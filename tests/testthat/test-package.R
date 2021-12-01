@@ -1,11 +1,10 @@
 test_that("Full package documentation works", {
   
   site_folder <- "tidypredict_site"
-  pkg_url <- "https://github.com/tidymodels/tidypredict"
   temp_dir <- tempdir()
   
   expect_silent(
-    pkg_location <- package_clone_git_repo(pkg_url)
+    pkg_location <- system.file(package = "ecodown", "testutils/tidypredict")
   )
   
   expect_output(

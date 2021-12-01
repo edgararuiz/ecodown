@@ -1,0 +1,75 @@
+---
+title: "Random Forest, using Ranger"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ranger}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(dplyr)
+library(tidypredict)
+library(parsnip)
+library(ranger)
+set.seed(100)
+```
+
+| Function                                                      |Works|
+|---------------------------------------------------------------|-----|
+|`tidypredict_fit()`, `tidypredict_sql()`, `parse_model()`      |  ✔  |
+|`tidypredict_to_column()`                                      |  ✗  |
+|`tidypredict_test()`                                           |  ✗  |
+|`tidypredict_interval()`, `tidypredict_sql_interval()`         |  ✗  |
+|`parsnip`                                                      |  ✔  |
+
+## How it works
+
+Here is a simple `ranger()` model using the `iris` dataset:
+```{r}
+library(dplyr)
+library(tidypredict)
+library(ranger)
+
+model <- ranger(Species ~ .,data = iris, num.trees =  100)
+```
+
+## Under the hood
+
+The parser is based on the output from the `ranger::treeInfo()` function.  It will return as many decision paths as there are non-NA rows in the `prediction` field.
+```{r}
+treeInfo(model) %>%
+  head()
+```
+
+
+The output from `parse_model()` is transformed into a `dplyr`, a.k.a Tidy Eval, formula.  The entire decision tree becomes one `dplyr::case_when()` statement
+```{r}
+tidypredict_fit(model)[1]
+```
+
+From there, the Tidy Eval formula can be used anywhere where it can be operated. `tidypredict` provides three paths:
+
+  - Use directly inside `dplyr`,  `mutate(iris, !! tidypredict_fit(model))`
+  - Use `tidypredict_to_column(model)` to a piped command set
+  - Use `tidypredict_to_sql(model)` to retrieve the SQL statement
+
+
+## parsnip
+
+`tidypredict` also supports `ranger` model objects fitted via the `parsnip` package.
+
+```{r}
+library(parsnip)
+
+parsnip_model <- rand_forest(mode = "classification") %>%
+  set_engine("ranger") %>%
+  fit(Species ~ ., data = iris)
+
+tidypredict_fit(parsnip_model)[[1]]
+```
