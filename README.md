@@ -4,6 +4,9 @@
 # ecodown
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/edgararuiz/ecodown/branch/main/graph/badge.svg)](https://app.codecov.io/gh/edgararuiz/ecodown?branch=main)
 <!-- badges: end -->
 
 The goal of ecodown is to …
@@ -24,5 +27,4 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(ecodown)
-## basic example code
 ```
