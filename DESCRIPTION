@@ -13,7 +13,8 @@ Imports:
   purrr,
   fs,
   crayon,
-  here
+  here,
+  downlit
 Suggests: 
     covr,
     testthat (>= 3.0.0)

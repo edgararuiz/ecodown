@@ -2,9 +2,10 @@ test_that("Full package documentation works", {
   
   site_folder <- "tidypredict_site"
   temp_dir <- tempdir()
+  pkg_folder <- "testutils/tidypredict"
   
-  location_inst <- system.file(package = "ecodown", "testutils/tidypredict")
-  location_source <- "inst/testutils/tidypredict"
+  location_inst <- system.file(package = "ecodown", pkg_folder)
+  location_source <- paste0("inst/", pkg_folder)
   
   if(dir.exists(location_source)) {
     pkg_location <- location_source
@@ -22,7 +23,7 @@ test_that("Full package documentation works", {
   )
 
   expect_equal(
-    list.files(paste0(temp_dir, "/tidypredict_site")),
+    list.files(paste0(temp_dir, "/", site_folder)),
     c("articles", "index.md", "news.md", "reference")
   )
 })

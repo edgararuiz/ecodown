@@ -1,0 +1,20 @@
+project:
+  output-dir: docs
+  type: site
+site:
+  title: testsite
+  google-analytics: UA-20375833-3
+  sidebar:
+    contents:
+    - section: MLeap 
+      href: /mleap
+      contents:
+        - text: News
+          href: /mleap/news.md
+        - text: Reference
+          href: /mleap/reference
+format:
+  html:
+    toc: true
+    code-copy: true
+    code-overflow: wrap
