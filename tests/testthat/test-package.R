@@ -3,9 +3,14 @@ test_that("Full package documentation works", {
   site_folder <- "tidypredict_site"
   temp_dir <- tempdir()
   
-  expect_silent(
-    pkg_location <- system.file(package = "ecodown", "testutils/tidypredict")
-  )
+  location_inst <- system.file(package = "ecodown", "testutils/tidypredict")
+  location_source <- "inst/testutils/tidypredict"
+  
+  if(dir.exists(location_source)) {
+    pkg_location <- location_source
+  } else {
+    pkg_location <- location_inst
+  }
   
   expect_output(
     package_build_documentation(
