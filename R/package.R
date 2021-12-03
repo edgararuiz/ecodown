@@ -3,10 +3,14 @@
 #' @param root_folder Base target Quarto folder. Defaults to current workspace.
 #' @param project_folder Sub folder in `root_folder` that will be the base for
 #' the package's documentation.
-#' @param readme Flag that indicates of the README file needs to be processed
-#' @param news Flag that indicates of the NEWS file needs to be processed
-#' @param articles Flag that indicates of the vignette files needs to be processed
-#' @param reference Flag that indicates of the help files needs to be processed
+#' @param readme Flag that indicates if the README file needs to be processed
+#' @param news Flag that indicates if the NEWS file needs to be processed
+#' @param articles Flag that indicates if the vignette files needs to be processed
+#' @param reference Flag that indicates if the help files needs to be processed
+#' @param downlit_options Flag that indicates if the package name should be 
+#' added to the 'options()' that tells 'downlit' that this is an internal 
+#' package
+#' @param url_prefix String to prefix to the 'downlit' URL's 
 #' @export
 package_build_documentation <- function(pkg_folder = "",
                                         project_folder = "",
@@ -14,7 +18,9 @@ package_build_documentation <- function(pkg_folder = "",
                                         readme = TRUE,
                                         news = TRUE,
                                         articles = TRUE,
-                                        reference = TRUE) {
+                                        reference = TRUE,
+                                        downlit_options = TRUE,
+                                        url_prefix = "") {
   if (readme | news) msg_bold_blue("- - - - - - - Top files - - - - - - - - -")
 
   if (readme) {
@@ -45,8 +51,10 @@ package_build_documentation <- function(pkg_folder = "",
     package_reference(
       pkg_folder = pkg_folder,
       project_folder = project_folder,
-      root_folder = root_folder
-    )
+      root_folder = root_folder,
+      downlit_options = downlit_options,
+      url_prefix = url_prefix
+      )
   }
 }
 
@@ -73,33 +81,6 @@ package_articles <- function(pkg_folder = "",
   } else {
     msg_yellow("Vignette folder not found")
   }
-}
-
-#' @rdname package_reference_pages
-#' @export
-package_reference <- function(pkg_folder = "",
-                              root_folder = here::here(),
-                              project_folder = "",
-                              reference_folder = "reference") {
-  pkg <- pkgdown::as_pkgdown(pkg_folder)
-
-  msg_bold_blue("- - - - - - Reference files - - - - - - -")
-
-  create_folder_if_missing(path(root_folder, project_folder, reference_folder))
-
-  package_reference_index(
-    pkg = pkg,
-    project_folder = project_folder,
-    root_folder = root_folder,
-    reference_folder = reference_folder
-  )
-
-  package_reference_pages(
-    pkg = pkg,
-    project_folder = project_folder,
-    root_folder = root_folder,
-    reference_folder = reference_folder
-  )
 }
 
 #' Download the package's latest source code from repo

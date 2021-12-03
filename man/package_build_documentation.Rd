@@ -11,7 +11,9 @@ package_build_documentation(
   readme = TRUE,
   news = TRUE,
   articles = TRUE,
-  reference = TRUE
+  reference = TRUE,
+  downlit_options = TRUE,
+  url_prefix = ""
 )
 }
 \arguments{
@@ -22,13 +24,19 @@ the package's documentation.}
 
 \item{root_folder}{Base target Quarto folder. Defaults to current workspace.}
 
-\item{readme}{Flag that indicates of the README file needs to be processed}
+\item{readme}{Flag that indicates if the README file needs to be processed}
 
-\item{news}{Flag that indicates of the NEWS file needs to be processed}
+\item{news}{Flag that indicates if the NEWS file needs to be processed}
 
-\item{articles}{Flag that indicates of the vignette files needs to be processed}
+\item{articles}{Flag that indicates if the vignette files needs to be processed}
 
-\item{reference}{Flag that indicates of the help files needs to be processed}
+\item{reference}{Flag that indicates if the help files needs to be processed}
+
+\item{downlit_options}{Flag that indicates if the package name should be
+added to the 'options()' that tells 'downlit' that this is an internal
+package}
+
+\item{url_prefix}{String to prefix to the 'downlit' URL's}
 }
 \description{
 Copies and/or converts files from package source into Quarto
