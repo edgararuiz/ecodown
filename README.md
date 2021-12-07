@@ -7,6 +7,7 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/edgararuiz/ecodown/branch/main/graph/badge.svg)](https://app.codecov.io/gh/edgararuiz/ecodown?branch=main)
+[![R-CMD-check](https://github.com/edgararuiz/ecodown/workflows/R-CMD-check/badge.svg)](https://github.com/edgararuiz/ecodown/actions)
 <!-- badges: end -->
 
 The goal of `ecodown` is to help convert package documentation to
@@ -100,16 +101,41 @@ package_build_documentation(
     #> - Created: mleap/reference/mleap_model_schema.md
     #> - Created: mleap/reference/mleap_transform.md
 
-This will be the contents of the new ‘mleap’ sub-folder.
+## Example site
 
+Added an ‘index.md’ file, and a ’\_quarto.yml’ files to the root folder.
+
+    #>  ├── _quarto.yml
     #>  ├── index.md
-    #>  ├── news.md
-    #>  └── reference
+    #>  └── mleap
     #>      ├── index.md
-    #>      ├── install_maven.md
-    #>      ├── install_mleap.md
-    #>      ├── ml_write_bundle.md
-    #>      ├── mleap_installed_versions.md
-    #>      ├── mleap_load_bundle.md
-    #>      ├── mleap_model_schema.md
-    #>      └── mleap_transform.md
+    #>      ├── news.md
+    #>      └── reference
+    #>          ├── index.md
+    #>          ├── install_maven.md
+    #>          ├── install_mleap.md
+    #>          ├── ml_write_bundle.md
+    #>          ├── mleap_installed_versions.md
+    #>          ├── mleap_load_bundle.md
+    #>          ├── mleap_model_schema.md
+    #>          └── mleap_transform.md
+
+``` r
+quarto::quarto_serve()
+```
+
+``` r
+site_autolink_html(path(dir_site, "docs"))
+#> - - - - - - - Auto-linking - - - - - - - - -
+#> - Processed: index.html
+#> - Processed: index.html
+#> - Processed: news.html
+#> - Processed: index.html
+#> - Processed: install_maven.html
+#> - Processed: install_mleap.html
+#> - Processed: ml_write_bundle.html
+#> - Processed: mleap_installed_versions.html
+#> - Processed: mleap_load_bundle.html
+#> - Processed: mleap_model_schema.html
+#> - Processed: mleap_transform.html
+```

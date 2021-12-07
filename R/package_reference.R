@@ -18,7 +18,7 @@ package_reference <- function(pkg_folder = "",
   
   pkg <- pkgdown::as_pkgdown(pkg_folder)
   
-  msg_bold_blue("- - - - - - Reference files - - - - - - -")
+  msg_color_bold("- - - - - - Reference files - - - - - - -", color = blue)
   
   create_folder_if_missing(path(root_folder, project_folder, reference_folder))
   
@@ -108,7 +108,7 @@ package_reference_index <- function(pkg_folder = "",
     sections_chr,
     path(root_folder, index_file)
   )
-  msg_green("Created: ", index_file)
+  msg_color("Created: ", index_file, color = green)
   
   if(downlit_options) {
     downlit_options(
@@ -138,7 +138,7 @@ package_reference_pages <- function(pkg_folder = "",
       f_name <- path(project_folder, reference_folder, new_name)
       out <- parse_topic(.x)
       writeLines(out, path(root_folder, f_name))
-      msg_green("Created: ", f_name)
+      msg_color("Created: ", f_name, color = green)
     }
   )
   

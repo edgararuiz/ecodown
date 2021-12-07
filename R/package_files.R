@@ -67,9 +67,12 @@ package_file_copy <- function(pkg_folder = "",
       path(dest_folder, file_n),
       overwrite = TRUE
     )
-    msg_green("Copied: ", path(project_folder, target, file_n))    
+    msg_color("Copied: ", path(project_folder, target, file_n), color = green)    
   } else {
-    msg_yellow("File(s) not found: ", paste0(file_names, collapse = ", "))
+    msg_color(
+      "File(s) not found: ", paste0(file_names, collapse = ", "), 
+      color = yellow
+      )
   }
 
 }

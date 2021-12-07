@@ -13,6 +13,7 @@ test_that("Full package documentation works", {
     pkg_location <- location_inst
   }
   
+  
   expect_output(
     package_build_documentation(
       pkg_folder = pkg_location, 
@@ -21,9 +22,17 @@ test_that("Full package documentation works", {
     ),
     "- - - - - - - - Top files - - - - - - - - -"
   )
+  
+  expect_output(
+    site_autolink_html(
+      quarto_folder = path(temp_dir, site_folder)
+    ),
+    "- - - - - - Auto-linking - - - - - - - - -"
+  )
 
   expect_equal(
     list.files(paste0(temp_dir, "/", site_folder)),
     c("articles", "index.md", "news.md", "reference")
   )
+
 })

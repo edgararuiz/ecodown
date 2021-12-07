@@ -21,15 +21,16 @@ cat_tree <- function(x, ...) {
 }
 
 temp_dir <- tempdir()
-
+dir_site <- path(temp_dir, "test_site")
 if(dir_exists(path(temp_dir, "mleap"))) dir_delete(path(temp_dir, "mleap"))
-if(dir_exists(path(temp_dir, "mleap_site"))) dir_delete(path(temp_dir, "mleap_site"))
+if(dir_exists(dir_site)) dir_delete(dir_site)
 ```
 
 # ecodown
 
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/edgararuiz/ecodown/branch/main/graph/badge.svg)](https://app.codecov.io/gh/edgararuiz/ecodown?branch=main)
+[![R-CMD-check](https://github.com/edgararuiz/ecodown/workflows/R-CMD-check/badge.svg)](https://github.com/edgararuiz/ecodown/actions)
 <!-- badges: end -->
 
 The goal of `ecodown` is to help convert package documentation to Quarto.  The main idea is to use `ecodown` to document multiple packages in a single 
@@ -94,14 +95,37 @@ temp_dir <- tempdir()
 
 package_build_documentation(
   pkg_folder = mleap_location,
-  root_folder = path(temp_dir, "mleap_site"),
+  root_folder = dir_site,
   project_folder = "mleap"
 )
 ```
 
-This will be the contents of the new 'mleap' sub-folder.
+## Example site
+
+Added an 'index.md' file, and a '_quarto.yml' files to the root folder.
+
+```{r, include = FALSE}
+quarto_folder <- system.file("testutils/quarto_files", package = "ecodown")
+lapply(dir_ls(quarto_folder), function(x) file_copy(x, dir_site))
+```
 
 ```{r, echo = FALSE}
-cat_tree(path(temp_dir, "mleap_site/mleap"))
+cat_tree(dir_site)
 ```
+```{r, eval = FALSE}
+quarto::quarto_serve()
+```
+
+```{r, include = FALSE}
+quarto::quarto_serve(dir = dir_site)
+```
+
+```{r, include = FALSE}
+site_autolink_html(path(dir_site, "docs"))
+```
+
+```{r}
+site_autolink_html(path(dir_site, "docs"))
+```
+
 

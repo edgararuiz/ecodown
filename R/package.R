@@ -21,7 +21,9 @@ package_build_documentation <- function(pkg_folder = "",
                                         reference = TRUE,
                                         downlit_options = TRUE,
                                         url_prefix = "") {
-  if (readme | news) msg_bold_blue("- - - - - - - Top files - - - - - - - - -")
+  if (readme | news) {
+    msg_color_bold("- - - - - - - Top files - - - - - - - - -", color = blue)
+  }  
 
   if (readme) {
     package_readme(
@@ -68,18 +70,24 @@ package_articles <- function(pkg_folder = "",
                              target = "articles",
                              project_folder = "",
                              root_folder = here::here()) {
-  msg_bold_blue("- - - - - - Article files - - - - - - - -")
+  msg_color_bold("- - - - - - Article files - - - - - - - -", color = blue)
 
   a_folder <- path(pkg_folder, source)
 
   if (dir_exists(a_folder)) {
-    full_file_copy(
+    dir_copy(
       a_folder,
       path(root_folder, project_folder, target)
     )
-    msg_green("Vignette folder copied to", path(project_folder, target))
+    msg_color(
+      "Vignette folder copied to", path(project_folder, target), 
+      color = green
+      )
   } else {
-    msg_yellow("Vignette folder not found")
+    msg_color(
+      "Vignette folder not found",
+      color = yellow
+      )
   }
 }
 
