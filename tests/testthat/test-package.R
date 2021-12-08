@@ -2,7 +2,7 @@ test_that("Full package documentation works", {
   
   pkg_location <- test_path("assets/crayon")
   
-  site_folder <- "test_site1"
+  site_folder <- "test_site2"
   
   temp_dir <- tempdir()
   
@@ -20,11 +20,6 @@ test_that("Full package documentation works", {
       quarto_folder = path(temp_dir, site_folder)
     ),
     "- - - - - - Auto-linking - - - - - - - - -"
-  )
-
-  expect_equal(
-    list.files(paste0(temp_dir, "/", site_folder)),
-    c("index.md", "news.md", "reference")
   )
 
 })
