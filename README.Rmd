@@ -90,7 +90,7 @@ Here are the current contents of the package:
 cat_tree(mleap_location, recurse = FALSE)
 ```
 
-And the contents of the 'man' folder: 
+And the contents of the **man** folder: 
 
 ```{r, echo = FALSE}
 cat_tree(path(mleap_location, "man"))
@@ -100,8 +100,8 @@ cat_tree(path(mleap_location, "man"))
 
 `package_build_documentation()` is the main function out of `ecodown`. It is 
 similar to the `pkgdown`'s `build_site()`.  It will map and copy the README, 
-NEWS and vignettes files. It will also parse and convert the '.Rd' files into 
-'.Md' files.  
+NEWS and vignettes files. It will also parse and convert the **.Rd** files into 
+**.Md** files.  
 
 The `project_folder` creates a sub-folder in your workspace where the documentation
 is going to be converted and copied to.
@@ -138,9 +138,12 @@ quarto::quarto_serve()
 quarto::quarto_serve(dir = dir_site)
 ```
 
+This the content of the **docs** sub-folder 
 
 ```{r, echo = FALSE}
-cat_tree(path(dir_site, "docs"))
+top_lines <- capture.output(cat_tree(path(dir_site, "docs")))[1:14]
+resume_cat <- c(top_lines, " ... more files ...")
+cat(paste0(resume_cat, collapse = "\n") )
 ```
 
 ## Run auto-linking

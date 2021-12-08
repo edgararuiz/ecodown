@@ -84,7 +84,7 @@ Here are the current contents of the package:
     #>  ├── mleap.Rproj
     #>  └── tests
 
-And the contents of the ‘man’ folder:
+And the contents of the **man** folder:
 
     #>  ├── install_maven.Rd
     #>  ├── install_mleap.Rd
@@ -97,9 +97,9 @@ And the contents of the ‘man’ folder:
 ### Prepare the documentation for Quarto
 
 `package_build_documentation()` is the main function out of `ecodown`.
-It is similar to the `pkgdown`‘s `build_site()`. It will map and copy
-the README, NEWS and vignettes files. It will also parse and convert
-the’.Rd’ files into ‘.Md’ files.
+It is similar to the `pkgdown`’s `build_site()`. It will map and copy
+the README, NEWS and vignettes files. It will also parse and convert the
+**.Rd** files into **.Md** files.
 
 The `project_folder` creates a sub-folder in your workspace where the
 documentation is going to be converted and copied to.
@@ -113,7 +113,7 @@ package_build_documentation(
 
     #> - - - - - - - - Top files - - - - - - - - -
     #> - Copied: mleap/index.md
-    #> - Copied: mleap/news.md
+    #> - Copied: mleap/NEWS.md
     #> - - - - - - - Article files - - - - - - - -
     #> - Vignette folder not found
     #> - - - - - - - Reference files - - - - - - -
@@ -132,10 +132,12 @@ package_build_documentation(
 quarto::quarto_serve()
 ```
 
+This the content of the **docs** sub-folder
+
     #>  ├── index.html
     #>  ├── mleap
+    #>  │   ├── NEWS.html
     #>  │   ├── index.html
-    #>  │   ├── news.html
     #>  │   └── reference
     #>  │       ├── index.html
     #>  │       ├── install_maven.html
@@ -146,28 +148,7 @@ quarto::quarto_serve()
     #>  │       ├── mleap_model_schema.html
     #>  │       └── mleap_transform.html
     #>  ├── search.json
-    #>  └── site_libs
-    #>      ├── bootstrap
-    #>      │   ├── bootstrap-icons.css
-    #>      │   ├── bootstrap-icons.woff
-    #>      │   ├── bootstrap.min.css
-    #>      │   └── bootstrap.min.js
-    #>      ├── clipboard
-    #>      │   └── clipboard.min.js
-    #>      ├── quarto-html
-    #>      │   ├── anchor.min.js
-    #>      │   ├── popper.min.js
-    #>      │   ├── quarto-syntax-highlighting.css
-    #>      │   ├── quarto.js
-    #>      │   ├── tippy.css
-    #>      │   └── tippy.umd.min.js
-    #>      ├── quarto-nav
-    #>      │   ├── headroom.min.js
-    #>      │   └── quarto-nav.js
-    #>      └── quarto-search
-    #>          ├── autocomplete.umd.js
-    #>          ├── fuse.min.js
-    #>          └── quarto-search.js
+    #>  ... more files ...
 
 ## Run auto-linking
 
@@ -175,8 +156,8 @@ quarto::quarto_serve()
 site_autolink_html(path(dir_site, "docs"))
 #> - - - - - - - Auto-linking - - - - - - - - -
 #> - Processed: index.html
+#> - Processed: NEWS.html
 #> - Processed: index.html
-#> - Processed: news.html
 #> - Processed: index.html
 #> - Processed: install_maven.html
 #> - Processed: install_mleap.html
