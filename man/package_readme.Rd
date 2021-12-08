@@ -9,7 +9,7 @@
 package_readme(
   pkg_folder = "",
   target = "",
-  file_names = c("readme.md"),
+  file_names = c("README.md"),
   project_folder = "",
   root_folder = here::here()
 )
@@ -17,7 +17,7 @@ package_readme(
 package_news(
   pkg_folder = "",
   target = "",
-  file_names = c("news.md", "news.Rmd"),
+  file_names = c("NEWS.md", "NEWS.Rmd"),
   project_folder = "",
   root_folder = here::here()
 )

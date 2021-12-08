@@ -80,7 +80,7 @@ package_articles <- function(pkg_folder = "",
       path(root_folder, project_folder, target)
     )
     msg_color(
-      "Vignette folder copied to", path(project_folder, target), 
+      "Vignette folder copied to: ", path(project_folder, target), 
       color = green
       )
   } else {

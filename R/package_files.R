@@ -9,7 +9,7 @@
 #' @export
 package_readme <- function(pkg_folder = "",
                            target = "",
-                           file_names = c("readme.md"),
+                           file_names = c("README.md"),
                            project_folder = "",
                            root_folder = here::here()) {
   package_file_copy(
@@ -26,7 +26,7 @@ package_readme <- function(pkg_folder = "",
 #' @export
 package_news <- function(pkg_folder = "",
                          target = "",
-                         file_names = c("news.md", "news.Rmd"),
+                         file_names = c("NEWS.md", "NEWS.Rmd"),
                          project_folder = "",
                          root_folder = here::here()) {
   package_file_copy(
