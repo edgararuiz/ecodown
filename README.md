@@ -10,13 +10,15 @@ coverage](https://codecov.io/gh/edgararuiz/ecodown/branch/main/graph/badge.svg)]
 [![R-CMD-check](https://github.com/edgararuiz/ecodown/workflows/R-CMD-check/badge.svg)](https://github.com/edgararuiz/ecodown/actions)
 <!-- badges: end -->
 
-The goal of `ecodown` is to help convert package documentation to
-Quarto. The main idea is to use `ecodown` to document multiple packages
-in a single Quarto site.
+The goal of `ecodown` is to make it possible for your R package’s
+documentation to be published in a Quarto site.
+
+The vision for `ecodown` is that it is used to document a group of
+related packages that will be published to a single Quarto site.
 
 ## Installation
 
-You can install the development version of ecodown from
+You can install the development version of `ecodown` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -24,13 +26,32 @@ You can install the development version of ecodown from
 devtools::install_github("edgararuiz/ecodown")
 ```
 
-## Example
+## Using
+
+There are 5 steps needed in order to keep the package’s documentation
+updated in a Quarto site:
+
+1.  [Download the latest package
+    source](#download-the-latest-package-source)
+2.  [Prepare the documentation for
+    Quarto](#prepare-the-documentation-for-quarto)
+3.  [Run Quarto locally](#run-quarto-locally)
+4.  [Run auto-linking](#run-auto-linking)
+5.  Commit the changes back to the site
 
 ``` r
 library(ecodown)
 ```
 
-### Clone the package’s repo
+### Download the latest package source
+
+The assumption is that the Git repository of the package is different
+from that of the Quarto site. Again, the idea is that the Quarto site is
+being used to document multiple packages.
+
+This means that the package’s source will be external to the Quarto-site
+repository, so it is likely that the latest bits will have to be cloned
+from Git.
 
 `ecodown` uses the package’s source to produce the documentation. Use
 `package_clone_git_repo()` to download the the package. By default, it
@@ -40,6 +61,10 @@ this example:
 ``` r
 mleap_location <- package_clone_git_repo("https://github.com/rstudio/mleap")
 ```
+
+This is not a required step, only use if the latest source is not
+available in your laptop, or if you are using `ecodown` as part of your
+CI/CD automation.
 
 Here are the current contents of the package:
 
@@ -69,7 +94,7 @@ And the contents of the ‘man’ folder:
     #>  ├── mleap_model_schema.Rd
     #>  └── mleap_transform.Rd
 
-### Build the documentation
+### Prepare the documentation for Quarto
 
 `package_build_documentation()` is the main function out of `ecodown`.
 It is similar to the `pkgdown`‘s `build_site()`. It will map and copy
@@ -101,28 +126,50 @@ package_build_documentation(
     #> - Created: mleap/reference/mleap_model_schema.md
     #> - Created: mleap/reference/mleap_transform.md
 
-## Example site
-
-Added an ‘index.md’ file, and a ’\_quarto.yml’ files to the root folder.
-
-    #>  ├── _quarto.yml
-    #>  ├── index.md
-    #>  └── mleap
-    #>      ├── index.md
-    #>      ├── news.md
-    #>      └── reference
-    #>          ├── index.md
-    #>          ├── install_maven.md
-    #>          ├── install_mleap.md
-    #>          ├── ml_write_bundle.md
-    #>          ├── mleap_installed_versions.md
-    #>          ├── mleap_load_bundle.md
-    #>          ├── mleap_model_schema.md
-    #>          └── mleap_transform.md
+## Run Quarto locally
 
 ``` r
 quarto::quarto_serve()
 ```
+
+    #>  ├── index.html
+    #>  ├── mleap
+    #>  │   ├── index.html
+    #>  │   ├── news.html
+    #>  │   └── reference
+    #>  │       ├── index.html
+    #>  │       ├── install_maven.html
+    #>  │       ├── install_mleap.html
+    #>  │       ├── ml_write_bundle.html
+    #>  │       ├── mleap_installed_versions.html
+    #>  │       ├── mleap_load_bundle.html
+    #>  │       ├── mleap_model_schema.html
+    #>  │       └── mleap_transform.html
+    #>  ├── search.json
+    #>  └── site_libs
+    #>      ├── bootstrap
+    #>      │   ├── bootstrap-icons.css
+    #>      │   ├── bootstrap-icons.woff
+    #>      │   ├── bootstrap.min.css
+    #>      │   └── bootstrap.min.js
+    #>      ├── clipboard
+    #>      │   └── clipboard.min.js
+    #>      ├── quarto-html
+    #>      │   ├── anchor.min.js
+    #>      │   ├── popper.min.js
+    #>      │   ├── quarto-syntax-highlighting.css
+    #>      │   ├── quarto.js
+    #>      │   ├── tippy.css
+    #>      │   └── tippy.umd.min.js
+    #>      ├── quarto-nav
+    #>      │   ├── headroom.min.js
+    #>      │   └── quarto-nav.js
+    #>      └── quarto-search
+    #>          ├── autocomplete.umd.js
+    #>          ├── fuse.min.js
+    #>          └── quarto-search.js
+
+## Run auto-linking
 
 ``` r
 site_autolink_html(path(dir_site, "docs"))
