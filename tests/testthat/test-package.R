@@ -20,7 +20,7 @@ test_that("Full package documentation works", {
 
   expect_output(
     site_autolink_html(
-      quarto_folder = full_site
+      quarto_folder = test_path("assets/crayon-html")
     ),
     "- - - - - - Auto-linking - - - - - - - - -"
   )
