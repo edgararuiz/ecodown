@@ -4,10 +4,10 @@
 #' will land.
 #' @param pkg A `pkgdown` object. If one is passed, then the `pkg_folder` argument
 #' will be ignored
-#' @param downlit_options Flag that indicates if the package name should be 
-#' added to the 'options()' that tells 'downlit' that this is an internal 
+#' @param downlit_options Flag that indicates if the package name should be
+#' added to the 'options()' that tells 'downlit' that this is an internal
 #' package
-#' @param url_prefix String to prefix to the 'downlit' URL's 
+#' @param url_prefix String to prefix to the 'downlit' URL's
 #' @export
 package_reference <- function(pkg_folder = "",
                               root_folder = here::here(),
@@ -15,34 +15,33 @@ package_reference <- function(pkg_folder = "",
                               reference_folder = "reference",
                               downlit_options = TRUE,
                               url_prefix = "") {
-  
   pkg <- pkgdown::as_pkgdown(pkg_folder)
-  
+
   msg_color_bold("- - - - - - Reference files - - - - - - -", color = blue)
-  
+
   create_folder_if_missing(path(root_folder, project_folder, reference_folder))
-  
+
   package_reference_index(
     pkg = pkg,
     project_folder = project_folder,
     root_folder = root_folder,
     reference_folder = reference_folder
   )
-  
+
   package_reference_pages(
     pkg = pkg,
     project_folder = project_folder,
     root_folder = root_folder,
     reference_folder = reference_folder
   )
-  
-  if(downlit_options) {
+
+  if (downlit_options) {
     downlit_options(
-      package = pkg$package, 
+      package = pkg$package,
       url = project_folder,
       url_prefix = url_prefix
-      )
-  } 
+    )
+  }
 }
 
 #' @rdname package_reference
@@ -57,10 +56,10 @@ package_reference_index <- function(pkg_folder = "",
   if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(pkg_folder)
   pkg_ref <- pkg$meta$reference
   pkg_topics <- pkg$topics
-  
+
   # For packages that do not have a _pkgdown.yml spec
   if (is.null(pkg_ref)) pkg_ref <- list(data.frame(contents = pkg_topics$name))
-  
+
   sections_list <- map(
     pkg_ref, ~ {
       ref <- .x
@@ -73,7 +72,7 @@ package_reference_index <- function(pkg_folder = "",
         }
       )
       unique_names <- unique(matched_names)
-      
+
       refs_html <- map(unique_names, ~ {
         me <- pkg_topics[pkg_topics$name == .x, ]
         fns <- me$funs[[1]]
@@ -84,11 +83,11 @@ package_reference_index <- function(pkg_folder = "",
           fn3 <- paste0(fn3, " | ", me$title)
         }
       })
-      
+
       null_refs <- map_lgl(refs_html, is.null)
-      
+
       refs_chr <- refs_html[!null_refs]
-      
+
       ref_section <- c(
         ifelse(!is.null(ref$title), paste0("## ", ref$title), ""),
         "",
@@ -99,20 +98,20 @@ package_reference_index <- function(pkg_folder = "",
       )
     }
   )
-  
+
   sections_chr <- map_chr(flatten(sections_list), ~.x)
-  
+
   index_file <- path(project_folder, reference_folder, "index.md")
-  
+
   writeLines(
     sections_chr,
     path(root_folder, index_file)
   )
   msg_color("Created: ", index_file, color = green)
-  
-  if(downlit_options) {
+
+  if (downlit_options) {
     downlit_options(
-      package = pkg$package, 
+      package = pkg$package,
       url = project_folder,
       url_prefix = url_prefix
     )
@@ -129,9 +128,9 @@ package_reference_pages <- function(pkg_folder = "",
                                     downlit_options = TRUE,
                                     url_prefix = "") {
   if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(pkg_folder)
-  
+
   topics <- transpose(pkg$topics)
-  
+
   walk(
     topics, ~ {
       new_name <- path(path_ext_remove(path_file(.x$file_in)), ext = "md")
@@ -141,10 +140,10 @@ package_reference_pages <- function(pkg_folder = "",
       msg_color("Created: ", f_name, color = green)
     }
   )
-  
-  if(downlit_options) {
+
+  if (downlit_options) {
     downlit_options(
-      package = pkg$package, 
+      package = pkg$package,
       url = project_folder,
       url_prefix = url_prefix
     )
@@ -237,4 +236,3 @@ parse_line_tag <- function(x) {
   if ("tag_item" %in% class(x)) tg_res <- "\n* "
   paste0(tg_res, collapse = "")
 }
-

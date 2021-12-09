@@ -1,9 +1,17 @@
 Package: ecodown
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9001
+Title: Publish package documents in Quarto
+Version: 0.0.0.9002
 Authors@R: 
-    person("Edgar", "Ruiz", , "edgararuiz@gmail.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person(
+    given = "Edgar", 
+    family = "Ruiz", 
+    email = "edgararuiz@gmail.com", 
+    role = c("aut", "cre")
+    )
+Description: Makes it possible for your R package's documentation to be published 
+    in a Quarto site. The vision for this package is that it is used to 
+    document a group of related packages that will be published to a single 
+    Quarto site.  
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
