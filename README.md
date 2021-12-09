@@ -28,8 +28,8 @@ devtools::install_github("edgararuiz/ecodown")
 
 ## Using
 
-There are 5 steps needed in order to keep the package’s documentation
-updated in a Quarto site:
+In general, there are 5 steps to keep the documents up-to-date in
+Quarto:
 
 1.  [Download the latest package
     source](#download-the-latest-package-source)
@@ -49,9 +49,9 @@ The assumption is that the Git repository of the package is different
 from that of the Quarto site. Again, the idea is that the Quarto site is
 being used to document multiple packages.
 
-This means that the package’s source will be external to the Quarto-site
-repository, so it is likely that the latest bits will have to be cloned
-from Git.
+This means that the package’s source will be external to the Quarto
+site’s repository, so it is likely that the latest bits will have to be
+cloned from Git.
 
 `ecodown` uses the package’s source to produce the documentation. Use
 `package_clone_git_repo()` to download the the package. By default, it
@@ -128,11 +128,17 @@ package_build_documentation(
 
 ## Run Quarto locally
 
+Use `quarto::quarto_render()` to convert the markdown files into HTML.
+
+For this example, an ‘index.md’ and a ’\_quarto.yml’ file to make it
+possible to run Quarto properly. This particular setup file points
+Quarto to a **docs** sub-folder.
+
 ``` r
-quarto::quarto_serve()
+quarto::quarto_render()
 ```
 
-This the content of the **docs** sub-folder
+This the content of the **docs** sub-folder after the process completes:
 
     #>  ├── index.html
     #>  ├── mleap
@@ -152,18 +158,32 @@ This the content of the **docs** sub-folder
 
 ## Run auto-linking
 
+Auto-linking here refers to converting written function names in a given
+HTML to links to the reference of that function. It uses the package
+`downlit` to accomplish this.
+
+In the background, `package_build_documentation()` not only builds the
+documentation in a format Quarto accepts, but also pre-loads the
+necessary R `options` so that `downlit` is aware that your package is
+inside your Quarto site. This will enable `downlit` to link references
+of your package to your Quarto site, instead of creating a generic link.
+
+Use the `site_autolink_html()` function to perform the auto-link over
+all of the Quarto site, or a sub-folder in it.
+
 ``` r
-site_autolink_html(path(dir_site, "docs"))
-#> - - - - - - - Auto-linking - - - - - - - - -
-#> - Processed: index.html
-#> - Processed: NEWS.html
-#> - Processed: index.html
-#> - Processed: index.html
-#> - Processed: install_maven.html
-#> - Processed: install_mleap.html
-#> - Processed: ml_write_bundle.html
-#> - Processed: mleap_installed_versions.html
-#> - Processed: mleap_load_bundle.html
-#> - Processed: mleap_model_schema.html
-#> - Processed: mleap_transform.html
+site_autolink_html("docs")
 ```
+
+    #> - - - - - - - Auto-linking - - - - - - - - -
+    #> - Processed: index.html
+    #> - Processed: NEWS.html
+    #> - Processed: index.html
+    #> - Processed: index.html
+    #> - Processed: install_maven.html
+    #> - Processed: install_mleap.html
+    #> - Processed: ml_write_bundle.html
+    #> - Processed: mleap_installed_versions.html
+    #> - Processed: mleap_load_bundle.html
+    #> - Processed: mleap_model_schema.html
+    #> - Processed: mleap_transform.html

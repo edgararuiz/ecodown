@@ -50,8 +50,7 @@ devtools::install_github("edgararuiz/ecodown")
 
 ## Using 
 
-There are 5 steps needed in order to keep the package's documentation updated in a
-Quarto site:
+In general, there are 5 steps to keep the documents up-to-date in Quarto:
 
 1. [Download the latest package source](#download-the-latest-package-source)
 1. [Prepare the documentation for Quarto](#prepare-the-documentation-for-quarto)
@@ -70,8 +69,8 @@ The assumption is that the Git repository of the package is different from that
 of the Quarto site.  Again, the idea is that the Quarto site is being used to
 document multiple packages.
 
-This means that the package's source will be external to the Quarto-site repository,
-so it is likely that the latest bits will have to be cloned from Git.  
+This means that the package's source will be external to the Quarto site's 
+repository, so it is likely that the latest bits will have to be cloned from Git.  
 
 `ecodown` uses the package's source to produce the documentation. Use 
 `package_clone_git_repo()` to download the the package.  By default, it clones 
@@ -81,8 +80,8 @@ the repo to a temp directory. We will use the `mleap` package for this example:
 mleap_location <- package_clone_git_repo("https://github.com/rstudio/mleap")
 ```
 
-This is not a required step, only use if the latest source is not available in your
-laptop, or if you are using `ecodown` as part of your CI/CD automation.
+This is not a required step, only use if the latest source is not available in 
+your laptop, or if you are using `ecodown` as part of your CI/CD automation.
 
 Here are the current contents of the package:
 
@@ -103,8 +102,8 @@ similar to the `pkgdown`'s `build_site()`.  It will map and copy the README,
 NEWS and vignettes files. It will also parse and convert the **.Rd** files into 
 **.Md** files.  
 
-The `project_folder` creates a sub-folder in your workspace where the documentation
-is going to be converted and copied to.
+The `project_folder` creates a sub-folder in your workspace where the 
+documentation is going to be converted and copied to.
 
 ```{r, eval = FALSE}
 package_build_documentation(
@@ -130,15 +129,21 @@ lapply(dir_ls(quarto_folder), function(x) file_copy(x, dir_site))
 
 ## Run Quarto locally
 
+Use `quarto::quarto_render()` to convert the markdown files into HTML. 
+
+For this example, an 'index.md' and a '_quarto.yml' file to make it possible to 
+run Quarto properly.  This particular setup file points Quarto to a **docs** 
+sub-folder.
+
 ```{r, eval = FALSE}
-quarto::quarto_serve()
+quarto::quarto_render()
 ```
 
 ```{r, include = FALSE}
-quarto::quarto_serve(dir = dir_site)
+quarto::quarto_render(dir_site)
 ```
 
-This the content of the **docs** sub-folder 
+This the content of the **docs** sub-folder after the process completes:
 
 ```{r, echo = FALSE}
 top_lines <- capture.output(cat_tree(path(dir_site, "docs")))[1:14]
@@ -148,11 +153,29 @@ cat(paste0(resume_cat, collapse = "\n") )
 
 ## Run auto-linking
 
+Auto-linking here refers to converting written function names in a given HTML
+to links to the reference of that function.  It uses the package `downlit` to 
+accomplish this.
+
+In the background, `package_build_documentation()` not only builds the documentation
+in a format Quarto accepts, but also pre-loads the necessary R `options` so that
+`downlit` is aware that your package is inside your Quarto site.  This will enable
+`downlit` to link references of your package to your Quarto site, instead of 
+creating a generic link. 
+
+Use the `site_autolink_html()` function to perform the auto-link over all of the
+Quarto site, or a sub-folder in it.  
+
 ```{r, include = FALSE}
 site_autolink_html(path(dir_site, "docs"))
 ```
 
-```{r}
+```{r, eval = FALSE}
+site_autolink_html("docs")
+```
+
+
+```{r, echo = FALSE}
 site_autolink_html(path(dir_site, "docs"))
 ```
 
