@@ -24,4 +24,19 @@ test_that("Full package documentation works", {
     ),
     "- - - - - - Auto-linking - - - - - - - - -"
   )
+  
+  expect_output(
+    package_file_copy(file_names = "test"),
+    "not found: test"
+  )
+  
+  expect_output(
+    package_build_documentation(
+      pkg_folder = test_path("assets/crayon2"),
+      project_folder = site_folder,
+      root_folder = temp_dir
+    ),
+    "- - - - - - - - Top files - - - - - - - - -"
+  )
+  
 })
