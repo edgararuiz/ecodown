@@ -90,17 +90,3 @@ package_articles <- function(pkg_folder = "",
     )
   }
 }
-
-#' Download the package's latest source code from repo
-#' @param url Repo location
-#' @param target_folder Location to copy the package to. Defaults to a temporary
-#' directory
-#' @param branch Repo branch. Defaults to 'main'
-#' @export
-package_clone_git_repo <- function(url = "",
-                                   target_folder = tempdir(),
-                                   branch = "main") {
-  tf <- path(target_folder, path_file(url))
-  system(paste0("git clone ", url, " -b ", branch, " ", tf))
-  tf
-}
