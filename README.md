@@ -64,11 +64,16 @@ this example:
 
 ``` r
 mleap_location <- package_clone_git_repo("https://github.com/rstudio/mleap")
+#> - - - - - - - Cloning repo - - - - - - - -
+#> - Cloning: mleap
+#> - Checking out tag: v1.0.0
 ```
 
 This is not a required step, only use if the latest source is not
 available in your laptop, or if you are using `ecodown` as part of your
-CI/CD automation.
+CI/CD automation. By default, the function will look for, and checkout,
+the commit related to the latest Git tag. This ensures that latest
+release is used for documentation.
 
 Here are the current contents of the package:
 
