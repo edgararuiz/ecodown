@@ -43,7 +43,7 @@ package_clone_and_build <- function(repo_url = "",
   package_build_documentation(
     package_source_folder = pkg_path,
     quarto_sub_folder = quarto_sub_folder,
-    quarto_base_folder = here::here(),
+    quarto_base_folder = quarto_base_folder,
     convert_readme = convert_readme,
     convert_news = convert_news,
     convert_articles = convert_articles,

@@ -32,76 +32,18 @@ devtools::install_github("edgararuiz/ecodown")
 
 ## Using
 
-In general, there are 5 steps to keep the documents up-to-date in
+In general, there are 4 steps to keep the documents up-to-date in
 Quarto:
 
-1.  [Download the latest package
-    source](#download-the-latest-package-source)
-2.  [Prepare the documentation for
+1.  [Prepare the documentation for
     Quarto](#prepare-the-documentation-for-quarto)
-3.  [Run Quarto locally](#run-quarto-locally)
-4.  [Run auto-linking](#run-auto-linking)
-5.  Commit the changes back to the site
+2.  [Run Quarto locally](#run-quarto-locally)
+3.  [Run auto-linking](#run-auto-linking)
+4.  Commit the changes back to the site
 
 ``` r
 library(ecodown)
 ```
-
-### Download the latest package source
-
-The assumption is that the Git repository of the package is different
-from that of the Quarto site. Again, the idea is that the Quarto site is
-being used to document multiple packages.
-
-This means that the package’s source will be external to the Quarto
-site’s repository, so it is likely that the latest bits will have to be
-cloned from Git.
-
-`ecodown` uses the package’s source to produce the documentation. Use
-`package_clone_git_repo()` to download the the package. By default, it
-clones the repo to a temp directory. We will use the `mleap` package for
-this example:
-
-``` r
-mleap_location <- package_clone_git_repo("https://github.com/rstudio/mleap")
-#> - - - - - - - Cloning repo - - - - - - - -
-#> - Cloning: mleap
-#> - Checking out tag: v1.0.0
-```
-
-This is not a required step, only use if the latest source is not
-available in your laptop, or if you are using `ecodown` as part of your
-CI/CD automation. By default, the function will look for, and checkout,
-the commit related to the latest Git tag. This ensures that latest
-release is used for documentation.
-
-Here are the current contents of the package:
-
-    #>  ├── DESCRIPTION
-    #>  ├── LICENSE.md
-    #>  ├── NAMESPACE
-    #>  ├── NEWS.md
-    #>  ├── R
-    #>  ├── README.Rmd
-    #>  ├── README.md
-    #>  ├── codecov.yml
-    #>  ├── configure.R
-    #>  ├── cran-comments.md
-    #>  ├── inst
-    #>  ├── java
-    #>  ├── man
-    #>  ├── mleap.Rproj
-    #>  └── tests
-
-And the contents of the **man** folder:
-
-    #>  ├── install_maven.Rd
-    #>  ├── install_mleap.Rd
-    #>  ├── ml_write_bundle.Rd
-    #>  ├── mleap_installed_versions.Rd
-    #>  ├── mleap_load_bundle.Rd
-    #>  ├── mleap_model_schema.Rd
-    #>  └── mleap_transform.Rd
 
 ### Prepare the documentation for Quarto
 
@@ -114,12 +56,15 @@ The `quarto_sub_folder` creates a sub-folder in your workspace where the
 documentation is going to be converted and copied to.
 
 ``` r
-package_build_documentation(
-  package_source_folder = mleap_location,
-  quarto_sub_folder = "mleap"
-)
+package_clone_and_build("https://github.com/rstudio/mleap")
 ```
 
+    #> - - - - - - - - - Init - - - - - - - - - - -
+    #> - quarto_sub_folder: mleap
+    #> - site_url: 
+    #> - - - - - - - Cloning repo - - - - - - - -
+    #> - Cloning: mleap
+    #> - Checking out tag: v1.0.0
     #> - - - - - - - - Top files - - - - - - - - -
     #> - Copied: mleap/index.md
     #> - Copied: mleap/NEWS.md
@@ -162,7 +107,7 @@ This the content of the **docs** sub-folder after the process completes:
     #>  │       ├── mleap_load_bundle.html
     #>  │       ├── mleap_model_schema.html
     #>  │       └── mleap_transform.html
-    #>  ├── search.json
+    #>  ├── robots.txt
     #>  ... more files ...
 
 ## Run auto-linking
@@ -178,10 +123,12 @@ inside your Quarto site. This will enable `downlit` to link references
 of your package to your Quarto site, instead of creating a generic link.
 
 Use the `site_autolink_html()` function to perform the auto-link over
-all of the Quarto site, or a sub-folder in it.
+all of the Quarto site, or a sub-folder in it. By default, it looks at
+the `output-dir` entry in the \*\*\_quarto.yml\*\* file to find the
+location of the HTML files created by Quarto.
 
 ``` r
-site_autolink_html("docs")
+site_autolink_html()
 ```
 
     #> - - - - - - - Auto-linking - - - - - - - - -
