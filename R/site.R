@@ -1,10 +1,10 @@
 #' Autolink function calls
-#' @param quarto_folder Location of the sub-folder that contains the output from
+#' @param quarto_rendered_site Location of the sub-folder that contains the output from
 #' Quarto.
 #' @export
-site_autolink_html <- function(quarto_folder = "_site") {
+site_autolink_html <- function(quarto_rendered_site = "_site") {
   msg_color("- - - - - - Auto-linking - - - - - - - - -", color = blue)
-  html_files <- dir_ls(quarto_folder, recurse = TRUE, type = "file", glob = "*.html")
+  html_files <- dir_ls(quarto_rendered_site, recurse = TRUE, type = "file", glob = "*.html")
   walk(
     html_files,
     ~ {

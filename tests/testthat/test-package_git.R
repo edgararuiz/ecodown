@@ -16,9 +16,9 @@ test_that("Default cloning works",{
   
   expect_output(
     package_clone_and_build(
-      url = pkg_url, 
-      target = paste0(tempdir(), "/newtest"),
-      project_folder = "crayon"
+      repo_url = pkg_url, 
+      target_folder = paste0(tempdir(), "/newtest"),
+      quarto_sub_folder = "crayon"
       ),
     "- - - - - - - Cloning repo - - - - - - - -"
   )

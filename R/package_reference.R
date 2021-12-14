@@ -1,44 +1,44 @@
 #' Processes reference/help files
 #' @inheritParams package_build_documentation
-#' @param reference_folder Sub folder in `project_folder` where the output files
+#' @param reference_folder Sub folder in `quarto_sub_folder` where the output files
 #' will land.
-#' @param pkg A `pkgdown` object. If one is passed, then the `pkg_folder` argument
+#' @param pkg A `pkgdown` object. If one is passed, then the `package_source_folder` argument
 #' will be ignored
 #' @param downlit_options Flag that indicates if the package name should be
 #' added to the 'options()' that tells 'downlit' that this is an internal
 #' package
 #' @param url_prefix String to prefix to the 'downlit' URL's
 #' @export
-package_reference <- function(pkg_folder = "",
-                              root_folder = here::here(),
-                              project_folder = "",
+package_reference <- function(package_source_folder = "",
+                              quarto_base_folder = here::here(),
+                              quarto_sub_folder = "",
                               reference_folder = "reference",
                               downlit_options = TRUE,
                               url_prefix = "") {
-  pkg <- pkgdown::as_pkgdown(pkg_folder)
+  pkg <- pkgdown::as_pkgdown(package_source_folder)
 
   msg_color_bold("- - - - - - Reference files - - - - - - -", color = blue)
 
-  create_folder_if_missing(path(root_folder, project_folder, reference_folder))
+  create_folder_if_missing(path(quarto_base_folder, quarto_sub_folder, reference_folder))
 
   package_reference_index(
     pkg = pkg,
-    project_folder = project_folder,
-    root_folder = root_folder,
+    quarto_sub_folder = quarto_sub_folder,
+    quarto_base_folder = quarto_base_folder,
     reference_folder = reference_folder
   )
 
   package_reference_pages(
     pkg = pkg,
-    project_folder = project_folder,
-    root_folder = root_folder,
+    quarto_sub_folder = quarto_sub_folder,
+    quarto_base_folder = quarto_base_folder,
     reference_folder = reference_folder
   )
 
   if (downlit_options) {
     downlit_options(
       package = pkg$package,
-      url = project_folder,
+      url = quarto_sub_folder,
       url_prefix = url_prefix
     )
   }
@@ -46,14 +46,14 @@ package_reference <- function(pkg_folder = "",
 
 #' @rdname package_reference
 #' @export
-package_reference_index <- function(pkg_folder = "",
+package_reference_index <- function(package_source_folder = "",
                                     reference_folder = "reference",
-                                    project_folder = "",
-                                    root_folder = here::here(),
+                                    quarto_sub_folder = "",
+                                    quarto_base_folder = here::here(),
                                     pkg = NULL,
                                     downlit_options = TRUE,
                                     url_prefix = "") {
-  if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(pkg_folder)
+  if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(package_source_folder)
   pkg_ref <- pkg$meta$reference
   pkg_topics <- pkg$topics
 
@@ -77,7 +77,7 @@ package_reference_index <- function(pkg_folder = "",
         me <- pkg_topics[pkg_topics$name == .x, ]
         fns <- me$funs[[1]]
         if (length(fns) > 0) {
-          n_path <- path("/", project_folder, reference_folder, "/", me$file_out)
+          n_path <- path("/", quarto_sub_folder, reference_folder, "/", me$file_out)
           fn2 <- paste0("[", fns, "](", n_path, ")")
           fn3 <- paste0(fn2, collapse = " ")
           fn3 <- paste0(fn3, " | ", me$title)
@@ -101,18 +101,18 @@ package_reference_index <- function(pkg_folder = "",
 
   sections_chr <- map_chr(flatten(sections_list), ~.x)
 
-  index_file <- path(project_folder, reference_folder, "index.md")
+  index_file <- path(quarto_sub_folder, reference_folder, "index.md")
 
   writeLines(
     sections_chr,
-    path(root_folder, index_file)
+    path(quarto_base_folder, index_file)
   )
   msg_color("Created: ", index_file, color = green)
 
   if (downlit_options) {
     downlit_options(
       package = pkg$package,
-      url = project_folder,
+      url = quarto_sub_folder,
       url_prefix = url_prefix
     )
   }
@@ -120,23 +120,23 @@ package_reference_index <- function(pkg_folder = "",
 
 #' @rdname package_reference
 #' @export
-package_reference_pages <- function(pkg_folder = "",
+package_reference_pages <- function(package_source_folder = "",
                                     reference_folder = "reference",
-                                    project_folder = "",
-                                    root_folder = here::here(),
+                                    quarto_sub_folder = "",
+                                    quarto_base_folder = here::here(),
                                     pkg = NULL,
                                     downlit_options = TRUE,
                                     url_prefix = "") {
-  if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(pkg_folder)
+  if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(package_source_folder)
 
   topics <- transpose(pkg$topics)
 
   walk(
     topics, ~ {
       new_name <- path(path_ext_remove(path_file(.x$file_in)), ext = "md")
-      f_name <- path(project_folder, reference_folder, new_name)
+      f_name <- path(quarto_sub_folder, reference_folder, new_name)
       out <- parse_topic(.x)
-      writeLines(out, path(root_folder, f_name))
+      writeLines(out, path(quarto_base_folder, f_name))
       msg_color("Created: ", f_name, color = green)
     }
   )
@@ -144,7 +144,7 @@ package_reference_pages <- function(pkg_folder = "",
   if (downlit_options) {
     downlit_options(
       package = pkg$package,
-      url = project_folder,
+      url = quarto_sub_folder,
       url_prefix = url_prefix
     )
   }

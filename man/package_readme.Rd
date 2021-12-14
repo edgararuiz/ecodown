@@ -7,42 +7,42 @@
 \title{Copies individual files from package to Quarto}
 \usage{
 package_readme(
-  pkg_folder = "",
+  package_source_folder = "",
   target = "",
   file_names = c("README.md"),
-  project_folder = "",
-  root_folder = here::here()
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here()
 )
 
 package_news(
-  pkg_folder = "",
+  package_source_folder = "",
   target = "",
   file_names = c("NEWS.md", "NEWS.Rmd"),
-  project_folder = "",
-  root_folder = here::here()
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here()
 )
 
 package_file_copy(
-  pkg_folder = "",
-  target = "project_folder",
+  package_source_folder = "",
+  target = "quarto_sub_folder",
   file_names = c("name.md", "name.Rmd"),
   override_name = NULL,
-  project_folder = "",
-  root_folder = here::here()
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here()
 )
 }
 \arguments{
-\item{pkg_folder}{Path to the package's source code}
+\item{package_source_folder}{Path to the package's source code}
 
-\item{target}{Sub folder in \code{project_folder} where the output file will land}
+\item{target}{Sub folder in \code{quarto_sub_folder} where the output file will land}
 
 \item{file_names}{A vector of one or many file names. If it is multiple files
 the function will look for and use the first available.}
 
-\item{project_folder}{Sub folder in \code{root_folder} that will be the base for
+\item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the base for
 the package's documentation.}
 
-\item{root_folder}{Base target Quarto folder. Defaults to current workspace.}
+\item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
 
 \item{override_name}{File name of the output, in case the original file name
 needs to be changed.}

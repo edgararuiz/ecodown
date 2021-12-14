@@ -1,52 +1,52 @@
 #' Copies individual files from package to Quarto
 #'
 #' @inheritParams package_build_documentation
-#' @param target Sub folder in `project_folder` where the output file will land
+#' @param target Sub folder in `quarto_sub_folder` where the output file will land
 #' @param file_names A vector of one or many file names. If it is multiple files
 #' the function will look for and use the first available.
 #' @param override_name File name of the output, in case the original file name
 #' needs to be changed.
 #' @export
-package_readme <- function(pkg_folder = "",
+package_readme <- function(package_source_folder = "",
                            target = "",
                            file_names = c("README.md"),
-                           project_folder = "",
-                           root_folder = here::here()) {
+                           quarto_sub_folder = "",
+                           quarto_base_folder = here::here()) {
   package_file_copy(
-    pkg_folder = pkg_folder,
+    package_source_folder = package_source_folder,
     target = target,
     file_names = file_names,
     override_name = "index.md",
-    project_folder = project_folder,
-    root_folder = root_folder
+    quarto_sub_folder = quarto_sub_folder,
+    quarto_base_folder = quarto_base_folder
   )
 }
 
 #' @rdname package_readme
 #' @export
-package_news <- function(pkg_folder = "",
+package_news <- function(package_source_folder = "",
                          target = "",
                          file_names = c("NEWS.md", "NEWS.Rmd"),
-                         project_folder = "",
-                         root_folder = here::here()) {
+                         quarto_sub_folder = "",
+                         quarto_base_folder = here::here()) {
   package_file_copy(
-    pkg_folder = pkg_folder,
+    package_source_folder = package_source_folder,
     target = target,
     file_names = file_names,
-    project_folder = project_folder,
-    root_folder = root_folder
+    quarto_sub_folder = quarto_sub_folder,
+    quarto_base_folder = quarto_base_folder
   )
 }
 
 #' @rdname package_readme
 #' @export
-package_file_copy <- function(pkg_folder = "",
-                              target = "project_folder",
+package_file_copy <- function(package_source_folder = "",
+                              target = "quarto_sub_folder",
                               file_names = c("name.md", "name.Rmd"),
                               override_name = NULL,
-                              project_folder = "",
-                              root_folder = here::here()) {
-  file_present <- file_exists(path(pkg_folder, file_names))
+                              quarto_sub_folder = "",
+                              quarto_base_folder = here::here()) {
+  file_present <- file_exists(path(package_source_folder, file_names))
   file_numbers <- setNames(file_present, 1:length(file_present))
   file_there <- file_numbers[file_numbers == TRUE]
 
@@ -55,7 +55,7 @@ package_file_copy <- function(pkg_folder = "",
     file_use <- file_present[file_min]
     file_name <- names(file_use)
 
-    dest_folder <- path(root_folder, project_folder, target)
+    dest_folder <- path(quarto_base_folder, quarto_sub_folder, target)
 
     create_folder_if_missing(dest_folder)
 
@@ -66,7 +66,7 @@ package_file_copy <- function(pkg_folder = "",
       path(dest_folder, file_n),
       overwrite = TRUE
     )
-    msg_color("Copied: ", path(project_folder, target, file_n), color = green)
+    msg_color("Copied: ", path(quarto_sub_folder, target, file_n), color = green)
   } else {
     msg_color(
       "File(s) not found: ", paste0(file_names, collapse = ", "),

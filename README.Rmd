@@ -106,13 +106,13 @@ similar to the `pkgdown`'s `build_site()`.  It will map and copy the README,
 NEWS and vignettes files. It will also parse and convert the **.Rd** files into 
 **.Md** files.  
 
-The `project_folder` creates a sub-folder in your workspace where the 
+The `quarto_sub_folder` creates a sub-folder in your workspace where the 
 documentation is going to be converted and copied to.
 
 ```{r, eval = FALSE}
 package_build_documentation(
-  pkg_folder = mleap_location,
-  project_folder = "mleap"
+  package_source_folder = mleap_location,
+  quarto_sub_folder = "mleap"
 )
 ```
 
@@ -120,15 +120,15 @@ package_build_documentation(
 temp_dir <- tempdir()
 
 package_build_documentation(
-  pkg_folder = mleap_location,
-  root_folder = dir_site,
-  project_folder = "mleap"
+  package_source_folder = mleap_location,
+  quarto_base_folder = dir_site,
+  quarto_sub_folder = "mleap"
 )
 ```
 
 ```{r, include = FALSE}
-quarto_folder <- system.file("testutils/quarto_files", package = "ecodown")
-lapply(dir_ls(quarto_folder), function(x) file_copy(x, dir_site))
+quarto_base_folder <- system.file("testutils/quarto_files", package = "ecodown")
+lapply(dir_ls(quarto_base_folder), function(x) file_copy(x, dir_site))
 ```
 
 ## Run Quarto locally

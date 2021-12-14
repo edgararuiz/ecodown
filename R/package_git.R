@@ -1,5 +1,5 @@
 #' Download the package's latest source code from repo
-#' @param url Repo location
+#' @param repo_url Repo location
 #' @param commit Commit to use as the base for the documentation.  It defaults 
 #' to 'latest_tag'. That default will search for the latest Git tag.  The 
 #' assumption is that the latest tag is the same as the latest release.  This
@@ -10,20 +10,20 @@
 #' directory
 #' @param branch Repo branch. Defaults to 'main'
 #' @export
-package_clone_git_repo <- function(url = "",
+package_clone_git_repo <- function(repo_url = "",
                                    commit = c("latest_tag", "latest_commit"),
                                    target_folder = tempdir(),
                                    branch = "main") {
   
   msg_color_bold("- - - - - - Cloning repo - - - - - - - -", color = blue)
   
-  pkg_name <- path_file(url)
+  pkg_name <- path_file(repo_url)
   
   pkg_dir <- path(target_folder, pkg_name)
   
   msg_color("Cloning: ", pkg_name, color = green)
   
-  git_clone(url = url, path = pkg_dir, verbose = FALSE)
+  git_clone(url = repo_url, path = pkg_dir, verbose = FALSE)
   
   if(commit[1] == "latest_tag") {
     repo_tags <- git_tag_list(repo = pkg_dir)

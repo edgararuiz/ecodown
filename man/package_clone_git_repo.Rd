@@ -5,14 +5,14 @@
 \title{Download the package's latest source code from repo}
 \usage{
 package_clone_git_repo(
-  url = "",
+  repo_url = "",
   commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
   branch = "main"
 )
 }
 \arguments{
-\item{url}{Repo location}
+\item{repo_url}{Repo location}
 
 \item{commit}{Commit to use as the base for the documentation.  It defaults
 to 'latest_tag'. That default will search for the latest Git tag.  The

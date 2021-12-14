@@ -5,24 +5,24 @@
 \title{Copies the vignettes into Quarto}
 \usage{
 package_articles(
-  pkg_folder = "",
+  package_source_folder = "",
   source = "vignettes",
   target = "articles",
-  project_folder = "",
-  root_folder = here::here()
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here()
 )
 }
 \arguments{
-\item{pkg_folder}{Path to the package's source code}
+\item{package_source_folder}{Path to the package's source code}
 
 \item{source}{Sub-folder location where the vignettes are available}
 
 \item{target}{Sub-folder location to place the articles in Quarto}
 
-\item{project_folder}{Sub folder in \code{root_folder} that will be the base for
+\item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the base for
 the package's documentation.}
 
-\item{root_folder}{Base target Quarto folder. Defaults to current workspace.}
+\item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
 }
 \description{
 Copies the vignettes into Quarto

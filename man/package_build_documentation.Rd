@@ -5,9 +5,9 @@
 \title{Copies and/or converts files from package source into Quarto}
 \usage{
 package_build_documentation(
-  pkg_folder = "",
-  project_folder = "",
-  root_folder = here::here(),
+  package_source_folder = "",
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here(),
   readme = TRUE,
   news = TRUE,
   articles = TRUE,
@@ -17,12 +17,12 @@ package_build_documentation(
 )
 }
 \arguments{
-\item{pkg_folder}{Path to the package's source code}
+\item{package_source_folder}{Path to the package's source code}
 
-\item{project_folder}{Sub folder in \code{root_folder} that will be the base for
+\item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the base for
 the package's documentation.}
 
-\item{root_folder}{Base target Quarto folder. Defaults to current workspace.}
+\item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
 
 \item{readme}{Flag that indicates if the README file needs to be processed}
 

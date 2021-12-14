@@ -110,13 +110,13 @@ It is similar to the `pkgdown`’s `build_site()`. It will map and copy
 the README, NEWS and vignettes files. It will also parse and convert the
 **.Rd** files into **.Md** files.
 
-The `project_folder` creates a sub-folder in your workspace where the
+The `quarto_sub_folder` creates a sub-folder in your workspace where the
 documentation is going to be converted and copied to.
 
 ``` r
 package_build_documentation(
-  pkg_folder = mleap_location,
-  project_folder = "mleap"
+  package_source_folder = mleap_location,
+  quarto_sub_folder = "mleap"
 )
 ```
 

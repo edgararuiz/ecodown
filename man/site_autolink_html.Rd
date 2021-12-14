@@ -4,10 +4,10 @@
 \alias{site_autolink_html}
 \title{Autolink function calls}
 \usage{
-site_autolink_html(quarto_folder = "_site")
+site_autolink_html(quarto_rendered_site = "_site")
 }
 \arguments{
-\item{quarto_folder}{Location of the sub-folder that contains the output from
+\item{quarto_rendered_site}{Location of the sub-folder that contains the output from
 Quarto.}
 }
 \description{

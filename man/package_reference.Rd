@@ -7,43 +7,43 @@
 \title{Processes reference/help files}
 \usage{
 package_reference(
-  pkg_folder = "",
-  root_folder = here::here(),
-  project_folder = "",
+  package_source_folder = "",
+  quarto_base_folder = here::here(),
+  quarto_sub_folder = "",
   reference_folder = "reference",
   downlit_options = TRUE,
   url_prefix = ""
 )
 
 package_reference_index(
-  pkg_folder = "",
+  package_source_folder = "",
   reference_folder = "reference",
-  project_folder = "",
-  root_folder = here::here(),
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here(),
   pkg = NULL,
   downlit_options = TRUE,
   url_prefix = ""
 )
 
 package_reference_pages(
-  pkg_folder = "",
+  package_source_folder = "",
   reference_folder = "reference",
-  project_folder = "",
-  root_folder = here::here(),
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here(),
   pkg = NULL,
   downlit_options = TRUE,
   url_prefix = ""
 )
 }
 \arguments{
-\item{pkg_folder}{Path to the package's source code}
+\item{package_source_folder}{Path to the package's source code}
 
-\item{root_folder}{Base target Quarto folder. Defaults to current workspace.}
+\item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
 
-\item{project_folder}{Sub folder in \code{root_folder} that will be the base for
+\item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the base for
 the package's documentation.}
 
-\item{reference_folder}{Sub folder in \code{project_folder} where the output files
+\item{reference_folder}{Sub folder in \code{quarto_sub_folder} where the output files
 will land.}
 
 \item{downlit_options}{Flag that indicates if the package name should be
@@ -52,7 +52,7 @@ package}
 
 \item{url_prefix}{String to prefix to the 'downlit' URL's}
 
-\item{pkg}{A \code{pkgdown} object. If one is passed, then the \code{pkg_folder} argument
+\item{pkg}{A \code{pkgdown} object. If one is passed, then the \code{package_source_folder} argument
 will be ignored}
 }
 \description{

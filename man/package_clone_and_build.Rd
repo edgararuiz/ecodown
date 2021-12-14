@@ -5,25 +5,25 @@
 \title{Clones repo and builds documentation}
 \usage{
 package_clone_and_build(
-  project_folder = "",
-  root_folder = here::here(),
+  quarto_sub_folder = "",
+  quarto_base_folder = here::here(),
   readme = TRUE,
   news = TRUE,
   articles = TRUE,
   reference = TRUE,
   downlit_options = TRUE,
   url_prefix = "",
-  url = "",
+  repo_url = "",
   commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
   branch = "main"
 )
 }
 \arguments{
-\item{project_folder}{Sub folder in \code{root_folder} that will be the base for
+\item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the base for
 the package's documentation.}
 
-\item{root_folder}{Base target Quarto folder. Defaults to current workspace.}
+\item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
 
 \item{readme}{Flag that indicates if the README file needs to be processed}
 
@@ -39,7 +39,7 @@ package}
 
 \item{url_prefix}{String to prefix to the 'downlit' URL's}
 
-\item{url}{Repo location}
+\item{repo_url}{Repo location}
 
 \item{commit}{Commit to use as the base for the documentation.  It defaults
 to 'latest_tag'. That default will search for the latest Git tag.  The
