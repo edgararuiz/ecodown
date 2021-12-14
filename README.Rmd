@@ -128,7 +128,7 @@ creating a generic link.
 
 Use the `site_autolink_html()` function to perform the auto-link over all of the
 Quarto site, or a sub-folder in it.  By default, it looks at the `output-dir` entry
-in the **_quarto.yml** file to find the location of the HTML files created by
+in the _quarto.yml file to find the location of the HTML files created by
 Quarto.
 
 ```{r, include = FALSE}
