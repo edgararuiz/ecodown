@@ -13,7 +13,7 @@ package_clone_and_build(
   convert_articles = TRUE,
   convert_reference = TRUE,
   downlit_options = TRUE,
-  url_prefix = "",
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
   commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
   branch = "main"
@@ -40,7 +40,8 @@ base for the package's documentation. It defaults to the last section of the
 added to the 'options()' that tells 'downlit' that this is an internal
 package}
 
-\item{url_prefix}{String to prefix to the 'downlit' URL's}
+\item{site_url}{URL of the target site.  It defaults to using the address in
+the '_quarto.yml' file}
 
 \item{commit}{Commit to use as the base for the documentation.  It defaults
 to 'latest_tag'. That default will search for the latest Git tag.  The

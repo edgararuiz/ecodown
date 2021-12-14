@@ -12,7 +12,7 @@ package_reference(
   quarto_sub_folder = "",
   reference_folder = "reference",
   downlit_options = TRUE,
-  url_prefix = ""
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
 )
 
 package_reference_index(
@@ -22,7 +22,7 @@ package_reference_index(
   quarto_base_folder = here::here(),
   pkg = NULL,
   downlit_options = TRUE,
-  url_prefix = ""
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
 )
 
 package_reference_pages(
@@ -32,7 +32,7 @@ package_reference_pages(
   quarto_base_folder = here::here(),
   pkg = NULL,
   downlit_options = TRUE,
-  url_prefix = ""
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
 )
 }
 \arguments{
@@ -50,7 +50,8 @@ will land.}
 added to the 'options()' that tells 'downlit' that this is an internal
 package}
 
-\item{url_prefix}{String to prefix to the 'downlit' URL's}
+\item{site_url}{URL of the target site.  It defaults to using the address in
+the '_quarto.yml' file}
 
 \item{pkg}{A \code{pkgdown} object. If one is passed, then the \code{package_source_folder} argument
 will be ignored}

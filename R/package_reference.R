@@ -7,14 +7,16 @@
 #' @param downlit_options Flag that indicates if the package name should be
 #' added to the 'options()' that tells 'downlit' that this is an internal
 #' package
-#' @param url_prefix String to prefix to the 'downlit' URL's
+#' @param site_url URL of the target site.  It defaults to using the address in
+#' the '_quarto.yml' file
 #' @export
 package_reference <- function(package_source_folder = "",
                               quarto_base_folder = here::here(),
                               quarto_sub_folder = "",
                               reference_folder = "reference",
                               downlit_options = TRUE,
-                              url_prefix = "") {
+                              site_url =  get_quarto_entry(quarto_base_folder, "site", "site-url")
+                              ) {
   pkg <- pkgdown::as_pkgdown(package_source_folder)
 
   msg_color_bold("- - - - - - Reference files - - - - - - -", color = blue)
@@ -39,7 +41,7 @@ package_reference <- function(package_source_folder = "",
     downlit_options(
       package = pkg$package,
       url = quarto_sub_folder,
-      url_prefix = url_prefix
+      site_url = site_url
     )
   }
 }
@@ -52,7 +54,7 @@ package_reference_index <- function(package_source_folder = "",
                                     quarto_base_folder = here::here(),
                                     pkg = NULL,
                                     downlit_options = TRUE,
-                                    url_prefix = "") {
+                                    site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
   if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(package_source_folder)
   pkg_ref <- pkg$meta$reference
   pkg_topics <- pkg$topics
@@ -113,7 +115,7 @@ package_reference_index <- function(package_source_folder = "",
     downlit_options(
       package = pkg$package,
       url = quarto_sub_folder,
-      url_prefix = url_prefix
+      site_url = site_url
     )
   }
 }
@@ -126,7 +128,7 @@ package_reference_pages <- function(package_source_folder = "",
                                     quarto_base_folder = here::here(),
                                     pkg = NULL,
                                     downlit_options = TRUE,
-                                    url_prefix = "") {
+                                    site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
   if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(package_source_folder)
 
   topics <- transpose(pkg$topics)
@@ -145,7 +147,7 @@ package_reference_pages <- function(package_source_folder = "",
     downlit_options(
       package = pkg$package,
       url = quarto_sub_folder,
-      url_prefix = url_prefix
+      site_url = site_url
     )
   }
 }

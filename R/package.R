@@ -13,7 +13,7 @@ package_clone_and_build <- function(repo_url= "",
                                     convert_articles = TRUE,
                                     convert_reference = TRUE,
                                     downlit_options = TRUE,
-                                    url_prefix = "",
+                                    site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
                                     commit = c("latest_tag", "latest_commit"),
                                     target_folder = tempdir(),
                                     branch = "main"
@@ -35,7 +35,7 @@ package_clone_and_build <- function(repo_url= "",
     convert_articles = convert_articles,
     convert_reference = convert_reference,
     downlit_options = downlit_options,
-    url_prefix = url_prefix
+    site_url = site_url
   )
   
 }
@@ -51,7 +51,8 @@ package_clone_and_build <- function(repo_url= "",
 #' @param downlit_options Flag that indicates if the package name should be
 #' added to the 'options()' that tells 'downlit' that this is an internal
 #' package
-#' @param url_prefix String to prefix to the 'downlit' URL's
+#' @param site_url URL of the target site.  It defaults to using the address in
+#' the '_quarto.yml' file
 #' @export
 package_build_documentation <- function(package_source_folder = "",
                                         quarto_sub_folder = "",
@@ -61,7 +62,8 @@ package_build_documentation <- function(package_source_folder = "",
                                         convert_articles = TRUE,
                                         convert_reference = TRUE,
                                         downlit_options = TRUE,
-                                        url_prefix = "") {
+                                        site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
+                                        ) {
   if (convert_readme | convert_news) {
     msg_color_bold("- - - - - - - Top files - - - - - - - - -", color = blue)
   }
@@ -96,7 +98,7 @@ package_build_documentation <- function(package_source_folder = "",
       quarto_sub_folder = quarto_sub_folder,
       quarto_base_folder = quarto_base_folder,
       downlit_options = downlit_options,
-      url_prefix = url_prefix
+      site_url = site_url
     )
   }
 }

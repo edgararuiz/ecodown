@@ -13,7 +13,7 @@ package_build_documentation(
   convert_articles = TRUE,
   convert_reference = TRUE,
   downlit_options = TRUE,
-  url_prefix = ""
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
 )
 }
 \arguments{
@@ -36,7 +36,8 @@ the package's documentation.}
 added to the 'options()' that tells 'downlit' that this is an internal
 package}
 
-\item{url_prefix}{String to prefix to the 'downlit' URL's}
+\item{site_url}{URL of the target site.  It defaults to using the address in
+the '_quarto.yml' file}
 }
 \description{
 Copies and/or converts files from package source into Quarto

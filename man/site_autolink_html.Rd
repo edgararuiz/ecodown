@@ -4,11 +4,13 @@
 \alias{site_autolink_html}
 \title{Autolink function calls}
 \usage{
-site_autolink_html(quarto_rendered_site = "_site")
+site_autolink_html(
+  rendered_site = get_quarto_entry(here::here(), "project", "output-dir")
+)
 }
 \arguments{
-\item{quarto_rendered_site}{Location of the sub-folder that contains the output from
-Quarto.}
+\item{rendered_site}{Location of the sub-folder that contains the output
+from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.}
 }
 \description{
 Autolink function calls

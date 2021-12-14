@@ -1,6 +1,6 @@
 Package: ecodown
 Title: Publish package documents in Quarto
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Authors@R: 
     person(
     given = "Edgar", 
@@ -18,12 +18,13 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports:
     pkgdown,
-    purrr,
-    fs,
-    crayon,
-    here,
     downlit,
-    gert
+    crayon,
+    purrr,
+    here,
+    gert,
+    yaml,
+    fs
 Suggests: 
     covr,
     testthat (>= 3.0.0)
