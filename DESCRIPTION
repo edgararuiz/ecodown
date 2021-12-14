@@ -8,22 +8,22 @@ Authors@R:
     email = "edgararuiz@gmail.com", 
     role = c("aut", "cre")
     )
-Description: Makes it possible for your R package's documentation to be published 
-    in a Quarto site. The vision for this package is that it is used to 
-    document a group of related packages that will be published to a single 
+Description: Makes it possible for your R package's documentation to be 
+    published in a Quarto site. The vision for this package is that it is used 
+    to document a group of related packages that will be published to a single 
     Quarto site.  
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports:
-  pkgdown,
-  purrr,
-  fs,
-  crayon,
-  here,
-  downlit,
-  gert
+    pkgdown,
+    purrr,
+    fs,
+    crayon,
+    here,
+    downlit,
+    gert
 Suggests: 
     covr,
     testthat (>= 3.0.0)

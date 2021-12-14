@@ -2,6 +2,7 @@
 
 export(package_articles)
 export(package_build_documentation)
+export(package_clone_and_build)
 export(package_clone_git_repo)
 export(package_file_copy)
 export(package_news)

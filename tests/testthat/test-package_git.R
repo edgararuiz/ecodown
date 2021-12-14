@@ -14,4 +14,13 @@ test_that("Default cloning works",{
     "- Checking out SHA: 80bfc4c..."
   )
   
+  expect_output(
+    package_clone_and_build(
+      url = pkg_url, 
+      target = paste0(tempdir(), "/newtest"),
+      project_folder = "crayon"
+      ),
+    "- - - - - - - Cloning repo - - - - - - - -"
+  )
+  
 })

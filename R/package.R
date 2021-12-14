@@ -1,3 +1,41 @@
+#' Clones repo and builds documentation
+#' @inheritParams package_build_documentation
+#' @inheritParams package_clone_git_repo
+#' @export
+package_clone_and_build <- function(project_folder = "",
+                                    root_folder = here::here(),
+                                    readme = TRUE,
+                                    news = TRUE,
+                                    articles = TRUE,
+                                    reference = TRUE,
+                                    downlit_options = TRUE,
+                                    url_prefix = "",
+                                    url = "",
+                                    commit = c("latest_tag", "latest_commit"),
+                                    target_folder = tempdir(),
+                                    branch = "main"
+                                    ) {
+  
+  pkg_path <- package_clone_git_repo(
+    url = url,
+    commit = commit,
+    target_folder = target_folder,
+    branch = branch
+  )
+  
+  package_build_documentation(
+    pkg_folder = pkg_path,
+    project_folder = project_folder,
+    root_folder = here::here(),
+    readme = readme,
+    news = news,
+    articles = articles,
+    reference = reference,
+    downlit_options = downlit_options,
+    url_prefix = url_prefix
+  )
+  
+}
 #' Copies and/or converts files from package source into Quarto
 #' @param pkg_folder Path to the package's source code
 #' @param root_folder Base target Quarto folder. Defaults to current workspace.
