@@ -8,7 +8,7 @@ test_that("Full package documentation works", {
     package_build_documentation(
       package_source_folder = pkg_location,
       quarto_sub_folder = site_folder,
-      quarto_base_folder = temp_dir, 
+      quarto_base_folder = temp_dir,
       site_url = ""
     ),
     "- - - - - - - - Top files - - - - - - - - -"
@@ -20,17 +20,17 @@ test_that("Full package documentation works", {
   )
 
   expect_output(
-    site_autolink_html( 
+    site_autolink_html(
       rendered_site = test_path("assets/crayon-html")
     ),
     "- - - - - - Auto-linking - - - - - - - - -"
   )
-  
+
   expect_output(
     package_file_copy(file_names = "test"),
     "not found: test"
   )
-  
+
   expect_output(
     package_build_documentation(
       package_source_folder = test_path("assets/crayon2"),
@@ -39,7 +39,7 @@ test_that("Full package documentation works", {
     ),
     "- - - - - - - - Top files - - - - - - - - -"
   )
-  
+
   expect_equal(
     get_quarto_entry(test_path("assets"), "site", "title"),
     "testsite"

@@ -1,10 +1,8 @@
 #' Autolink function calls
-#' @param rendered_site Location of the sub-folder that contains the output 
+#' @param rendered_site Location of the sub-folder that contains the output
 #' from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.
 #' @export
-site_autolink_html <- function(
-  rendered_site = get_quarto_entry(here::here(), "project", "output-dir")
-  ) {
+site_autolink_html <- function(rendered_site = get_quarto_entry(here::here(), "project", "output-dir")) {
   msg_color("- - - - - - Auto-linking - - - - - - - - -", color = blue)
   html_files <- dir_ls(rendered_site, recurse = TRUE, type = "file", glob = "*.html")
   walk(

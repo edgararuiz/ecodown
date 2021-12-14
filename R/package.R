@@ -1,11 +1,11 @@
 #' Clones repo and builds documentation
 #' @inheritParams package_build_documentation
 #' @inheritParams package_clone_git_repo
-#' @param quarto_sub_folder Sub folder in `quarto_base_folder` that will be the 
-#' base for the package's documentation. It defaults to the last section of the 
+#' @param quarto_sub_folder Sub folder in `quarto_base_folder` that will be the
+#' base for the package's documentation. It defaults to the last section of the
 #' 'repo_url', which is usually the package name.
 #' @export
-package_clone_and_build <- function(repo_url= "",
+package_clone_and_build <- function(repo_url = "",
                                     quarto_sub_folder = path_file(repo_url),
                                     quarto_base_folder = here::here(),
                                     convert_readme = TRUE,
@@ -16,32 +16,30 @@ package_clone_and_build <- function(repo_url= "",
                                     site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
                                     commit = c("latest_tag", "latest_commit"),
                                     target_folder = tempdir(),
-                                    branch = "main"
-                                    ) {
-  
+                                    branch = "main") {
   msg_color_bold("- - - - - - - - Init - - - - - - - - - - -", color = blue)
-  
-  if(quarto_base_folder == here::here()) {
+
+  if (quarto_base_folder == here::here()) {
     msg_color(bold("quarto_base_folder: "), here::here(), color = green)
   }
-  
+
   pkg_name <- path_file(repo_url)
-  if(quarto_sub_folder == pkg_name) {
+  if (quarto_sub_folder == pkg_name) {
     msg_color(bold("quarto_sub_folder: "), pkg_name, color = green)
-  } 
-  
+  }
+
   quarto_site <- get_quarto_entry(quarto_base_folder, "site", "site-url")
-  if(site_url == quarto_site) {
+  if (site_url == quarto_site) {
     msg_color(bold("site_url: "), quarto_site, color = green)
   }
-  
+
   pkg_path <- package_clone_git_repo(
-    repo_url= repo_url,
+    repo_url = repo_url,
     commit = commit,
     target_folder = target_folder,
     branch = branch
   )
-  
+
   package_build_documentation(
     package_source_folder = pkg_path,
     quarto_sub_folder = quarto_sub_folder,
@@ -53,7 +51,6 @@ package_clone_and_build <- function(repo_url= "",
     downlit_options = downlit_options,
     site_url = site_url
   )
-  
 }
 #' Copies and/or converts files from package source into Quarto
 #' @param package_source_folder Path to the package's source code
@@ -78,13 +75,11 @@ package_build_documentation <- function(package_source_folder = "",
                                         convert_articles = TRUE,
                                         convert_reference = TRUE,
                                         downlit_options = TRUE,
-                                        site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
-                                        ) {
-  
+                                        site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
   if (convert_readme | convert_news) {
     msg_color_bold("- - - - - - - Top files - - - - - - - - -", color = blue)
   }
-  
+
   if (convert_readme) {
     package_readme(
       package_source_folder = package_source_folder,
