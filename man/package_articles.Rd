@@ -17,7 +17,7 @@ package_articles(
 
 \item{source}{Sub-folder location where the vignettes are available}
 
-\item{target}{Sub-folder location to place the articles in Quarto}
+\item{target}{Sub-folder location to place the convert_articles in Quarto}
 
 \item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the base for
 the package's documentation.}

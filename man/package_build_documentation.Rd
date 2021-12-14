@@ -8,10 +8,10 @@ package_build_documentation(
   package_source_folder = "",
   quarto_sub_folder = "",
   quarto_base_folder = here::here(),
-  readme = TRUE,
-  news = TRUE,
-  articles = TRUE,
-  reference = TRUE,
+  convert_readme = TRUE,
+  convert_news = TRUE,
+  convert_articles = TRUE,
+  convert_reference = TRUE,
   downlit_options = TRUE,
   url_prefix = ""
 )
@@ -24,13 +24,13 @@ the package's documentation.}
 
 \item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
 
-\item{readme}{Flag that indicates if the README file needs to be processed}
+\item{convert_readme}{Flag that indicates if the README file needs to be processed}
 
-\item{news}{Flag that indicates if the NEWS file needs to be processed}
+\item{convert_news}{Flag that indicates if the NEWS file needs to be processed}
 
-\item{articles}{Flag that indicates if the vignette files needs to be processed}
+\item{convert_articles}{Flag that indicates if the vignette files needs to be processed}
 
-\item{reference}{Flag that indicates if the help files needs to be processed}
+\item{convert_reference}{Flag that indicates if the help files needs to be processed}
 
 \item{downlit_options}{Flag that indicates if the package name should be
 added to the 'options()' that tells 'downlit' that this is an internal

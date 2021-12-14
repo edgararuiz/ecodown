@@ -5,41 +5,42 @@
 \title{Clones repo and builds documentation}
 \usage{
 package_clone_and_build(
-  quarto_sub_folder = "",
+  repo_url = "",
+  quarto_sub_folder = path_file(repo_url),
   quarto_base_folder = here::here(),
-  readme = TRUE,
-  news = TRUE,
-  articles = TRUE,
-  reference = TRUE,
+  convert_readme = TRUE,
+  convert_news = TRUE,
+  convert_articles = TRUE,
+  convert_reference = TRUE,
   downlit_options = TRUE,
   url_prefix = "",
-  repo_url = "",
   commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
   branch = "main"
 )
 }
 \arguments{
-\item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the base for
-the package's documentation.}
+\item{repo_url}{Repo location}
+
+\item{quarto_sub_folder}{Sub folder in \code{quarto_base_folder} that will be the
+base for the package's documentation. It defaults to the last section of the
+'repo_url', which is usually the package name.}
 
 \item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
 
-\item{readme}{Flag that indicates if the README file needs to be processed}
+\item{convert_readme}{Flag that indicates if the README file needs to be processed}
 
-\item{news}{Flag that indicates if the NEWS file needs to be processed}
+\item{convert_news}{Flag that indicates if the NEWS file needs to be processed}
 
-\item{articles}{Flag that indicates if the vignette files needs to be processed}
+\item{convert_articles}{Flag that indicates if the vignette files needs to be processed}
 
-\item{reference}{Flag that indicates if the help files needs to be processed}
+\item{convert_reference}{Flag that indicates if the help files needs to be processed}
 
 \item{downlit_options}{Flag that indicates if the package name should be
 added to the 'options()' that tells 'downlit' that this is an internal
 package}
 
 \item{url_prefix}{String to prefix to the 'downlit' URL's}
-
-\item{repo_url}{Repo location}
 
 \item{commit}{Commit to use as the base for the documentation.  It defaults
 to 'latest_tag'. That default will search for the latest Git tag.  The
