@@ -19,6 +19,22 @@ package_clone_and_build <- function(repo_url= "",
                                     branch = "main"
                                     ) {
   
+  msg_color_bold("- - - - - - - - Init - - - - - - - - - - -", color = blue)
+  
+  if(quarto_base_folder == here::here()) {
+    msg_color(bold("quarto_base_folder: "), here::here(), color = green)
+  }
+  
+  pkg_name <- path_file(repo_url)
+  if(quarto_sub_folder == pkg_name) {
+    msg_color(bold("quarto_sub_folder: "), pkg_name, color = green)
+  } 
+  
+  quarto_site <- get_quarto_entry(quarto_base_folder, "site", "site-url")
+  if(site_url == quarto_site) {
+    msg_color(bold("site_url: "), quarto_site, color = green)
+  }
+  
   pkg_path <- package_clone_git_repo(
     repo_url= repo_url,
     commit = commit,
@@ -64,10 +80,11 @@ package_build_documentation <- function(package_source_folder = "",
                                         downlit_options = TRUE,
                                         site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
                                         ) {
+  
   if (convert_readme | convert_news) {
     msg_color_bold("- - - - - - - Top files - - - - - - - - -", color = blue)
   }
-
+  
   if (convert_readme) {
     package_readme(
       package_source_folder = package_source_folder,
