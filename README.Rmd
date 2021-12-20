@@ -22,8 +22,11 @@ cat_tree <- function(x, ...) {
 
 temp_dir <- tempdir()
 dir_site <- path(temp_dir, "test_site")
-if(dir_exists(path(temp_dir, "mleap"))) dir_delete(path(temp_dir, "mleap"))
-if(dir_exists(dir_site)) dir_delete(dir_site)
+if(dir_exists(dir_site)) unlink(dir_site, recursive = TRUE, force = TRUE)
+dir_create(dir_site)   
+
+file_utils <- system.file("testutils/quarto_files", package = "ecodown")
+lapply(dir_ls(file_utils), function(x) file_copy(x, dir_site, overwrite = TRUE))
 ```
 
 # ecodown
@@ -84,12 +87,6 @@ package_clone_and_build(
   quarto_base_folder = dir_site
 )
 ```
-
-```{r, include = FALSE}
-quarto_base_folder <- system.file("testutils/quarto_files", package = "ecodown")
-lapply(dir_ls(quarto_base_folder), function(x) file_copy(x, dir_site, overwrite = TRUE))
-```
-
 ## Run Quarto locally
 
 Use `quarto::quarto_render()` to convert the markdown files into HTML. 
