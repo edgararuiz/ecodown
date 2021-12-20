@@ -1,19 +1,18 @@
 #' Autolink function calls
+#' @inheritParams package_clone_and_build
 #' @param render_folder Location of the sub-folder that contains the output
 #' from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.
 #' @export
-site_autolink_html <- function(
-  quarto_base_folder = here::here(),
-  render_folder = get_quarto_entry(quarto_base_folder, "project", "output-dir")
-  ) {
+site_autolink_html <- function(quarto_base_folder = here::here(),
+                               render_folder = get_quarto_entry(quarto_base_folder, "project", "output-dir")) {
   quarto_path <- path(quarto_base_folder, render_folder)
   msg_color("- - - - - - Auto-linking - - - - - - - - -", color = blue)
   msg_color(bold("Path: "), quarto_path, color = green)
-  html_files <- dir_ls(quarto_path, 
-                       recurse = TRUE, 
-                       type = "file", 
-                       glob = "*.html"
-                       )
+  html_files <- dir_ls(quarto_path,
+    recurse = TRUE,
+    type = "file",
+    glob = "*.html"
+  )
   walk(
     html_files,
     ~ {

@@ -10,6 +10,8 @@ site_autolink_html(
 )
 }
 \arguments{
+\item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
+
 \item{render_folder}{Location of the sub-folder that contains the output
 from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.}
 }
