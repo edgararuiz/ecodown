@@ -61,7 +61,7 @@ package_clone_and_build("https://github.com/rstudio/mleap")
 
     #> - - - - - - - - - Init - - - - - - - - - - -
     #> - quarto_sub_folder: mleap
-    #> - site_url: 
+    #> - site_url: https://www.mysite.com/
     #> - - - - - - - Cloning repo - - - - - - - -
     #> - Cloning: mleap
     #> - Checking out tag: v1.0.0
@@ -132,6 +132,7 @@ site_autolink_html()
 ```
 
     #> - - - - - - - Auto-linking - - - - - - - - -
+    #> - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/Rtmp91ixev/test_site/docs
     #> - Processed: index.html
     #> - Processed: NEWS.html
     #> - Processed: index.html

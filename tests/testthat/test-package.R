@@ -21,7 +21,8 @@ test_that("Full package documentation works", {
 
   expect_output(
     site_autolink_html(
-      rendered_site = test_path("assets/crayon-html")
+      quarto_base_folder = test_path("assets/crayon-html"),
+      render_folder = NULL
     ),
     "- - - - - - Auto-linking - - - - - - - - -"
   )
