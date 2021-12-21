@@ -16,19 +16,28 @@ site_build_quarto <- function(quarto_base_folder = here::here()) {
         )
       }
     )
+    exec_command("quarto_render", config_yaml$site$quarto_render, qbf)
+    exec_command("site_autolink_html", config_yaml$site$autolink, qbf)
 
-    qr <- config_yaml$site$quarto_render
-    if (!is.null(qr)) {
-      exec("quarto_render", !!!qr, input = qbf)
-    } else {
-      quarto_render(input = qbf, as_job = FALSE)
-    }
-
-    al <- config_yaml$site$autolink
-    if (!is.null(al)) {
-      exec("site_autolink_html", !!!al)
-    } else {
-      site_autolink_html(quarto_base_folder = quarto_base_folder)
-    }
   }
 }
+
+exec_command <- function(command_name = "", 
+                        entry_value, 
+                        quarto_base_folder = ""
+                        ) {
+  if(!is.null(entry_value)) {
+    if(entry_value != FALSE) {
+      exec(command_name, entry_value)
+    } 
+  } else {
+    exec(command_name, quarto_base_folder = quarto_base_folder)
+  }
+  
+  
+}
+
+
+
+
+

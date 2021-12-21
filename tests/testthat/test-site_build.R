@@ -12,6 +12,6 @@ test_that("Build site works", {
 
   expect_equal(
     length(list.dirs(dir_site, recursive = FALSE)),
-    4
+    2
   )
 })
