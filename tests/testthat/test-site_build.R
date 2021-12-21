@@ -7,7 +7,7 @@ test_that("Build site works", {
 
   expect_output(
     site_build_quarto(quarto_base_folder = dir_site),
-    "- - - - - - - - - - - - - - Pakcage documentation - - - - - - - - - - - - - - "
+    msg_title_raw("Package documentation")
   )
 
   expect_equal(

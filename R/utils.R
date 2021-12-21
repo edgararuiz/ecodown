@@ -25,8 +25,13 @@ msg_color_bold <- function(..., color = black) {
 }
 
 msg_color_title <- function(..., color = blue) {
-  title <- paste0(...)
+  title <- msg_title_raw(paste0(...))
+  cat(bold(color(paste0(title, "\n"))))
+}
+
+msg_title_raw <- function(title) {
   n_side <- floor(40 - nchar(title) / 2)
   sides <- paste0(rep("- ", times = n_side / 2), collapse = "")
-  cat(bold(color(paste0(sides, title, " ", sides, "\n"))))
+  x <- paste0(sides, title, " ", sides)
+  substr(x, 1, 78)
 }

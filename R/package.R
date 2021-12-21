@@ -18,7 +18,7 @@ package_clone_and_build <- function(repo_url = "",
                                     target_folder = tempdir(),
                                     branch = "main") {
   
-  msg_color_title("Pakcage documentation")
+  msg_color_title("Package documentation")
 
   if (quarto_base_folder == here::here()) {
     msg_color(bold("quarto_base_folder: "), here::here(), color = green)

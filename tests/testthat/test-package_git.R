@@ -6,7 +6,7 @@ test_that("Default cloning works", {
 
   expect_output(
     pkg_path <- package_clone_git_repo(pkg_url),
-    "- - - - - - - Cloning repo - - - - - - - -"
+    msg_title_raw("Cloning repo")
   )
 
   expect_output(
@@ -20,6 +20,6 @@ test_that("Default cloning works", {
       target_folder = paste0(tempdir(), "/newtest"),
       quarto_sub_folder = "crayon"
     ),
-    "- - - - - - - - - - - - - - Pakcage documentation - - - - - - - - - - - - - - "
+    msg_title_raw("Package documentation")
   )
 })

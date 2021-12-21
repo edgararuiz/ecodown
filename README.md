@@ -53,10 +53,10 @@ Contents of example ’\_ecodown.yml’ file:
 site_build_quarto()
 ```
 
-    - - - - - - - - - - - - - - Pakcage documentation - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - Package documentation - - - - - - - - - - - - - - 
     - quarto_sub_folder: mleap
     - site_url: https://www.mysite.com/
-    - - - - - - - - - - - - - - - - - Cloning repo - - - - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - - - - Cloning repo - - - - - - - - - - - - - - - -
     - Cloning: mleap
     - Checking out SHA: 39267f6...
     - - - - - - - - - - - - - - - - - Top files - - - - - - - - - - - - - - - - - 
@@ -64,7 +64,7 @@ site_build_quarto()
     - Copied: mleap/NEWS.md
     - - - - - - - - - - - - - - - - Article files - - - - - - - - - - - - - - - - 
     - Vignette folder not found
-    - - - - - - - - - - - - - - - - Reference files - - - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - - - Reference files - - - - - - - - - - - - - - - 
     - Created: mleap/reference/index.md
     - Created: mleap/reference/install_maven.md
     - Created: mleap/reference/install_mleap.md
@@ -73,17 +73,17 @@ site_build_quarto()
     - Created: mleap/reference/mleap_load_bundle.md
     - Created: mleap/reference/mleap_model_schema.md
     - Created: mleap/reference/mleap_transform.md
-    - - - - - - - - - - - - - - Pakcage documentation - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - Package documentation - - - - - - - - - - - - - - 
     - quarto_sub_folder: graphframes
     - site_url: https://www.mysite.com/
-    - - - - - - - - - - - - - - - - - Cloning repo - - - - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - - - - Cloning repo - - - - - - - - - - - - - - - -
     - Cloning: graphframes
     - Checking out tag: v0.1.2
     - - - - - - - - - - - - - - - - - Top files - - - - - - - - - - - - - - - - - 
     - Copied: graphframes/NEWS.md
     - - - - - - - - - - - - - - - - Article files - - - - - - - - - - - - - - - - 
     - Vignette folder not found
-    - - - - - - - - - - - - - - - - Reference files - - - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - - - Reference files - - - - - - - - - - - - - - - 
     - Created: graphframes/reference/index.md
     - Created: graphframes/reference/gf_bfs.md
     - Created: graphframes/reference/gf_cache.md
@@ -112,7 +112,7 @@ site_build_quarto()
     - Created: graphframes/reference/gf_vertex_columns.md
     - Created: graphframes/reference/gf_vertices.md
     - Created: graphframes/reference/spark_graphframe.md
-    - - - - - - - - - - - - - - - Render Quarto site - - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - - Render Quarto site - - - - - - - - - - - - - - -
     [ 1/40] graphframes/NEWS.md
     [ 2/40] graphframes/reference/gf_triangle_count.md
     [ 3/40] graphframes/reference/gf_lpa.md
@@ -156,8 +156,8 @@ site_build_quarto()
 
     Output created: docs/index.html
 
-    - - - - - - - - - - - - - - - - - Auto-linking - - - - - - - - - - - - - - - - - 
-    - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/RtmpNtQygO/test_site2/docs
+    - - - - - - - - - - - - - - - - - Auto-linking - - - - - - - - - - - - - - - -
+    - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/Rtmpjmo9OV/test_site2/docs
     - Processed: NEWS.html
     - Processed: gf_bfs.html
     - Processed: gf_cache.html
@@ -198,4 +198,4 @@ site_build_quarto()
     - Processed: mleap_load_bundle.html
     - Processed: mleap_model_schema.html
     - Processed: mleap_transform.html
-    - - - - - - - - - - - - - - - - - - Complete - - - - - - - - - - - - - - - - - - 
+    - - - - - - - - - - - - - - - - - - Complete - - - - - - - - - - - - - - - - -
