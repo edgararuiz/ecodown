@@ -20,6 +20,6 @@ test_that("Default cloning works", {
       target_folder = paste0(tempdir(), "/newtest"),
       quarto_sub_folder = "crayon"
     ),
-    "- - - - - - - - Init - - - - - - - - - - -"
+    "- - - - - - - - - - - - - - Pakcage documentation - - - - - - - - - - - - - - "
   )
 })

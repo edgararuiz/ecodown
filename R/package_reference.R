@@ -18,7 +18,7 @@ package_reference <- function(package_source_folder = "",
                               site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
   pkg <- pkgdown::as_pkgdown(package_source_folder)
 
-  msg_color_bold("- - - - - - Reference files - - - - - - -", color = blue)
+  msg_color_title("Reference files")
 
   create_folder_if_missing(path(quarto_base_folder, quarto_sub_folder, reference_folder))
 

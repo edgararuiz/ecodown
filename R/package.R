@@ -17,7 +17,8 @@ package_clone_and_build <- function(repo_url = "",
                                     commit = c("latest_tag", "latest_commit"),
                                     target_folder = tempdir(),
                                     branch = "main") {
-  msg_color_bold("- - - - - - - - Init - - - - - - - - - - -", color = blue)
+  
+  msg_color_title("Pakcage documentation")
 
   if (quarto_base_folder == here::here()) {
     msg_color(bold("quarto_base_folder: "), here::here(), color = green)
@@ -76,9 +77,8 @@ package_build_documentation <- function(package_source_folder = "",
                                         convert_reference = TRUE,
                                         downlit_options = TRUE,
                                         site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
-  if (convert_readme | convert_news) {
-    msg_color_bold("- - - - - - - Top files - - - - - - - - -", color = blue)
-  }
+  
+  if (convert_readme | convert_news) msg_color_title("Top files")
 
   if (convert_readme) {
     package_readme(
@@ -125,7 +125,8 @@ package_articles <- function(package_source_folder = "",
                              target = "articles",
                              quarto_sub_folder = "",
                              quarto_base_folder = here::here()) {
-  msg_color_bold("- - - - - - Article files - - - - - - - -", color = blue)
+  
+  msg_color_title("Article files")
 
   a_folder <- path(package_source_folder, source)
 

@@ -11,7 +11,7 @@ test_that("Full package documentation works", {
       quarto_base_folder = temp_dir,
       site_url = ""
     ),
-    "- - - - - - - - Top files - - - - - - - - -"
+    "- - - - - - - - - - - - - - - - - Top files - - - - - - - - - - - - - - - - - "
   )
 
   expect_equal(
@@ -24,7 +24,7 @@ test_that("Full package documentation works", {
       quarto_base_folder = test_path("assets/crayon-html"),
       render_folder = NULL
     ),
-    "- - - - - - Auto-linking - - - - - - - - -"
+    "- - - - - - - - - - - - - - - - - Auto-linking - - - - - - - - - - - - - - - - - "
   )
 
   expect_output(
@@ -38,7 +38,7 @@ test_that("Full package documentation works", {
       quarto_sub_folder = site_folder,
       quarto_base_folder = temp_dir
     ),
-    "- - - - - - - - Top files - - - - - - - - -"
+    "- - - - - - - - - - - - - - - - - Top files - - - - - - - - - - - - - - - - - "
   )
 
   expect_equal(

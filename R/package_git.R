@@ -14,7 +14,8 @@ package_clone_git_repo <- function(repo_url = "",
                                    commit = c("latest_tag", "latest_commit"),
                                    target_folder = tempdir(),
                                    branch = "main") {
-  msg_color_bold("- - - - - - Cloning repo - - - - - - - -", color = blue)
+  
+  msg_color_title("Cloning repo")
 
   pkg_name <- path_file(repo_url)
 

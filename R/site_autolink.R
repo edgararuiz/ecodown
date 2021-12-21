@@ -6,7 +6,9 @@
 site_autolink_html <- function(quarto_base_folder = here::here(),
                                render_folder = get_quarto_entry(quarto_base_folder, "project", "output-dir")) {
   quarto_path <- path(quarto_base_folder, render_folder)
-  msg_color("- - - - - - Auto-linking - - - - - - - - -", color = blue)
+  
+  msg_color_title("Auto-linking")
+  
   msg_color(bold("Path: "), quarto_path, color = green)
   html_files <- dir_ls(quarto_path,
     recurse = TRUE,

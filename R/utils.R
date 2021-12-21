@@ -23,3 +23,10 @@ msg_color <- function(..., color = black) cat(color(paste0("- ", ..., "\n")))
 msg_color_bold <- function(..., color = black) {
   cat(bold(color(paste0("- ", ..., "\n"))))
 }
+
+msg_color_title <- function(..., color = blue) {
+  title <- paste0(...)
+  n_side <- floor(40 - nchar(title) / 2)
+  sides <- paste0(rep("- ", times = n_side / 2), collapse = "")
+  cat(bold(color(paste0(sides, title, " ", sides, "\n"))))
+}
