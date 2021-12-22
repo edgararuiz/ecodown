@@ -16,7 +16,8 @@ package_clone_and_build(
   site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
   commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
-  branch = "main"
+  branch = "main",
+  verbosity = c("verbose", "summary", "silent")
 )
 }
 \arguments{
@@ -54,6 +55,9 @@ commit to use.}
 directory}
 
 \item{branch}{Repo branch. Defaults to 'main'}
+
+\item{verbosity}{Level of messaging available during run time. Possible values
+are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
 }
 \description{
 Clones repo and builds documentation

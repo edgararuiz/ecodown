@@ -16,8 +16,10 @@ package_clone_and_build <- function(repo_url = "",
                                     site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
                                     commit = c("latest_tag", "latest_commit"),
                                     target_folder = tempdir(),
-                                    branch = "main") {
-  
+                                    branch = "main",
+                                    verbosity = c("verbose", "summary", "silent")
+                                    ) {
+
   msg_color_title("Package documentation")
 
   if (quarto_base_folder == here::here()) {
@@ -50,8 +52,11 @@ package_clone_and_build <- function(repo_url = "",
     convert_articles = convert_articles,
     convert_reference = convert_reference,
     downlit_options = downlit_options,
-    site_url = site_url
+    site_url = site_url,
+    verbosity = verbosity
   )
+  
+  
 }
 #' Copies and/or converts files from package source into Quarto
 #' @param package_source_folder Path to the package's source code
@@ -67,6 +72,8 @@ package_clone_and_build <- function(repo_url = "",
 #' package
 #' @param site_url URL of the target site.  It defaults to using the address in
 #' the '_quarto.yml' file
+#' @param verbosity Level of messaging available during run time. Possible values
+#' are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose' 
 #' @export
 package_build_documentation <- function(package_source_folder = "",
                                         quarto_sub_folder = "",
@@ -76,16 +83,23 @@ package_build_documentation <- function(package_source_folder = "",
                                         convert_articles = TRUE,
                                         convert_reference = TRUE,
                                         downlit_options = TRUE,
-                                        site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
+                                        site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+                                        verbosity = c("verbose", "summary", "silent")
+                                        ) {
   
   if (convert_readme | convert_news) msg_color_title("Top files")
-
+  
+  msg_summary_entry("|")
+  
   if (convert_readme) {
     package_readme(
       package_source_folder = package_source_folder,
       quarto_sub_folder = quarto_sub_folder,
       quarto_base_folder = quarto_base_folder
     )
+    msg_summary_number(1)
+  } else {
+    msg_summary_number(0)
   }
 
   if (convert_news) {
@@ -94,25 +108,38 @@ package_build_documentation <- function(package_source_folder = "",
       quarto_sub_folder = quarto_sub_folder,
       quarto_base_folder = quarto_base_folder
     )
+    msg_summary_number(1)
+  } else {
+    msg_summary_number(0)
   }
 
   if (convert_articles) {
+    vf <- path(package_source_folder, "vignettes")
+    nv <- ifelse(dir_exists(vf), length(dir_ls(vf)), 0) 
     package_articles(
       package_source_folder = package_source_folder,
       quarto_sub_folder = quarto_sub_folder,
       quarto_base_folder = quarto_base_folder
     )
+  } else {
+    nv <- 0
   }
 
+  msg_summary_number(nv, size = 4)
+  
   if (convert_reference) {
     package_reference(
       package_source_folder = package_source_folder,
       quarto_sub_folder = quarto_sub_folder,
       quarto_base_folder = quarto_base_folder,
       downlit_options = downlit_options,
-      site_url = site_url
+      site_url = site_url,
+      verbosity = verbosity
     )
   }
+  
+  msg_summary_number("|", size = 2)
+  msg_summary_entry("\n")
 }
 
 #' Copies the vignettes into Quarto

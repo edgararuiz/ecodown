@@ -75,7 +75,7 @@ site_build_quarto()
 ```
 
 ```{r, echo = FALSE}
-site_build_quarto(dir_site)
+site_build_quarto(dir_site, verbosity = "summary")
 ```
 
 

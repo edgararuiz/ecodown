@@ -15,7 +15,9 @@ package_reference <- function(package_source_folder = "",
                               quarto_sub_folder = "",
                               reference_folder = "reference",
                               downlit_options = TRUE,
-                              site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
+                              site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+                              verbosity = c("verbose", "summary", "silent")
+                              ) {
   pkg <- pkgdown::as_pkgdown(package_source_folder)
 
   msg_color_title("Reference files")
@@ -33,7 +35,8 @@ package_reference <- function(package_source_folder = "",
     pkg = pkg,
     quarto_sub_folder = quarto_sub_folder,
     quarto_base_folder = quarto_base_folder,
-    reference_folder = reference_folder
+    reference_folder = reference_folder,
+    verbosity = verbosity
   )
 
   if (downlit_options) {
@@ -53,7 +56,9 @@ package_reference_index <- function(package_source_folder = "",
                                     quarto_base_folder = here::here(),
                                     pkg = NULL,
                                     downlit_options = TRUE,
-                                    site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
+                                    site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+                                    verbosity = c("verbose", "summary", "silent")
+                                    ) {
   if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(package_source_folder)
   pkg_ref <- pkg$meta$reference
   pkg_topics <- pkg$topics
@@ -127,7 +132,9 @@ package_reference_pages <- function(package_source_folder = "",
                                     quarto_base_folder = here::here(),
                                     pkg = NULL,
                                     downlit_options = TRUE,
-                                    site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")) {
+                                    site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+                                    verbosity = c("verbose", "summary", "silent")
+                                    ) {
   if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(package_source_folder)
 
   topics <- transpose(pkg$topics)
@@ -141,7 +148,7 @@ package_reference_pages <- function(package_source_folder = "",
       msg_color("Created: ", f_name, color = green)
     }
   )
-
+  
   if (downlit_options) {
     downlit_options(
       package = pkg$package,
@@ -149,6 +156,8 @@ package_reference_pages <- function(package_source_folder = "",
       site_url = site_url
     )
   }
+  
+  msg_summary_number(length(topics), size = 4)
 }
 
 parse_topic <- function(topic) {

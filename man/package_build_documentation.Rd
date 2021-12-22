@@ -13,7 +13,8 @@ package_build_documentation(
   convert_articles = TRUE,
   convert_reference = TRUE,
   downlit_options = TRUE,
-  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+  verbosity = c("verbose", "summary", "silent")
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ package}
 
 \item{site_url}{URL of the target site.  It defaults to using the address in
 the '_quarto.yml' file}
+
+\item{verbosity}{Level of messaging available during run time. Possible values
+are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
 }
 \description{
 Copies and/or converts files from package source into Quarto

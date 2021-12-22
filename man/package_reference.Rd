@@ -12,7 +12,8 @@ package_reference(
   quarto_sub_folder = "",
   reference_folder = "reference",
   downlit_options = TRUE,
-  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+  verbosity = c("verbose", "summary", "silent")
 )
 
 package_reference_index(
@@ -22,7 +23,8 @@ package_reference_index(
   quarto_base_folder = here::here(),
   pkg = NULL,
   downlit_options = TRUE,
-  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+  verbosity = c("verbose", "summary", "silent")
 )
 
 package_reference_pages(
@@ -32,7 +34,8 @@ package_reference_pages(
   quarto_base_folder = here::here(),
   pkg = NULL,
   downlit_options = TRUE,
-  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url")
+  site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
+  verbosity = c("verbose", "summary", "silent")
 )
 }
 \arguments{
@@ -52,6 +55,9 @@ package}
 
 \item{site_url}{URL of the target site.  It defaults to using the address in
 the '_quarto.yml' file}
+
+\item{verbosity}{Level of messaging available during run time. Possible values
+are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
 
 \item{pkg}{A \code{pkgdown} object. If one is passed, then the \code{package_source_folder} argument
 will be ignored}

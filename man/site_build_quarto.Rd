@@ -4,10 +4,16 @@
 \alias{site_build_quarto}
 \title{Prepare full Quarto site}
 \usage{
-site_build_quarto(quarto_base_folder = here::here())
+site_build_quarto(
+  quarto_base_folder = here::here(),
+  verbosity = c("verbose", "summary", "silent")
+)
 }
 \arguments{
 \item{quarto_base_folder}{Base target Quarto folder. Defaults to current workspace.}
+
+\item{verbosity}{Level of messaging available during run time. Possible values
+are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
 }
 \description{
 Prepare full Quarto site

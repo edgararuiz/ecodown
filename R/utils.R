@@ -18,15 +18,23 @@ get_quarto_entry <- function(quarto_path = here::here(), ..., file_name = "_quar
 
 create_folder_if_missing <- function(x) if (!dir_exists(x)) dir_create(x)
 
-msg_color <- function(..., color = black) cat(color(paste0("- ", ..., "\n")))
+msg_color <- function(..., color = black) {
+  if(get_verbosity() == "verbose") {
+    cat(color(paste0("- ", ..., "\n")))   
+  }
+}
 
 msg_color_bold <- function(..., color = black) {
-  cat(bold(color(paste0("- ", ..., "\n"))))
+  if(get_verbosity() == "verbose") {
+    cat(bold(color(paste0("- ", ..., "\n")))) 
+  }
 }
 
 msg_color_title <- function(..., color = blue) {
-  title <- msg_title_raw(paste0(...))
-  cat(bold(color(paste0(title, "\n"))))
+  if(get_verbosity() == "verbose") {
+    title <- msg_title_raw(paste0(...))
+    cat(bold(color(paste0(title, "\n"))))
+  }
 }
 
 msg_title_raw <- function(title) {
@@ -35,3 +43,38 @@ msg_title_raw <- function(title) {
   x <- paste0(sides, title, " ", sides)
   substr(x, 1, 78)
 }
+
+msg_summary_entry <- function(x, color = black) {
+  if(get_verbosity() == "summary") {
+    cat(color(x))
+  }
+}
+
+msg_summary_number <- function(x, size = 2, color = black, side = c("left", "right")) {
+  if(get_verbosity() == "summary") {
+    side <- side[[1]]
+    x <- as.character(x)
+    xn <- nchar(x)
+    
+    pad <- paste0(rep(" ", times = (size - xn)), collapse = "")
+    if(side == "left") cat(color(paste0(pad, x)))
+    if(side == "right") cat(color(paste0(x, pad)))
+  }
+}
+
+ecodown_context <- new.env(parent = emptyenv())
+
+ecodown_context_set <- function(id, vals = list()) {
+  ecodown_context[[id]] <- vals
+}
+
+ecodown_context_get <- function(id) {
+  if (id == "") return(NULL)
+  ecodown_context[[id]]
+}
+
+get_verbosity <- function() {
+  x <- ecodown_context_get("verbosity")
+  if(is.null(x)) x <- "verbose"
+  x
+} 

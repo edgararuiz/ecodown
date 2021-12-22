@@ -15,6 +15,8 @@ package_clone_git_repo <- function(repo_url = "",
                                    target_folder = tempdir(),
                                    branch = "main") {
   
+  
+  
   msg_color_title("Cloning repo")
 
   pkg_name <- path_file(repo_url)
@@ -22,7 +24,7 @@ package_clone_git_repo <- function(repo_url = "",
   pkg_dir <- path(target_folder, pkg_name)
 
   msg_color("Cloning: ", pkg_name, color = green)
-
+  
   git_clone(url = repo_url, path = pkg_dir, verbose = FALSE)
 
   if (commit[1] == "latest_tag") {
@@ -52,10 +54,21 @@ package_clone_git_repo <- function(repo_url = "",
     matched_tag <- repo_tags[repo_tags$commit == log_match[[1]], ]
     msg_color("Checking out tag: ", matched_tag$name, color = green)
     git_branch_create("currenttag", ref = log_match, repo = pkg_dir)
+    ck_msg <- matched_tag$name
   } else {
-    if (commit[1] != "latest_commit") checkout_commit(pkg_dir, commit[1])
+    if (commit[1] != "latest_commit") {
+      checkout_commit(pkg_dir, commit[1])
+      ck_msg <- paste0( substr(commit[1], 1, 7), "...")
+    } else {
+      ck_msg <- "Latest"
+    }
   }
+  
+  sum_msg <- paste0(pkg_name, " (", ck_msg, ")")
+  msg_summary_number(sum_msg, size = 30, side = "right")
+  
   pkg_dir
+  
 }
 
 checkout_commit <- function(repo = "", commit = "") {

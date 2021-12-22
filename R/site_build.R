@@ -1,12 +1,19 @@
 #' Prepare full Quarto site
 #' @inheritParams package_clone_and_build
 #' @export
-site_build_quarto <- function(quarto_base_folder = here::here()) {
+site_build_quarto <- function(quarto_base_folder = here::here(),
+                              verbosity = c("verbose", "summary", "silent")
+                              ) {
+  
+  ecodown_context_set("verbosity", verbosity)
+  
   qbf <- quarto_base_folder
   config_path <- path(qbf, "_ecodown.yml")
   if (file_exists(config_path)) {
     config_yaml <- read_yaml(config_path)
 
+    msg_summary_number("| R N Art Ref |\n", size = 46)
+    
     walk(
       config_yaml$site$packages, ~ {
         exec(
@@ -16,13 +23,14 @@ site_build_quarto <- function(quarto_base_folder = here::here()) {
         )
       }
     )
-    
     msg_color_title("Render Quarto site")
+    
+    run_quiet <- get_verbosity() != "verbose"
     
     exec_command(
       "quarto_render", 
       config_yaml$site$quarto_render, 
-      list(input = qbf, as_job = FALSE)
+      list(input = qbf, as_job = FALSE, quiet = run_quiet)
       )
     
     exec_command(
