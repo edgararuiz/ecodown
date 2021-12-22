@@ -62,6 +62,16 @@ msg_summary_number <- function(x, size = 2, color = black, side = c("left", "rig
   }
 }
 
+msg_summary_tree <- function(file_list, file_type = "", base_folder) {
+  if(get_verbosity() == "summary") {
+    file_tree(
+      file_list = file_list,
+      file_type = file_type,
+      base_folder = base_folder
+    )
+  }
+}
+
 ecodown_context <- new.env(parent = emptyenv())
 
 ecodown_context_set <- function(id, vals = list()) {
@@ -78,3 +88,35 @@ get_verbosity <- function() {
   if(is.null(x)) x <- "verbose"
   x
 } 
+
+file_tree <- function(file_list, file_type = "", base_folder) {
+  file_unique <- unique(path_dir(file_list))
+  file_sort <- sort(file_unique)
+  rel_sort <- substr(
+    file_sort,
+    nchar(path_dir(base_folder)) + 2,
+    nchar(file_sort)
+  )
+  ml <- 0
+  for(i in seq_along(rel_sort)) {
+    no_files <- sum(path_dir(file_list) == file_sort[i])
+    no_caption <- ifelse(no_files > 1, "files", "file")
+    curr_sort <- rel_sort[i]
+    if(i > 1) {
+      pc <- path_common(rel_sort[c(i, i-1)])
+      fln <- path_file(curr_sort)
+      ps <- path_split(curr_sort)[[1]]
+      pss <- paste0(rep("|--- ", times = length(ps) - 1), collapse = "")
+      psc <- silver(pss)
+      flc <- black(fln)
+      curr_sort <- paste0(psc, flc)
+    }
+    no_cat <- magenta(paste0(" (", no_files, " ", file_type, no_caption, ")"))
+    cat_msg <- paste0(curr_sort, no_cat, "\n")
+    if(nchar(cat_msg) > ml) ml <- nchar(cat_msg)
+    cat(cat_msg)
+  }
+  sep_cat <- paste0(rep("=", times = ml), collapse = "")
+  cat(silver(sep_cat, "\n"))
+  cat(silver("Total files: ", length(file_list), "\n"))
+}

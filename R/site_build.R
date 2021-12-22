@@ -4,7 +4,7 @@
 site_build_quarto <- function(quarto_base_folder = here::here(),
                               verbosity = c("verbose", "summary", "silent")
                               ) {
-  
+
   ecodown_context_set("verbosity", verbosity)
   
   qbf <- quarto_base_folder
@@ -12,8 +12,10 @@ site_build_quarto <- function(quarto_base_folder = here::here(),
   if (file_exists(config_path)) {
     config_yaml <- read_yaml(config_path)
 
-    msg_summary_number("| R N Art Ref |\n", size = 46)
-    
+    msg_summary_entry(">> Package clone and prep:\n")
+    msg_summary_entry("       Clone / Checkout       | R N Art Ref |\n")
+    msg_summary_entry("------------------------------|-------------|\n")
+     
     walk(
       config_yaml$site$packages, ~ {
         exec(
@@ -27,11 +29,25 @@ site_build_quarto <- function(quarto_base_folder = here::here(),
     
     run_quiet <- get_verbosity() != "verbose"
     
+    msg_summary_entry(">> Render in Quarto\n")
+    
+    msg_summary_tree(
+      c(
+        dir_ls(quarto_base_folder, recurse = TRUE, glob = "*.md"),
+        dir_ls(quarto_base_folder, recurse = TRUE, glob = "*.Rmd"),
+        dir_ls(quarto_base_folder, recurse = TRUE, glob = "*.qmd")
+      ),
+      "renderable ",
+      base_folder = quarto_base_folder
+    )
+    
+    msg_summary_entry("------ Process started\n")
     exec_command(
       "quarto_render", 
       config_yaml$site$quarto_render, 
       list(input = qbf, as_job = FALSE, quiet = run_quiet)
       )
+    msg_summary_entry("------ Process complete\n")
     
     exec_command(
       "site_autolink_html", 
