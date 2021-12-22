@@ -50,6 +50,13 @@ msg_summary_entry <- function(x, color = black) {
   }
 }
 
+msg_summary_title <- function(x) {
+  if(get_verbosity() == "summary") {
+    x <- paste0(">> ", x, "\n")
+    cat(black(bold(x)))
+  }
+}
+
 msg_summary_number <- function(x, size = 2, color = black, side = c("left", "right")) {
   if(get_verbosity() == "summary") {
     side <- side[[1]]
@@ -86,7 +93,7 @@ ecodown_context_get <- function(id) {
 get_verbosity <- function() {
   x <- ecodown_context_get("verbosity")
   if(is.null(x)) x <- "verbose"
-  x
+  x[[1]]
 } 
 
 file_tree <- function(file_list, file_type = "", base_folder) {
@@ -97,7 +104,6 @@ file_tree <- function(file_list, file_type = "", base_folder) {
     nchar(path_dir(base_folder)) + 2,
     nchar(file_sort)
   )
-  ml <- 0
   for(i in seq_along(rel_sort)) {
     no_files <- sum(path_dir(file_list) == file_sort[i])
     no_caption <- ifelse(no_files > 1, "files", "file")
@@ -113,10 +119,9 @@ file_tree <- function(file_list, file_type = "", base_folder) {
     }
     no_cat <- magenta(paste0(" (", no_files, " ", file_type, no_caption, ")"))
     cat_msg <- paste0(curr_sort, no_cat, "\n")
-    if(nchar(cat_msg) > ml) ml <- nchar(cat_msg)
     cat(cat_msg)
   }
-  sep_cat <- paste0(rep("=", times = ml), collapse = "")
+  sep_cat <- paste0(rep("=", times = 46), collapse = "")
   cat(silver(sep_cat, "\n"))
   cat(silver("Total files: ", length(file_list), "\n"))
 }

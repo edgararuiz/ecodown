@@ -7,7 +7,7 @@ test_that("Build site works", {
 
   expect_output(
     site_build_quarto(quarto_base_folder = dir_site),
-    msg_title_raw("Package documentation")
+    ">> Render in Quarto"
   )
 
   expect_equal(

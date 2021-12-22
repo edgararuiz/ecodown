@@ -22,7 +22,7 @@ cat_tree <- function(x, ...) {
 }
 
 temp_dir <- tempdir()
-dir_site <- path(temp_dir, "test_site2")
+dir_site <- path(temp_dir, "my_site")
 if(dir_exists(dir_site)) unlink(dir_site, recursive = TRUE, force = TRUE)
 dir_create(dir_site)   
 

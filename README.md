@@ -48,13 +48,35 @@ Contents of example ’\_ecodown.yml’ file:
           commit: 39267f6a253f51d1176e58e528c7ce2c6cfd2a64
         - repo_url: https://github.com/rstudio/graphframes
           convert_readme: FALSE
-      quarto_render: FALSE
-      autolink: FALSE
 
 ``` r
 site_build_quarto()
 ```
 
-                                  | R N Art Ref |
-    mleap(39267f6...)             | 1 1   0   7 |
-    graphframes(v0.1.2)           | 0 1   0  27 |
+    >> Package clone and prep
+           Clone / Checkout       | R N Art Ref |
+    ------------------------------|-------------|
+    mleap (39267f6...)            | 1 1   0   7 |
+    graphframes (v0.1.2)          | 0 1   0  27 |
+
+    >> Render in Quarto
+    my_site (1 renderable file)
+    |--- graphframes (1 renderable file)
+    |--- |--- reference (28 renderable files)
+    |--- mleap (2 renderable files)
+    |--- |--- reference (8 renderable files)
+    ============================================== 
+    Total files:  40 
+    ------ Process started
+    ------ Process complete
+
+    >> Autolinking
+    my_site/docs (1 html file)
+    |--- |--- graphframes (1 html file)
+    |--- |--- |--- reference (28 html files)
+    |--- |--- mleap (2 html files)
+    |--- |--- |--- reference (8 html files)
+    ============================================== 
+    Total files:  40 
+    ------ Process started
+    ------ Process complete

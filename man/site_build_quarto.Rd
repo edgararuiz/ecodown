@@ -6,7 +6,7 @@
 \usage{
 site_build_quarto(
   quarto_base_folder = here::here(),
-  verbosity = c("verbose", "summary", "silent")
+  verbosity = c("summary", "verbose", "silent")
 )
 }
 \arguments{

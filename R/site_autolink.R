@@ -8,13 +8,20 @@ site_autolink_html <- function(quarto_base_folder = here::here(),
   quarto_path <- path(quarto_base_folder, render_folder)
   
   msg_color_title("Auto-linking")
-  
   msg_color(bold("Path: "), quarto_path, color = green)
   html_files <- dir_ls(quarto_path,
     recurse = TRUE,
     type = "file",
     glob = "*.html"
   )
+  msg_summary_entry("\n")
+  msg_summary_title("Autolinking")
+  msg_summary_tree(
+    html_files, 
+    "html ", 
+    path(quarto_base_folder, render_folder)
+    )
+  msg_summary_entry("------ Process started\n")
   walk(
     html_files,
     ~ {
@@ -22,6 +29,7 @@ site_autolink_html <- function(quarto_base_folder = here::here(),
       msg_color("Processed: ", path_file(.x), color = green)
     }
   )
+  msg_summary_entry("------ Process complete\n")
 }
 
 downlit_options <- function(package = "", url = "", site_url = "") {

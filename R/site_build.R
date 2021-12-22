@@ -2,7 +2,7 @@
 #' @inheritParams package_clone_and_build
 #' @export
 site_build_quarto <- function(quarto_base_folder = here::here(),
-                              verbosity = c("verbose", "summary", "silent")
+                              verbosity = c("summary", "verbose", "silent")
                               ) {
 
   ecodown_context_set("verbosity", verbosity)
@@ -12,7 +12,7 @@ site_build_quarto <- function(quarto_base_folder = here::here(),
   if (file_exists(config_path)) {
     config_yaml <- read_yaml(config_path)
 
-    msg_summary_entry(">> Package clone and prep:\n")
+    msg_summary_title("Package clone and prep")
     msg_summary_entry("       Clone / Checkout       | R N Art Ref |\n")
     msg_summary_entry("------------------------------|-------------|\n")
      
@@ -25,12 +25,13 @@ site_build_quarto <- function(quarto_base_folder = here::here(),
         )
       }
     )
-    msg_color_title("Render Quarto site")
     
     run_quiet <- get_verbosity() != "verbose"
     
-    msg_summary_entry(">> Render in Quarto\n")
+    msg_color_title("Render Quarto site")
     
+    msg_summary_entry("\n")
+    msg_summary_title("Render in Quarto")
     msg_summary_tree(
       c(
         dir_ls(quarto_base_folder, recurse = TRUE, glob = "*.md"),
@@ -40,7 +41,6 @@ site_build_quarto <- function(quarto_base_folder = here::here(),
       "renderable ",
       base_folder = quarto_base_folder
     )
-    
     msg_summary_entry("------ Process started\n")
     exec_command(
       "quarto_render", 
