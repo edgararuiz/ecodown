@@ -29,3 +29,5 @@ vignettes/*.pdf
 .DS_Store
 .quarto
 inst/doc
+
+/.quarto/

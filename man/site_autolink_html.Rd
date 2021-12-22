@@ -6,7 +6,8 @@
 \usage{
 site_autolink_html(
   quarto_base_folder = here::here(),
-  render_folder = get_quarto_entry(quarto_base_folder, "project", "output-dir")
+  render_folder = get_quarto_entry(quarto_base_folder, "project", "output-dir"),
+  verbosity = c("summary", "verbose", "silent")
 )
 }
 \arguments{
@@ -14,6 +15,9 @@ site_autolink_html(
 
 \item{render_folder}{Location of the sub-folder that contains the output
 from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.}
+
+\item{verbosity}{Level of messaging available during run time. Possible values
+are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
 }
 \description{
 Autolink function calls

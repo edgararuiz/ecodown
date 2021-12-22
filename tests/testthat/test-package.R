@@ -22,7 +22,8 @@ test_that("Full package documentation works", {
   expect_output(
     site_autolink_html(
       quarto_base_folder = test_path("assets/crayon-html"),
-      render_folder = NULL
+      render_folder = NULL,
+      verbosity = "verbose"
     ),
     msg_title_raw("Auto-linking")
   )
