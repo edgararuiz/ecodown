@@ -18,26 +18,17 @@ site_autolink_html <- function(quarto_base_folder = here::here(),
                        glob = "*.html"
   )
   
-  if(get_verbosity() == "verbose") {
-    msg_color_title("Auto-linking")
-    msg_color(bold("Path: "), quarto_path, color = green)
-    walk(
-      html_files,
-      ~ {
-        downlit_html_path(.x, .x)
-        msg_color("Processed: ", path_file(.x), color = green)
-      }
-    )
-  } else {
-    msg_summary_title("Autolinking")
-    msg_summary_tree(
-      file_list = html_files,
-      file_type = "html ",
-      base_folder = path(quarto_base_folder, render_folder),
-      command_name = "downlit_single"
-    )
-  }
-  
+  msg_color_title("Auto-linking")
+  msg_color(bold("Path: "), quarto_path, color = green)
+
+  msg_summary_title("Autolinking")
+  file_tree(
+    file_list = html_files,
+    file_type = "html ",
+    base_folder = path(quarto_base_folder, render_folder),
+    command_name = "downlit_single"
+  )
+
   
 }
 
