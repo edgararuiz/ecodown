@@ -3,7 +3,8 @@ file_tree <- function(file_list,
                       base_folder,
                       command_name = "", 
                       entry_value = NULL, 
-                      addl_entries = list()
+                      addl_entries = list(),
+                      verbosity = "summary"
 ) {
   file_unique <- unique(path_dir(file_list))
   file_sort <- sort(file_unique)
@@ -39,7 +40,7 @@ file_tree <- function(file_list,
             entry_value = entry_value, 
             addl_entries = c(addl_entries, list(input = .x))
           )
-          if(get_verbosity() == "verbose") {
+          if(verbosity == "verbose") {
             cat(paste0(silver(paste0(pss, "|--- ")), path_file(.x), "\n"))
           } 
         } 

@@ -21,6 +21,7 @@ site_quarto_build <- function(quarto_base_folder = here::here(),
     base_folder = quarto_base_folder,
     command_name = "quarto_render", 
     entry_value = NULL, 
-    addl_entries = list(as_job = FALSE, quiet = TRUE)
+    addl_entries = list(as_job = FALSE, quiet = TRUE),
+    verbosity = verbosity
   )
 }

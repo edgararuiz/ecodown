@@ -86,61 +86,92 @@ package_build_documentation <- function(package_source_folder = "",
                                         site_url = get_quarto_entry(quarto_base_folder, "site", "site-url"),
                                         verbosity = c("verbose", "summary", "silent")
                                         ) {
+  all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
   
-  if (convert_readme | convert_news) msg_color_title("Top files")
+  pkg <- pkgdown::as_pkgdown(package_source_folder)
   
-  msg_summary_entry("|")
+  topics <- pkg$topics
+  vignettes <- pkg$vignettes
   
-  if (convert_readme) {
-    package_readme(
-      package_source_folder = package_source_folder,
-      quarto_sub_folder = quarto_sub_folder,
-      quarto_base_folder = quarto_base_folder
-    )
-    msg_summary_number(1)
-  } else {
-    msg_summary_number(0)
-  }
-
-  if (convert_news) {
-    package_news(
-      package_source_folder = package_source_folder,
-      quarto_sub_folder = quarto_sub_folder,
-      quarto_base_folder = quarto_base_folder
-    )
-    msg_summary_number(1)
-  } else {
-    msg_summary_number(0)
-  }
-
-  if (convert_articles) {
-    vf <- path(package_source_folder, "vignettes")
-    nv <- ifelse(dir_exists(vf), length(dir_ls(vf)), 0) 
-    package_articles(
-      package_source_folder = package_source_folder,
-      quarto_sub_folder = quarto_sub_folder,
-      quarto_base_folder = quarto_base_folder
-    )
-  } else {
-    nv <- 0
-  }
-
-  msg_summary_number(nv, size = 4)
+  rel_files <- substr(
+    all_files, 
+    nchar(path_common(all_files)) + 2, 
+    nchar(all_files)
+  )
   
-  if (convert_reference) {
-    package_reference(
-      package_source_folder = package_source_folder,
-      quarto_sub_folder = quarto_sub_folder,
-      quarto_base_folder = quarto_base_folder,
-      downlit_options = downlit_options,
-      site_url = site_url,
-      verbosity = verbosity
-    )
-  }
+  file_readme <- all_files[rel_files == "README.md"]
+  file_news <- all_files[rel_files == "NEWS.md"]
   
-  msg_summary_number("|", size = 2)
-  msg_summary_entry("\n")
+  file_vignettes <- path(
+    path_common(all_files), 
+    vignettes$file_in
+  ) 
+  
+  file_reference <- path(
+    path_common(all_files), "man", 
+    topics$file_in[!topics$internal]
+  )
+  
+  file_add <- path()
+  if(convert_readme && length(file_readme) > 0) file_add <- c(file_add, file_readme)
+  if(convert_news && length(file_news) > 0) file_add <- c(file_add, file_news)
+  if(convert_articles && length(file_vignettes) > 0) file_add <- c(file_add, file_vignettes)
+  if(convert_reference && length(file_reference) > 0) file_add <- c(file_add, file_reference)
+  pkg_files <- as_fs_path(file_add)
+  
+  file_tree(
+    pkg_files, 
+    base_folder = package_source_folder, 
+    command_name = "package_file",
+    addl_entries = list(
+      pkg_topics = topics, 
+      pkg_vignettes = vignettes, 
+      base_folder = path(quarto_base_folder, quarto_sub_folder)
+    ),
+    verbosity = verbosity[1]
+  )
+  
 }
+
+package_file <- function(input, 
+                         base_folder = here::here(),
+                         pkg_topics = NULL,
+                         pkg_vignettes = NULL
+) {
+  input_ext <- tolower(path_ext(input))
+  input_name <- path_file(input)
+  in_folder <- path_file(path_dir(input))
+  output_folder <- base_folder
+  
+  if(tolower(input_name) == "readme.md") {
+    output_file <- path(base_folder, "index.md")
+  }
+  
+  if(tolower(input_name) == "news.md") {
+    output_file <- path(base_folder, "news.md")
+  }  
+  
+  if(input_ext == "rd" && in_folder == "man") {
+    output_name <- path(path_ext_remove(input_name), ext = "md")
+    output_folder <- path(base_folder, "reference")
+    output_file <- path(output_folder, output_name)
+  }
+  if(in_folder == "vignettes") {
+    output_folder <- path(base_folder, "articles")
+    output_file <- path(output_folder, input_name)
+    
+  }
+  if(!dir_exists(output_folder)) dir_create(output_folder)
+  if(input_ext == "rd") {
+    list_topics <- transpose(pkg_topics)
+    input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
+    out <- parse_topic(input_topic)
+    writeLines(out, output_file)
+  } else {
+    file_copy(input, output_file)
+  }
+}
+
 
 #' Copies the vignettes into Quarto
 #' @inheritParams package_build_documentation

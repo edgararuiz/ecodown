@@ -26,7 +26,8 @@ site_autolink_html <- function(quarto_base_folder = here::here(),
     file_list = html_files,
     file_type = "html ",
     base_folder = path(quarto_base_folder, render_folder),
-    command_name = "downlit_single"
+    command_name = "downlit_single",
+    verbosity = verbosity
   )
 
   
