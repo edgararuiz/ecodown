@@ -1,23 +1,21 @@
 #' Autolink function calls
-#' @inheritParams package_clone_and_build
+#' @inheritParams ecodown_clone_convert
 #' @param render_folder Location of the sub-folder that contains the output
 #' from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.
 #' @export
-site_autolink_html <- function(quarto_base_folder = here::here(),
-                               render_folder = get_quarto_entry(quarto_base_folder, "project", "output-dir"),
-                               verbosity = c("summary", "verbose", "silent")
-                               ) {
-  
+ecodown_autolink <- function(quarto_folder = here::here(),
+                             render_folder = quarto_entry(quarto_folder, "project", "output-dir"),
+                             verbosity = c("summary", "verbose", "silent")) {
   ecodown_context_set("verbosity", verbosity)
-  
-  quarto_path <- path(quarto_base_folder, render_folder)
-  
+
+  quarto_path <- path(quarto_folder, render_folder)
+
   html_files <- dir_ls(quarto_path,
-                       recurse = TRUE,
-                       type = "file",
-                       glob = "*.html"
+    recurse = TRUE,
+    type = "file",
+    glob = "*.html"
   )
-  
+
   msg_color_title("Auto-linking")
   msg_color(bold("Path: "), quarto_path, color = green)
 
@@ -25,12 +23,10 @@ site_autolink_html <- function(quarto_base_folder = here::here(),
   file_tree(
     file_list = html_files,
     file_type = "html ",
-    base_folder = path(quarto_base_folder, render_folder),
+    base_folder = path(quarto_folder, render_folder),
     command_name = "downlit_single",
     verbosity = verbosity
   )
-
-  
 }
 
 downlit_single <- function(input = "") {

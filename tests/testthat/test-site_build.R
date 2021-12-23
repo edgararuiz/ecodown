@@ -6,7 +6,7 @@ test_that("Build site works", {
   lapply(dir_ls(file_utils), function(x) file_copy(x, dir_site, overwrite = TRUE))
 
   expect_output(
-    site_build_quarto(quarto_base_folder = dir_site),
+    ecodown_build(quarto_folder = dir_site),
     ">> Render in Quarto"
   )
 

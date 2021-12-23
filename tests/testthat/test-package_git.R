@@ -5,7 +5,7 @@ test_that("Default cloning works", {
   skip_if_offline("github.com")
 
   expect_output(
-    pkg_path <- package_clone_git_repo(pkg_url),
+    pkg_path <- ecodown_clone(pkg_url),
     msg_title_raw("Cloning repo")
   )
 
@@ -15,7 +15,7 @@ test_that("Default cloning works", {
   )
 
   expect_output(
-    package_clone_and_build(
+    ecodown_clone_convert(
       repo_url = pkg_url,
       target_folder = paste0(tempdir(), "/newtest"),
       quarto_sub_folder = "crayon"

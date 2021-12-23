@@ -9,22 +9,26 @@
 #' @param target_folder Location to copy the package to. Defaults to a temporary
 #' directory
 #' @param branch Repo branch. Defaults to 'main'
+#' @param verbosity Level of messaging available during run time. Possible values
+#' are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'
 #' @export
-package_clone_git_repo <- function(repo_url = "",
-                                   commit = c("latest_tag", "latest_commit"),
-                                   target_folder = tempdir(),
-                                   branch = "main") {
-  
-  
-  
+ecodown_clone <- function(repo_url = "",
+                          commit = c("latest_tag", "latest_commit"),
+                          target_folder = tempdir(),
+                          branch = "main") {
   msg_color_title("Cloning repo")
+
+  if (verbosity == "summary" && get_clone_header() == 0) {
+    msg_summary_entry("       Clone / Checkout       ")
+    set_clone_header(1)
+  }
 
   pkg_name <- path_file(repo_url)
 
   pkg_dir <- path(target_folder, pkg_name)
 
   msg_color("Cloning: ", pkg_name, color = green)
-  
+
   git_clone(url = repo_url, path = pkg_dir, verbose = FALSE)
 
   if (commit[1] == "latest_tag") {
@@ -58,17 +62,17 @@ package_clone_git_repo <- function(repo_url = "",
   } else {
     if (commit[1] != "latest_commit") {
       checkout_commit(pkg_dir, commit[1])
-      ck_msg <- paste0( substr(commit[1], 1, 7), "...")
+      ck_msg <- paste0(substr(commit[1], 1, 7), "...")
     } else {
       ck_msg <- "Latest"
     }
   }
-  
+
+
   sum_msg <- paste0(pkg_name, " (", ck_msg, ")")
   msg_summary_number(sum_msg, size = 30, side = "right")
-  
+
   pkg_dir
-  
 }
 
 checkout_commit <- function(repo = "", commit = "") {

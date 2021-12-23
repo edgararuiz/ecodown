@@ -5,10 +5,10 @@ test_that("Full package documentation works", {
   full_site <- paste0(temp_dir, "/", site_folder)
 
   expect_output(
-    package_build_documentation(
+    ecodown_convert(
       package_source_folder = pkg_location,
       quarto_sub_folder = site_folder,
-      quarto_base_folder = temp_dir,
+      quarto_folder = temp_dir,
       site_url = ""
     ),
     msg_title_raw("Top files")
@@ -20,8 +20,8 @@ test_that("Full package documentation works", {
   )
 
   expect_output(
-    site_autolink_html(
-      quarto_base_folder = test_path("assets/crayon-html"),
+    ecodown_autolink(
+      quarto_folder = test_path("assets/crayon-html"),
       render_folder = NULL,
       verbosity = "verbose"
     ),
@@ -34,16 +34,16 @@ test_that("Full package documentation works", {
   )
 
   expect_output(
-    package_build_documentation(
+    ecodown_convert(
       package_source_folder = test_path("assets/crayon2"),
       quarto_sub_folder = site_folder,
-      quarto_base_folder = temp_dir
+      quarto_folder = temp_dir
     ),
     msg_title_raw("Top files")
   )
 
   expect_equal(
-    get_quarto_entry(test_path("assets"), "site", "title"),
+    quarto_entry(test_path("assets"), "site", "title"),
     "testsite"
   )
 })
