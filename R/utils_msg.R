@@ -1,23 +1,3 @@
-#' Get entry from the Quarto setup file
-#' @param quarto_path Path to the Quarto folder, defaults to project path.
-#' @param ... A single or multiple entries with the path to the desired entry.
-#' @param file_name The name of the Quarto setup file, '_quarto.yml'
-#' @export
-quarto_entry <- function(quarto_path = here::here(), ..., file_name = "_quarto.yml") {
-  if (!file_exists(path(quarto_path, file_name))) {
-    return("")
-  }
-  element <- list(...)
-  cont <- read_yaml(path(quarto_path, file_name))
-  for (i in seq_along(element)) {
-    cont <- pluck(cont, element[[i]])
-  }
-  if (is.null(cont)) cont <- ""
-  cont
-}
-
-create_folder_if_missing <- function(x) if (!dir_exists(x)) dir_create(x)
-
 msg_color <- function(..., color = black) {
   if (get_verbosity() == "verbose") {
     cat(color(paste0("- ", ..., "\n")))
@@ -62,7 +42,7 @@ msg_summary_number <- function(x, size = 2, color = black, side = c("left", "rig
     side <- side[[1]]
     x <- as.character(x)
     xn <- nchar(x)
-
+    
     pad <- paste0(rep(" ", times = (size - xn)), collapse = "")
     if (side == "left") cat(color(paste0(pad, x)))
     if (side == "right") cat(color(paste0(x, pad)))

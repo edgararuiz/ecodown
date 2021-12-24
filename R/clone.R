@@ -15,7 +15,13 @@
 ecodown_clone <- function(repo_url = "",
                           commit = c("latest_tag", "latest_commit"),
                           target_folder = tempdir(),
-                          branch = "main") {
+                          branch = "main",
+                          verbosity = c("verbose", "summary", "silent")) {
+  
+  verbosity <- verbosity[1]
+  
+  ecodown_context_set("verbosity", verbosity)
+  
   msg_color_title("Cloning repo")
 
   if (verbosity == "summary" && get_clone_header() == 0) {
@@ -70,6 +76,7 @@ ecodown_clone <- function(repo_url = "",
 
 
   sum_msg <- paste0(pkg_name, " (", ck_msg, ")")
+  if(get_package_header() == 0) msg_summary_entry("\n")
   msg_summary_number(sum_msg, size = 30, side = "right")
 
   pkg_dir

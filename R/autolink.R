@@ -4,7 +4,7 @@
 #' from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.
 #' @export
 ecodown_autolink <- function(quarto_folder = here::here(),
-                             render_folder = quarto_entry(quarto_folder, "project", "output-dir"),
+                             render_folder = qe(quarto_folder, "project", "output-dir"),
                              verbosity = c("summary", "verbose", "silent")) {
   ecodown_context_set("verbosity", verbosity)
 

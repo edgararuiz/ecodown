@@ -43,7 +43,7 @@ test_that("Full package documentation works", {
   )
 
   expect_equal(
-    quarto_entry(test_path("assets"), "site", "title"),
+    qe(test_path("assets"), "site", "title"),
     "testsite"
   )
 })

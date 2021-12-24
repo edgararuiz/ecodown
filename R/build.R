@@ -3,6 +3,9 @@
 #' @export
 ecodown_build <- function(quarto_folder = here::here(),
                           verbosity = c("summary", "verbose", "silent")) {
+  
+  verbosity <- verbosity[1]
+  
   ecodown_context_set("verbosity", verbosity)
 
   qbf <- quarto_folder
@@ -14,7 +17,8 @@ ecodown_build <- function(quarto_folder = here::here(),
         exec(
           "ecodown_clone_convert",
           !!!.x,
-          quarto_folder = qbf
+          quarto_folder = qbf,
+          verbosity = verbosity
         )
       }
     )

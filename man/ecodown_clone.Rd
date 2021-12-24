@@ -8,7 +8,8 @@ ecodown_clone(
   repo_url = "",
   commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
-  branch = "main"
+  branch = "main",
+  verbosity = c("verbose", "summary", "silent")
 )
 }
 \arguments{

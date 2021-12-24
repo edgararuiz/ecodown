@@ -6,7 +6,7 @@
 \usage{
 ecodown_autolink(
   quarto_folder = here::here(),
-  render_folder = quarto_entry(quarto_folder, "project", "output-dir"),
+  render_folder = qe(quarto_folder, "project", "output-dir"),
   verbosity = c("summary", "verbose", "silent")
 )
 }

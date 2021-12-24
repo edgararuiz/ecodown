@@ -13,11 +13,16 @@ ecodown_clone_convert <- function(repo_url = "",
                                   convert_articles = TRUE,
                                   convert_reference = TRUE,
                                   downlit_options = TRUE,
-                                  site_url = quarto_entry(quarto_folder, "site", "site-url"),
+                                  site_url = qe(quarto_folder, "site", "site-url"),
                                   commit = c("latest_tag", "latest_commit"),
                                   target_folder = tempdir(),
                                   branch = "main",
                                   verbosity = c("verbose", "summary", "silent")) {
+  
+  verbosity <- verbosity[1]
+  
+  ecodown_context_set("verbosity", verbosity)
+  
   msg_color_title("Package documentation")
 
   if (quarto_folder == here::here()) {
@@ -29,7 +34,7 @@ ecodown_clone_convert <- function(repo_url = "",
     msg_color(bold("quarto_sub_folder: "), pkg_name, color = green)
   }
 
-  quarto_site <- quarto_entry(quarto_folder, "site", "site-url")
+  quarto_site <- qe(quarto_folder, "site", "site-url")
   if (site_url == quarto_site) {
     msg_color(bold("site_url: "), quarto_site, color = green)
   }
@@ -38,7 +43,8 @@ ecodown_clone_convert <- function(repo_url = "",
     repo_url = repo_url,
     commit = commit,
     target_folder = target_folder,
-    branch = branch
+    branch = branch,
+    verbosity = verbosity
   )
 
   ecodown_convert(
@@ -79,11 +85,15 @@ ecodown_convert <- function(package_source_folder = "",
                             convert_articles = TRUE,
                             convert_reference = TRUE,
                             downlit_options = TRUE,
-                            site_url = quarto_entry(quarto_folder, "site", "site-url"),
+                            site_url = qe(quarto_folder, "site", "site-url"),
                             verbosity = c("verbose", "summary", "silent")) {
   all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
+  verbosity <- verbosity[1]
+  
   ecodown_context_set("verbosity", verbosity)
+  
+  smy <- verbosity == "summary"
 
   pkg <- pkgdown::as_pkgdown(package_source_folder)
 
@@ -123,7 +133,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_readme && length(file_readme) > 0) {
     pf <- c(pf, file_readme)
     msg_summary_number(length(file_readme))
-    walk(file_readme, package_file, qfs, topics, vignettes)
+    if(smy) walk(file_readme, package_file, qfs, topics, vignettes)
   } else {
     msg_summary_number(0)
   }
@@ -131,7 +141,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_news && length(file_news) > 0) {
     pf <- c(pf, file_news)
     msg_summary_number(length(file_news))
-    walk(file_news, package_file, qfs, topics, vignettes)
+    if(smy) walk(file_news, package_file, qfs, topics, vignettes)
   } else {
     msg_summary_number(0)
   }
@@ -139,7 +149,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_articles && length(file_vignettes) > 0) {
     pf <- c(pf, file_vignettes)
     msg_summary_number(length(file_vignettes), size = 4)
-    walk(file_vignettes, package_file, qfs, topics, vignettes)
+    if(smy) walk(file_vignettes, package_file, qfs, topics, vignettes)
   } else {
     msg_summary_number(0, size = 4)
   }
@@ -147,7 +157,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_reference && length(file_reference) > 0) {
     pf <- c(pf, file_reference)
     msg_summary_number(length(file_reference), size = 4)
-    walk(file_reference, package_file, qfs, topics, vignettes)
+    if(smy) walk(file_reference, package_file, qfs, topics, vignettes)
   } else {
     msg_summary_number(0, size = 4)
   }
@@ -166,7 +176,7 @@ ecodown_convert <- function(package_source_folder = "",
         pkg_vignettes = vignettes,
         base_folder = path(quarto_folder, quarto_sub_folder)
       ),
-      verbosity = verbose
+      verbosity = "verbose"
     )
   }
 
