@@ -41,7 +41,7 @@ package}
 the '_quarto.yml' file}
 
 \item{verbosity}{Level of messaging available during run time. Possible values
-are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
+are 'verbose', 'summary', and 'silent'.}
 }
 \description{
 Copies and/or converts files from package source into Quarto

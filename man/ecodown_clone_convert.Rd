@@ -23,9 +23,8 @@ ecodown_clone_convert(
 \arguments{
 \item{repo_url}{Repo location}
 
-\item{quarto_sub_folder}{Sub folder in \code{quarto_folder} that will be the
-base for the package's documentation. It defaults to the last section of the
-'repo_url', which is usually the package name.}
+\item{quarto_sub_folder}{Sub folder in \code{quarto_folder} that will be the base for
+the package's documentation.}
 
 \item{quarto_folder}{Base target Quarto folder. Defaults to current workspace.}
 
@@ -57,7 +56,7 @@ directory}
 \item{branch}{Repo branch. Defaults to 'main'}
 
 \item{verbosity}{Level of messaging available during run time. Possible values
-are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
+are 'verbose', 'summary', and 'silent'.}
 }
 \description{
 Clones repo and builds documentation

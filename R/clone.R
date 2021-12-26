@@ -9,19 +9,17 @@
 #' @param target_folder Location to copy the package to. Defaults to a temporary
 #' directory
 #' @param branch Repo branch. Defaults to 'main'
-#' @param verbosity Level of messaging available during run time. Possible values
-#' are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'
+#' @inheritParams ecodown_build
 #' @export
 ecodown_clone <- function(repo_url = "",
                           commit = c("latest_tag", "latest_commit"),
                           target_folder = tempdir(),
                           branch = "main",
                           verbosity = c("verbose", "summary", "silent")) {
-  
   verbosity <- verbosity[1]
-  
+
   ecodown_context_set("verbosity", verbosity)
-  
+
   msg_color_title("Cloning repo")
 
   if (verbosity == "summary" && get_clone_header() == 0) {
@@ -61,10 +59,14 @@ ecodown_clone <- function(repo_url = "",
       }
     })
     log_match <- flatten(log_match)
-    matched_tag <- repo_tags[repo_tags$commit == log_match[[1]], ]
-    msg_color("Checking out tag: ", matched_tag$name, color = green)
-    git_branch_create("currenttag", ref = log_match, repo = pkg_dir)
-    ck_msg <- matched_tag$name
+    if (length(log_match) > 0) {
+      matched_tag <- repo_tags[repo_tags$commit == log_match[[1]], ]
+      msg_color("Checking out tag: ", matched_tag$name, color = green)
+      git_branch_create("currenttag", ref = log_match, repo = pkg_dir)
+      ck_msg <- matched_tag$name
+    } else {
+      ck_msg <- "Latest"
+    }
   } else {
     if (commit[1] != "latest_commit") {
       checkout_commit(pkg_dir, commit[1])
@@ -74,9 +76,8 @@ ecodown_clone <- function(repo_url = "",
     }
   }
 
-
   sum_msg <- paste0(pkg_name, " (", ck_msg, ")")
-  if(get_package_header() == 0) msg_summary_entry("\n")
+  if (get_package_header() == 0) msg_summary_entry("\n")
   msg_summary_number(sum_msg, size = 30, side = "right")
 
   pkg_dir

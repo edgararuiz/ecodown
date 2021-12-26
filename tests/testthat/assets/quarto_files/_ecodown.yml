@@ -2,7 +2,5 @@ site:
   packages:
     - repo_url: https://github.com/rstudio/mleap
       commit: 39267f6a253f51d1176e58e528c7ce2c6cfd2a64
-    - repo_url: https://github.com/rstudio/graphframes
-      convert_readme: FALSE
   quarto_render: FALSE
   autolink: FALSE

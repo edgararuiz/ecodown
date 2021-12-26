@@ -28,7 +28,7 @@ directory}
 \item{branch}{Repo branch. Defaults to 'main'}
 
 \item{verbosity}{Level of messaging available during run time. Possible values
-are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
+are 'verbose', 'summary', and 'silent'.}
 }
 \description{
 Download the package's latest source code from repo

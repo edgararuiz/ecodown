@@ -1,11 +1,12 @@
 #' Prepare full Quarto site
-#' @inheritParams ecodown_clone_convert
+#' @param quarto_folder Base target Quarto folder. Defaults to current workspace.
+#' @param verbosity Level of messaging available during run time. Possible values
+#' are 'verbose', 'summary', and 'silent'.
 #' @export
 ecodown_build <- function(quarto_folder = here::here(),
                           verbosity = c("summary", "verbose", "silent")) {
-  
   verbosity <- verbosity[1]
-  
+
   ecodown_context_set("verbosity", verbosity)
 
   qbf <- quarto_folder

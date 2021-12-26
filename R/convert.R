@@ -1,6 +1,5 @@
 #' Copies and/or converts files from package source into Quarto
 #' @param package_source_folder Path to the package's source code
-#' @param quarto_folder Base target Quarto folder. Defaults to current workspace.
 #' @param quarto_sub_folder Sub folder in `quarto_folder` that will be the base for
 #' the package's documentation.
 #' @param convert_readme Flag that indicates if the README file needs to be processed
@@ -12,8 +11,7 @@
 #' package
 #' @param site_url URL of the target site.  It defaults to using the address in
 #' the '_quarto.yml' file
-#' @param verbosity Level of messaging available during run time. Possible values
-#' are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'
+#' @inheritParams ecodown_build
 #' @export
 ecodown_convert <- function(package_source_folder = "",
                             quarto_sub_folder = "",
@@ -25,13 +23,12 @@ ecodown_convert <- function(package_source_folder = "",
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
                             verbosity = c("verbose", "summary", "silent")) {
-  
   all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
   verbosity <- verbosity[1]
-  
+
   ecodown_context_set("verbosity", verbosity)
-  
+
   smy <- verbosity == "summary"
 
   pkg <- pkgdown::as_pkgdown(package_source_folder)
@@ -48,10 +45,15 @@ ecodown_convert <- function(package_source_folder = "",
   file_readme <- all_files[rel_files == "README.md"]
   file_news <- all_files[rel_files == "NEWS.md"]
 
-  file_vignettes <- path(
-    path_common(all_files),
-    vignettes$file_in
-  )
+  vignette_path <- path(path_common(all_files), "vignettes")
+  if (dir_exists(vignette_path)) {
+    file_vignettes <- dir_ls(
+      vignette_path,
+      recurse = TRUE
+    )
+  } else {
+    file_vignettes <- as.character()
+  }
 
   file_reference <- path(
     path_common(all_files), "man",
@@ -59,7 +61,7 @@ ecodown_convert <- function(package_source_folder = "",
   )
 
   if (verbosity == "summary" && get_package_header() == 0) {
-    msg_summary_entry("| R N Art Ref |\n")
+    msg_summary_entry("| R N Art Ref I |\n")
     set_package_header(1)
   }
 
@@ -72,7 +74,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_readme && length(file_readme) > 0) {
     pf <- c(pf, file_readme)
     msg_summary_number(length(file_readme))
-    if(smy) walk(file_readme, package_file, qfs, topics, vignettes)
+    if (smy) walk(file_readme, package_file, qfs, topics, vignettes)
   } else {
     msg_summary_number(0)
   }
@@ -80,7 +82,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_news && length(file_news) > 0) {
     pf <- c(pf, file_news)
     msg_summary_number(length(file_news))
-    if(smy) walk(file_news, package_file, qfs, topics, vignettes)
+    if (smy) walk(file_news, package_file, qfs, topics, vignettes)
   } else {
     msg_summary_number(0)
   }
@@ -88,7 +90,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_articles && length(file_vignettes) > 0) {
     pf <- c(pf, file_vignettes)
     msg_summary_number(length(file_vignettes), size = 4)
-    if(smy) walk(file_vignettes, package_file, qfs, topics, vignettes)
+    if (smy) walk(file_vignettes, package_file, qfs, topics, vignettes)
   } else {
     msg_summary_number(0, size = 4)
   }
@@ -96,12 +98,21 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_reference && length(file_reference) > 0) {
     pf <- c(pf, file_reference)
     msg_summary_number(length(file_reference), size = 4)
-    if(smy) walk(file_reference, package_file, qfs, topics, vignettes)
+    if (smy) {
+      walk(file_reference, package_file, qfs, topics, vignettes)
+      ri <- reference_index(
+        pkg = pkg,
+        quarto_sub_folder = quarto_sub_folder
+      )
+      writeLines(ri, path(qfs, "reference", "index.md"))
+      msg_summary_number(1)
+    }
   } else {
     msg_summary_number(0, size = 4)
+    msg_summary_number(0)
   }
 
-  msg_summary_number(" |\n")
+  msg_summary_entry(" |\n")
 
   pkg_files <- as_fs_path(pf)
 
@@ -113,10 +124,15 @@ ecodown_convert <- function(package_source_folder = "",
       addl_entries = list(
         pkg_topics = topics,
         pkg_vignettes = vignettes,
-        base_folder = path(quarto_folder, quarto_sub_folder)
+        base_folder = qfs
       ),
       verbosity = "verbose"
     )
+    ri <- reference_index(
+      pkg = pkg,
+      quarto_sub_folder = quarto_sub_folder
+    )
+    writeLines(ri, path(qfs, "reference", "index.md"))
   }
 
   downlit_options(
@@ -161,10 +177,4 @@ package_file <- function(input,
   } else {
     file_copy(input, output_file)
   }
-}
-
-temp_test <- function() {
-  msg_summary_title("Package clone and prep")
-  msg_summary_entry("       Clone / Checkout       | R N Art Ref |\n")
-  msg_summary_entry("------------------------------|-------------|\n")
 }

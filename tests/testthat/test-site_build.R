@@ -10,8 +10,9 @@ test_that("Build site works", {
     ">> Render in Quarto"
   )
 
+  res_files <- sort(list.dirs(dir_site, recursive = FALSE))
   expect_equal(
-    length(list.dirs(dir_site, recursive = FALSE)),
-    2
+    basename(res_files),
+    c(".quarto", "docs", "mleap")
   )
 })

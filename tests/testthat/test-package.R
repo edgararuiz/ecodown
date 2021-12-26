@@ -1,22 +1,14 @@
 test_that("Full package documentation works", {
-  pkg_location <- test_path("assets/crayon")
-  site_folder <- "test_site2"
-  temp_dir <- tempdir()
-  full_site <- paste0(temp_dir, "/", site_folder)
-
-  expect_output(
-    ecodown_convert(
-      package_source_folder = pkg_location,
-      quarto_sub_folder = site_folder,
-      quarto_folder = temp_dir,
-      site_url = ""
-    ),
-    msg_title_raw("Top files")
+  ecodown_convert(
+    package_source_folder = test_path("assets/crayon"),
+    quarto_sub_folder = "test1",
+    quarto_folder = tempdir(),
+    site_url = ""
   )
 
   expect_equal(
-    sort(list.files(full_site)),
-    sort(c("articles", "index.md", "NEWS.md", "reference"))
+    sort(list.files(paste0(tempdir(), "/", "test1"))),
+    sort(c("articles", "index.md", "news.md", "reference"))
   )
 
   expect_output(
@@ -25,23 +17,19 @@ test_that("Full package documentation works", {
       render_folder = NULL,
       verbosity = "verbose"
     ),
-    msg_title_raw("Auto-linking")
+    "Auto-linking"
   )
 
-  expect_output(
-    package_file_copy(file_names = "test"),
-    "not found: test"
+  ecodown_convert(
+    package_source_folder = test_path("assets/crayon2"),
+    quarto_sub_folder = "test2",
+    quarto_folder = tempdir()
   )
 
-  expect_output(
-    ecodown_convert(
-      package_source_folder = test_path("assets/crayon2"),
-      quarto_sub_folder = site_folder,
-      quarto_folder = temp_dir
-    ),
-    msg_title_raw("Top files")
+  expect_equal(
+    sort(list.files(paste0(tempdir(), "/", "test2"))),
+    sort(c("index.md", "news.md", "reference"))
   )
-
   expect_equal(
     qe(test_path("assets"), "site", "title"),
     "testsite"

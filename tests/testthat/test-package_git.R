@@ -17,7 +17,8 @@ test_that("Default cloning works", {
   expect_output(
     ecodown_clone_convert(
       repo_url = pkg_url,
-      target_folder = paste0(tempdir(), "/newtest"),
+      target_folder = paste0(tempdir(), "/clone1"),
+      quarto_folder = paste0(tempdir(), "/crayon1"),
       quarto_sub_folder = "crayon"
     ),
     msg_title_raw("Package documentation")

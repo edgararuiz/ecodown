@@ -42,7 +42,7 @@ msg_summary_number <- function(x, size = 2, color = black, side = c("left", "rig
     side <- side[[1]]
     x <- as.character(x)
     xn <- nchar(x)
-    
+
     pad <- paste0(rep(" ", times = (size - xn)), collapse = "")
     if (side == "left") cat(color(paste0(pad, x)))
     if (side == "right") cat(color(paste0(x, pad)))

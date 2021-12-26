@@ -17,7 +17,7 @@ ecodown_autolink(
 from Quarto. It defaults to the 'output-dir' entry in the '_quarto.yml' file.}
 
 \item{verbosity}{Level of messaging available during run time. Possible values
-are 'verbose', 'summary', and 'silent'.  Defaults to: 'verbose'}
+are 'verbose', 'summary', and 'silent'.}
 }
 \description{
 Autolink function calls

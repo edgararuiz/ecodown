@@ -1,6 +1,4 @@
-reference_index <- function(package_source_folder = "",
-                            pkg = NULL) {
-  if (is.null(pkg)) pkg <- pkgdown::as_pkgdown(package_source_folder)
+reference_index <- function(pkg = NULL, quarto_sub_folder) {
   pkg_ref <- pkg$meta$reference
   pkg_topics <- pkg$topics
 
