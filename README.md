@@ -50,33 +50,28 @@ Contents of example ’\_ecodown.yml’ file:
           convert_readme: FALSE
 
 ``` r
-site_build_quarto()
+ecodown_build()
 ```
 
-    >> Package clone and prep
            Clone / Checkout       | R N Art Ref |
-    ------------------------------|-------------|
-    mleap (39267f6...)            | 1 1   0   7 |
-    graphframes (v0.1.2)          | 0 1   0  27 |
+    mleap (39267f6...)            | 1 1   0    7|
+    graphframes (v0.1.2)          | 0 1   0   27|
+
 
     >> Render in Quarto
     my_site (1 renderable file)
     |--- graphframes (1 renderable file)
-    |--- |--- reference (28 renderable files)
+    |--- |--- reference (27 renderable files)
     |--- mleap (2 renderable files)
-    |--- |--- reference (8 renderable files)
+    |--- |--- reference (7 renderable files)
     ============================================== 
-    Total files:  40 
-    ------ Process started
-    ------ Process complete
+    Total files:  38 
 
     >> Autolinking
-    my_site/docs (1 html file)
-    |--- |--- graphframes (1 html file)
-    |--- |--- |--- reference (28 html files)
-    |--- |--- mleap (2 html files)
-    |--- |--- |--- reference (8 html files)
+    docs (1 html file)
+    |--- graphframes (1 html file)
+    |--- |--- reference (27 html files)
+    |--- mleap (2 html files)
+    |--- |--- reference (7 html files)
     ============================================== 
-    Total files:  40 
-    ------ Process started
-    ------ Process complete
+    Total files:  38 

@@ -20,7 +20,6 @@ get_verbosity <- function() {
 get_clone_header <- function() {
   x <- ecodown_context_get("clone_header")
   if (is.null(x)) x <- 0
-  set_clone_header(0)
   x[[1]]
 }
 
@@ -31,7 +30,6 @@ set_clone_header <- function(x) {
 get_package_header <- function() {
   x <- ecodown_context_get("package_header")
   if (is.null(x)) x <- 0
-  set_package_header(0)
   x[[1]]
 }
 

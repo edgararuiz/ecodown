@@ -25,7 +25,7 @@ ecodown_clone <- function(repo_url = "",
   msg_color_title("Cloning repo")
 
   if (verbosity == "summary" && get_clone_header() == 0) {
-    msg_summary_entry("       Clone / Checkout       ")
+    msg_summary_entry("       Clone / Checkout       \n")
     set_clone_header(1)
   }
 

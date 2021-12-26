@@ -71,11 +71,11 @@ cat(paste0(readLines(path(dir_site, "_ecodown.yml")), collapse = "\n"))
 ```
 
 ```{r, eval = FALSE}
-site_build_quarto()
+ecodown_build()
 ```
 
 ```{r, echo = FALSE}
-site_build_quarto(dir_site, verbosity = "summary")
+ecodown_build(dir_site, verbosity = "summary")
 ```
 
 

@@ -1,65 +1,3 @@
-#' Clones repo and builds documentation
-#' @inheritParams ecodown_convert
-#' @inheritParams ecodown_clone
-#' @param quarto_sub_folder Sub folder in `quarto_folder` that will be the
-#' base for the package's documentation. It defaults to the last section of the
-#' 'repo_url', which is usually the package name.
-#' @export
-ecodown_clone_convert <- function(repo_url = "",
-                                  quarto_sub_folder = path_file(repo_url),
-                                  quarto_folder = here::here(),
-                                  convert_readme = TRUE,
-                                  convert_news = TRUE,
-                                  convert_articles = TRUE,
-                                  convert_reference = TRUE,
-                                  downlit_options = TRUE,
-                                  site_url = qe(quarto_folder, "site", "site-url"),
-                                  commit = c("latest_tag", "latest_commit"),
-                                  target_folder = tempdir(),
-                                  branch = "main",
-                                  verbosity = c("verbose", "summary", "silent")) {
-  
-  verbosity <- verbosity[1]
-  
-  ecodown_context_set("verbosity", verbosity)
-  
-  msg_color_title("Package documentation")
-
-  if (quarto_folder == here::here()) {
-    msg_color(bold("quarto_folder: "), here::here(), color = green)
-  }
-
-  pkg_name <- path_file(repo_url)
-  if (quarto_sub_folder == pkg_name) {
-    msg_color(bold("quarto_sub_folder: "), pkg_name, color = green)
-  }
-
-  quarto_site <- qe(quarto_folder, "site", "site-url")
-  if (site_url == quarto_site) {
-    msg_color(bold("site_url: "), quarto_site, color = green)
-  }
-
-  pkg_path <- ecodown_clone(
-    repo_url = repo_url,
-    commit = commit,
-    target_folder = target_folder,
-    branch = branch,
-    verbosity = verbosity
-  )
-
-  ecodown_convert(
-    package_source_folder = pkg_path,
-    quarto_sub_folder = quarto_sub_folder,
-    quarto_folder = quarto_folder,
-    convert_readme = convert_readme,
-    convert_news = convert_news,
-    convert_articles = convert_articles,
-    convert_reference = convert_reference,
-    downlit_options = downlit_options,
-    site_url = site_url,
-    verbosity = verbosity
-  )
-}
 #' Copies and/or converts files from package source into Quarto
 #' @param package_source_folder Path to the package's source code
 #' @param quarto_folder Base target Quarto folder. Defaults to current workspace.
@@ -87,6 +25,7 @@ ecodown_convert <- function(package_source_folder = "",
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
                             verbosity = c("verbose", "summary", "silent")) {
+  
   all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
   verbosity <- verbosity[1]
@@ -162,7 +101,7 @@ ecodown_convert <- function(package_source_folder = "",
     msg_summary_number(0, size = 4)
   }
 
-  msg_summary_number("|")
+  msg_summary_number(" |\n")
 
   pkg_files <- as_fs_path(pf)
 
