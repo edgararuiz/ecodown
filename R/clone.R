@@ -9,13 +9,23 @@
 #' @param target_folder Location to copy the package to. Defaults to a temporary
 #' directory
 #' @param branch Repo branch. Defaults to 'main'
+#' @inheritParams ecodown_build
 #' @export
-package_clone_git_repo <- function(repo_url = "",
-                                   commit = c("latest_tag", "latest_commit"),
-                                   target_folder = tempdir(),
-                                   branch = "main") {
-  
+ecodown_clone <- function(repo_url = "",
+                          commit = c("latest_tag", "latest_commit"),
+                          target_folder = tempdir(),
+                          branch = "main",
+                          verbosity = c("verbose", "summary", "silent")) {
+  verbosity <- verbosity[1]
+
+  ecodown_context_set("verbosity", verbosity)
+
   msg_color_title("Cloning repo")
+
+  if (verbosity == "summary" && get_clone_header() == 0) {
+    msg_summary_entry("       Clone / Checkout       \n")
+    set_clone_header(1)
+  }
 
   pkg_name <- path_file(repo_url)
 
@@ -49,12 +59,27 @@ package_clone_git_repo <- function(repo_url = "",
       }
     })
     log_match <- flatten(log_match)
-    matched_tag <- repo_tags[repo_tags$commit == log_match[[1]], ]
-    msg_color("Checking out tag: ", matched_tag$name, color = green)
-    git_branch_create("currenttag", ref = log_match, repo = pkg_dir)
+    if (length(log_match) > 0) {
+      matched_tag <- repo_tags[repo_tags$commit == log_match[[1]], ]
+      msg_color("Checking out tag: ", matched_tag$name, color = green)
+      git_branch_create("currenttag", ref = log_match, repo = pkg_dir)
+      ck_msg <- matched_tag$name
+    } else {
+      ck_msg <- "Latest"
+    }
   } else {
-    if (commit[1] != "latest_commit") checkout_commit(pkg_dir, commit[1])
+    if (commit[1] != "latest_commit") {
+      checkout_commit(pkg_dir, commit[1])
+      ck_msg <- paste0(substr(commit[1], 1, 7), "...")
+    } else {
+      ck_msg <- "Latest"
+    }
   }
+
+  sum_msg <- paste0(pkg_name, " (", ck_msg, ")")
+  if (get_package_header() == 0) msg_summary_entry("\n")
+  msg_summary_number(sum_msg, size = 30, side = "right")
+
   pkg_dir
 }
 

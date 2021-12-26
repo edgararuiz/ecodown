@@ -22,7 +22,7 @@ cat_tree <- function(x, ...) {
 }
 
 temp_dir <- tempdir()
-dir_site <- path(temp_dir, "test_site2")
+dir_site <- path(temp_dir, "my_site")
 if(dir_exists(dir_site)) unlink(dir_site, recursive = TRUE, force = TRUE)
 dir_create(dir_site)   
 
@@ -60,22 +60,48 @@ devtools::install_github("edgararuiz/ecodown")
 library(ecodown)
 ```
  
-```{r, echo = FALSE}
-cat_tree(dir_site)
+## Clone the repo
+
+```{r}
+mleap_location <- ecodown_clone("https://github.com/rstudio/mleap")
 ```
 
-Contents of example  '_ecodown.yml'  file:
-
-```{r, echo = FALSE}
-cat(paste0(readLines(path(dir_site, "_ecodown.yml")), collapse = "\n"))
-```
+## Convert and move to Quarto folder
 
 ```{r, eval = FALSE}
-site_build_quarto()
+ecodown_convert(mleap_location, quarto_sub_folder = "mleap")
 ```
 
 ```{r, echo = FALSE}
-site_build_quarto(dir_site)
+ecodown_convert(mleap_location, quarto_folder = dir_site, quarto_sub_folder = "mleap")
+```
+
+## Render site
+
+```{r, eval = FALSE}
+ecodown_quarto_render()
+```
+
+```{r, echo = FALSE}
+ecodown_quarto_render(dir_site)
+```
+## Autolink
+
+```{r, eval = FALSE}
+ecodown_autolink()
+```
+
+```{r, echo = FALSE}
+ecodown_autolink(dir_site)
 ```
 
 
+
+
+
+
+
+
+ 
+ 
+ 
