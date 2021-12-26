@@ -96,7 +96,7 @@ ecodown_autolink()
 ```
 
     >> Auto-linking
-    - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/RtmpjhlgVG/my_site/docs
+    - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/RtmpoA7L9Z/my_site/docs
     docs (1 html file)
     |--- index.html
     |--- mleap (2 html files)

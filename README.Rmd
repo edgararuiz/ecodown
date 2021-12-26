@@ -26,7 +26,7 @@ dir_site <- path(temp_dir, "my_site")
 if(dir_exists(dir_site)) unlink(dir_site, recursive = TRUE, force = TRUE)
 dir_create(dir_site)   
 
-file_utils <- system.file("testutils/quarto_files", package = "ecodown")
+file_utils <- system.file("readme_files", package = "ecodown")
 lapply(dir_ls(file_utils), function(x) file_copy(x, dir_site, overwrite = TRUE))
 ```
 
