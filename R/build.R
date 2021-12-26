@@ -27,6 +27,7 @@ ecodown_build <- function(quarto_folder = here::here(),
     msg_summary_entry("\n")
     exec_command(
       "ecodown_quarto_render",
+      config_yaml$site$quarto,
       addl_entries = list(quarto_folder = qbf, verbosity = verbosity)
     )
 

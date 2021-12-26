@@ -50,21 +50,3 @@ msg_summary_number <- function(x, size = 2, color = black, side = c("left", "rig
     if (side == "right") cat(color(paste0(x, pad)))
   }
 }
-
-msg_summary_tree <- function(file_list,
-                             file_type = "",
-                             base_folder,
-                             command_name = "",
-                             entry_value = NULL,
-                             addl_entries = list()) {
-  if (get_verbosity() == "summary") {
-    file_tree(
-      file_list = file_list,
-      file_type = file_type,
-      base_folder = base_folder,
-      command_name = command_name,
-      entry_value = entry_value,
-      addl_entries = addl_entries
-    )
-  }
-}
