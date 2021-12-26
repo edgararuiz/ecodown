@@ -6,7 +6,7 @@
 \usage{
 ecodown_quarto_render(
   quarto_folder = here::here(),
-  verbosity = c("summary", "verbose", "silent")
+  verbosity = c("verbose", "summary", "silent")
 )
 }
 \arguments{

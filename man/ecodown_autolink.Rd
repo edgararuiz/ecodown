@@ -7,7 +7,7 @@
 ecodown_autolink(
   quarto_folder = here::here(),
   render_folder = qe(quarto_folder, "project", "output-dir"),
-  verbosity = c("summary", "verbose", "silent")
+  verbosity = c("verbose", "summary", "silent")
 )
 }
 \arguments{

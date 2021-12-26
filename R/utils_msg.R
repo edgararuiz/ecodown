@@ -10,10 +10,12 @@ msg_color_bold <- function(..., color = black) {
   }
 }
 
-msg_color_title <- function(..., color = blue) {
+msg_color_title <- function(x, color = blue) {
   if (get_verbosity() == "verbose") {
-    title <- msg_title_raw(paste0(...))
-    cat(bold(color(paste0(title, "\n"))))
+    # title <- msg_title_raw(paste0(...))
+    # cat(bold(color(paste0(title, "\n"))))
+    x <- paste0(">> ", x, "\n")
+    cat(black(bold(x)))
   }
 }
 

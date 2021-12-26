@@ -5,7 +5,10 @@
 #' @export
 ecodown_autolink <- function(quarto_folder = here::here(),
                              render_folder = qe(quarto_folder, "project", "output-dir"),
-                             verbosity = c("summary", "verbose", "silent")) {
+                             verbosity = c("verbose", "summary", "silent")) {
+  
+  verbosity <- verbosity[1]
+  
   ecodown_context_set("verbosity", verbosity)
 
   quarto_path <- path(quarto_folder, render_folder)

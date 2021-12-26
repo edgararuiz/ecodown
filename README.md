@@ -36,42 +36,80 @@ devtools::install_github("edgararuiz/ecodown")
 library(ecodown)
 ```
 
-     ├── _ecodown.yml
-     ├── _quarto.yml
-     └── index.md
-
-Contents of example ’\_ecodown.yml’ file:
-
-    site:
-      packages:
-        - repo_url: https://github.com/rstudio/mleap
-          commit: 39267f6a253f51d1176e58e528c7ce2c6cfd2a64
-        - repo_url: https://github.com/rstudio/graphframes
-          convert_readme: FALSE
+## Clone the repo
 
 ``` r
-ecodown_build()
+mleap_location <- ecodown_clone("https://github.com/rstudio/mleap")
+>> Cloning repo
+- Cloning: mleap
+- Checking out tag: v1.0.0
 ```
 
-           Clone / Checkout       | R N Art Ref |
-    mleap (39267f6...)            | 1 1   0    7|
-    graphframes (v0.1.2)          | 0 1   0   27|
+## Convert and move to Quarto folder
 
+``` r
+ecodown_convert(mleap_location, quarto_sub_folder = "mleap")
+```
 
-    >> Render in Quarto
+    mleap (2 files)
+    |--- README.md
+    |--- NEWS.md
+    |--- man (7 files)
+    |--- |--- install_maven.Rd
+    |--- |--- install_mleap.Rd
+    |--- |--- ml_write_bundle.Rd
+    |--- |--- mleap_installed_versions.Rd
+    |--- |--- mleap_load_bundle.Rd
+    |--- |--- mleap_model_schema.Rd
+    |--- |--- mleap_transform.Rd
+    ============================================== 
+    Total files:  9 
+
+## Render site
+
+``` r
+ecodown_quarto_render()
+```
+
+    >> Render Quarto site
     my_site (1 renderable file)
-    |--- graphframes (1 renderable file)
-    |--- |--- reference (27 renderable files)
+    |--- index.md
     |--- mleap (2 renderable files)
-    |--- |--- reference (7 renderable files)
+    |--- |--- index.md
+    |--- |--- news.md
+    |--- |--- reference (8 renderable files)
+    |--- |--- |--- index.md
+    |--- |--- |--- install_maven.md
+    |--- |--- |--- install_mleap.md
+    |--- |--- |--- ml_write_bundle.md
+    |--- |--- |--- mleap_installed_versions.md
+    |--- |--- |--- mleap_load_bundle.md
+    |--- |--- |--- mleap_model_schema.md
+    |--- |--- |--- mleap_transform.md
     ============================================== 
-    Total files:  38 
+    Total files:  11 
 
-    >> Autolinking
+## Autolink
+
+``` r
+ecodown_autolink()
+```
+
+    >> Auto-linking
+    - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/RtmpjhlgVG/my_site/docs
     docs (1 html file)
-    |--- graphframes (1 html file)
-    |--- |--- reference (27 html files)
+    |--- index.html
     |--- mleap (2 html files)
-    |--- |--- reference (7 html files)
+    |--- |--- index.html
+    |--- |--- news.html
+    |--- |--- reference (8 html files)
+    |--- |--- |--- index.html
+    |--- |--- |--- install_maven.html
+    |--- |--- |--- install_mleap.html
+    |--- |--- |--- ml_write_bundle.html
+    |--- |--- |--- mleap_installed_versions.html
+    |--- |--- |--- mleap_load_bundle.html
+    |--- |--- |--- mleap_model_schema.html
+    |--- |--- |--- mleap_transform.html
     ============================================== 
-    Total files:  38 
+    Total files:  11 

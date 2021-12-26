@@ -2,7 +2,10 @@
 #' @inheritParams ecodown_clone_convert
 #' @export
 ecodown_quarto_render <- function(quarto_folder = here::here(),
-                                  verbosity = c("summary", "verbose", "silent")) {
+                                  verbosity = c("verbose", "summary", "silent")
+                                  ) {
+  verbosity <- verbosity[1]
+  
   ecodown_context_set("verbosity", verbosity)
 
   msg_color_title("Render Quarto site")
