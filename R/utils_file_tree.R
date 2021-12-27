@@ -34,13 +34,18 @@ file_tree <- function(file_list,
       walk(
         file_list[matched_files],
         ~ {
+          stt <- Sys.time()
           exec_command(
             command_name = command_name,
             entry_value = entry_value,
             addl_entries = c(addl_entries, list(input = .x))
           )
+          stp <- Sys.time()
           if (verbosity == "verbose") {
-            cat(paste0(silver(paste0(pss, "|--- ")), path_file(.x), "\n"))
+            et <- stp - stt
+            ett <- round(et[[1]])
+            etc <- paste0(" [", ett, "s]")
+            cat(paste0(silver(paste0(pss, "|--- ")), path_file(.x), silver(etc), "\n"))
           }
         }
       )

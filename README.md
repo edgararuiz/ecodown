@@ -52,16 +52,16 @@ ecodown_convert(mleap_location, quarto_sub_folder = "mleap")
 ```
 
     mleap (2 files)
-    |--- README.md
-    |--- NEWS.md
+    |--- README.md [0s]
+    |--- NEWS.md [0s]
     |--- man (7 files)
-    |--- |--- install_maven.Rd
-    |--- |--- install_mleap.Rd
-    |--- |--- ml_write_bundle.Rd
-    |--- |--- mleap_installed_versions.Rd
-    |--- |--- mleap_load_bundle.Rd
-    |--- |--- mleap_model_schema.Rd
-    |--- |--- mleap_transform.Rd
+    |--- |--- install_maven.Rd [0s]
+    |--- |--- install_mleap.Rd [0s]
+    |--- |--- ml_write_bundle.Rd [0s]
+    |--- |--- mleap_installed_versions.Rd [0s]
+    |--- |--- mleap_load_bundle.Rd [0s]
+    |--- |--- mleap_model_schema.Rd [0s]
+    |--- |--- mleap_transform.Rd [0s]
     ============================================== 
     Total files:  9 
 
@@ -73,19 +73,19 @@ ecodown_quarto_render()
 
     >> Render Quarto site
     my_site (1 renderable file)
-    |--- index.md
+    |--- index.md [1s]
     |--- mleap (2 renderable files)
-    |--- |--- index.md
-    |--- |--- news.md
+    |--- |--- index.md [1s]
+    |--- |--- news.md [1s]
     |--- |--- reference (8 renderable files)
-    |--- |--- |--- index.md
-    |--- |--- |--- install_maven.md
-    |--- |--- |--- install_mleap.md
-    |--- |--- |--- ml_write_bundle.md
-    |--- |--- |--- mleap_installed_versions.md
-    |--- |--- |--- mleap_load_bundle.md
-    |--- |--- |--- mleap_model_schema.md
-    |--- |--- |--- mleap_transform.md
+    |--- |--- |--- index.md [1s]
+    |--- |--- |--- install_maven.md [1s]
+    |--- |--- |--- install_mleap.md [1s]
+    |--- |--- |--- ml_write_bundle.md [1s]
+    |--- |--- |--- mleap_installed_versions.md [1s]
+    |--- |--- |--- mleap_load_bundle.md [1s]
+    |--- |--- |--- mleap_model_schema.md [1s]
+    |--- |--- |--- mleap_transform.md [1s]
     ============================================== 
     Total files:  11 
 
@@ -96,20 +96,20 @@ ecodown_autolink()
 ```
 
     >> Auto-linking
-    - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/RtmpoA7L9Z/my_site/docs
+    - Path: /var/folders/l8/v1ym1mc10_b0dftql5wrrm8w0000gn/T/RtmpuRq2Rt/my_site/docs
     docs (1 html file)
-    |--- index.html
+    |--- index.html [0s]
     |--- mleap (2 html files)
-    |--- |--- index.html
-    |--- |--- news.html
+    |--- |--- index.html [0s]
+    |--- |--- news.html [0s]
     |--- |--- reference (8 html files)
-    |--- |--- |--- index.html
-    |--- |--- |--- install_maven.html
-    |--- |--- |--- install_mleap.html
-    |--- |--- |--- ml_write_bundle.html
-    |--- |--- |--- mleap_installed_versions.html
-    |--- |--- |--- mleap_load_bundle.html
-    |--- |--- |--- mleap_model_schema.html
-    |--- |--- |--- mleap_transform.html
+    |--- |--- |--- index.html [0s]
+    |--- |--- |--- install_maven.html [0s]
+    |--- |--- |--- install_mleap.html [0s]
+    |--- |--- |--- ml_write_bundle.html [0s]
+    |--- |--- |--- mleap_installed_versions.html [0s]
+    |--- |--- |--- mleap_load_bundle.html [0s]
+    |--- |--- |--- mleap_model_schema.html [0s]
+    |--- |--- |--- mleap_transform.html [0s]
     ============================================== 
     Total files:  11 
