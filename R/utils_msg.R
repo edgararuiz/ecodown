@@ -1,12 +1,13 @@
-msg_color <- function(..., color = black) {
+msg_color <- function(..., color = black, return = TRUE) {
   if (get_verbosity() == "verbose") {
-    cat(color(paste0("- ", ..., "\n")))
+    msg <- paste0(blue(bold("i ")), color(..., ifelse(return, "\n", "") ))
+    cat(msg)
   }
 }
 
-msg_color_bold <- function(..., color = black) {
+msg_color_line <- function(..., color = black, return = FALSE) {
   if (get_verbosity() == "verbose") {
-    cat(bold(color(paste0("- ", ..., "\n"))))
+    cat(color(paste0(..., ifelse(return, "\n", "") )))
   }
 }
 
@@ -17,13 +18,6 @@ msg_color_title <- function(x, color = blue) {
     x <- paste0(">> ", x, "\n")
     cat(black(bold(x)))
   }
-}
-
-msg_title_raw <- function(title) {
-  n_side <- floor(40 - nchar(title) / 2)
-  sides <- paste0(rep("- ", times = n_side / 2), collapse = "")
-  x <- paste0(sides, title, " ", sides)
-  substr(x, 1, 78)
 }
 
 msg_summary_entry <- function(x, color = black) {

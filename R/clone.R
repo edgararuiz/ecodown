@@ -31,9 +31,12 @@ ecodown_clone <- function(repo_url = "",
 
   pkg_dir <- path(target_folder, pkg_name)
 
-  msg_color("Cloning: ", pkg_name, color = green)
+  msg_color("Cloning:", bold(pkg_name), return = FALSE, color = magenta)
 
+  start_clone <- Sys.time()
   git_clone(url = repo_url, path = pkg_dir, verbose = FALSE)
+  
+  msg_color_line(cat_time(start_clone, Sys.time()), "\n")
 
   if (commit[1] == "latest_tag") {
     repo_tags <- git_tag_list(repo = pkg_dir)
@@ -61,11 +64,12 @@ ecodown_clone <- function(repo_url = "",
     log_match <- flatten(log_match)
     if (length(log_match) > 0) {
       matched_tag <- repo_tags[repo_tags$commit == log_match[[1]], ]
-      msg_color("Checking out tag: ", matched_tag$name, color = green)
+      msg_color("Checking out tag:", matched_tag$name, color = magenta)
       git_branch_create("currenttag", ref = log_match, repo = pkg_dir)
       ck_msg <- matched_tag$name
     } else {
       ck_msg <- "Latest"
+      msg_color("Using", bold("latest"),"commit", color = magenta)
     }
   } else {
     if (commit[1] != "latest_commit") {
@@ -73,6 +77,7 @@ ecodown_clone <- function(repo_url = "",
       ck_msg <- paste0(substr(commit[1], 1, 7), "...")
     } else {
       ck_msg <- "Latest"
+      msg_color("Using", bold("latest"),"commit", color = magenta)
     }
   }
 
@@ -84,6 +89,6 @@ ecodown_clone <- function(repo_url = "",
 }
 
 checkout_commit <- function(repo = "", commit = "") {
-  msg_color("Checking out SHA: ", substr(commit[1], 1, 7), "...", color = green)
+  msg_color("Checking out SHA:", substr(commit[1], 1, 7), "...", color = magenta)
   git_branch_create("specificsha", ref = commit[1], repo = repo)
 }

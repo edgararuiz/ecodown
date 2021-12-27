@@ -6,7 +6,7 @@
 \usage{
 ecodown_convert(
   package_source_folder = "",
-  quarto_sub_folder = "",
+  quarto_sub_folder = fs::path_file(package_source_folder),
   quarto_folder = here::here(),
   convert_readme = TRUE,
   convert_news = TRUE,

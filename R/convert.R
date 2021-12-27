@@ -14,7 +14,7 @@
 #' @inheritParams ecodown_build
 #' @export
 ecodown_convert <- function(package_source_folder = "",
-                            quarto_sub_folder = "",
+                            quarto_sub_folder = fs::path_file(package_source_folder),
                             quarto_folder = here::here(),
                             convert_readme = TRUE,
                             convert_news = TRUE,
@@ -33,9 +33,6 @@ ecodown_convert <- function(package_source_folder = "",
 
   pkg <- pkgdown::as_pkgdown(package_source_folder)
 
-  topics <- pkg$topics
-  vignettes <- pkg$vignettes
-
   rel_files <- substr(
     all_files,
     nchar(path_common(all_files)) + 2,
@@ -49,17 +46,24 @@ ecodown_convert <- function(package_source_folder = "",
   if (dir_exists(vignette_path)) {
     file_vignettes <- dir_ls(
       vignette_path,
-      recurse = TRUE
+      recurse = TRUE,
+      type = "file"
     )
   } else {
     file_vignettes <- as.character()
   }
 
-  file_reference <- path(
-    path_common(all_files), "man",
-    topics$file_in[!topics$internal]
-  )
-
+  reference_path <- path(path_common(all_files), "man")
+  if (dir_exists(reference_path)) {
+    file_reference <- dir_ls(
+      reference_path,
+      recurse = TRUE,
+      type = "file"
+    )
+  } else {
+    file_reference <- as.character()
+  }
+  
   if (verbosity == "summary" && get_package_header() == 0) {
     msg_summary_entry("| R N Art Ref I |\n")
     set_package_header(1)
@@ -74,7 +78,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_readme && length(file_readme) > 0) {
     pf <- c(pf, file_readme)
     msg_summary_number(length(file_readme))
-    if (smy) walk(file_readme, package_file, qfs, topics, vignettes)
+    if (smy) walk(file_readme, package_file, qfs, pkg)
   } else {
     msg_summary_number(0)
   }
@@ -82,7 +86,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_news && length(file_news) > 0) {
     pf <- c(pf, file_news)
     msg_summary_number(length(file_news))
-    if (smy) walk(file_news, package_file, qfs, topics, vignettes)
+    if (smy) walk(file_news, package_file, qfs, pkg)
   } else {
     msg_summary_number(0)
   }
@@ -90,7 +94,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_articles && length(file_vignettes) > 0) {
     pf <- c(pf, file_vignettes)
     msg_summary_number(length(file_vignettes), size = 4)
-    if (smy) walk(file_vignettes, package_file, qfs, topics, vignettes)
+    if (smy) walk(file_vignettes, package_file, qfs, pkg)
   } else {
     msg_summary_number(0, size = 4)
   }
@@ -99,7 +103,7 @@ ecodown_convert <- function(package_source_folder = "",
     pf <- c(pf, file_reference)
     msg_summary_number(length(file_reference), size = 4)
     if (smy) {
-      walk(file_reference, package_file, qfs, topics, vignettes)
+      walk(file_reference, package_file, qfs, pkg)
       ri <- reference_index(
         pkg = pkg,
         quarto_sub_folder = quarto_sub_folder
@@ -122,8 +126,7 @@ ecodown_convert <- function(package_source_folder = "",
       base_folder = package_source_folder,
       command_name = "package_file",
       addl_entries = list(
-        pkg_topics = topics,
-        pkg_vignettes = vignettes,
+        pkg = pkg,
         base_folder = qfs
       ),
       verbosity = "verbose"
@@ -144,32 +147,34 @@ ecodown_convert <- function(package_source_folder = "",
 
 package_file <- function(input,
                          base_folder = here::here(),
-                         pkg_topics = NULL,
-                         pkg_vignettes = NULL) {
-  input_ext <- tolower(path_ext(input))
+                         pkg = NULL) {
+  
+  pkg_topics <- pkg$topics
+  pkg_source_path <- pkg$src_path
+  
   input_name <- path_file(input)
-  in_folder <- path_file(path_dir(input))
-  output_folder <- base_folder
+  
+  input_rel <- tolower(substr(
+    input,
+    nchar(pkg_source_path) + 2,
+    nchar(input)
+  ))
 
-  if (tolower(input_name) == "readme.md") {
-    output_file <- path(base_folder, "index.md")
-  }
+  input_split <- path_split(input_rel)[[1]]
+  
+  output_split <- input_split
+  if(input_split[[1]] == "man") output_split[[1]] <- "reference"
+  if(input_split[[1]] == "vignettes") output_split[[1]] <- "articles"
+  li <- length(input_split)
+  if(input_split[li] == "readme.md") output_split[li] <- "index.md"
+  output_file <- path(
+    base_folder, 
+    paste0(output_split, collapse = "/")
+    )
 
-  if (tolower(input_name) == "news.md") {
-    output_file <- path(base_folder, "news.md")
-  }
-
-  if (input_ext == "rd" && in_folder == "man") {
-    output_name <- path(path_ext_remove(input_name), ext = "md")
-    output_folder <- path(base_folder, "reference")
-    output_file <- path(output_folder, output_name)
-  }
-  if (in_folder == "vignettes") {
-    output_folder <- path(base_folder, "articles")
-    output_file <- path(output_folder, input_name)
-  }
+  output_folder <- path_dir(output_file)
   if (!dir_exists(output_folder)) dir_create(output_folder)
-  if (input_ext == "rd") {
+  if (tolower(path_ext(input)) == "rd") {
     list_topics <- transpose(pkg_topics)
     input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
     out <- reference_parse_topic(input_topic)

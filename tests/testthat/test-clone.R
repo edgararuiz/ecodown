@@ -15,7 +15,7 @@ test_that("Default cloning works", {
       pkg_path, 
       "80bfc4c90da668a77da1410c037181d097de3354"
       ),
-    "- Checking out SHA: 80bfc4c..."
+    "i Checking out SHA: 80bfc4"
   )
    
 })

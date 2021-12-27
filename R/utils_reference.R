@@ -13,10 +13,14 @@ reference_index <- function(pkg = NULL, quarto_sub_folder) {
         ~ {
           cr <- .x
           ma <- map_lgl(pkg_topics$alias, ~ any(cr == .x))
-          pkg_topics$name[ma]
+          if(sum(ma) == 1) {
+            pkg_topics$name[ma]  
+          } else {
+            ""
+          }
         }
       )
-      unique_names <- unique(matched_names)
+      unique_names <- unique(matched_names[matched_names != ""])
 
       refs_html <- map(unique_names, ~ {
         me <- pkg_topics[pkg_topics$name == .x, ]

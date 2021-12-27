@@ -7,13 +7,20 @@ site:
   google-analytics: UA-20375833-3
   sidebar:
     contents:
-    - section: MLeap 
-      href: /mleap
+    - section: Lubridate 
+      href: /lubridate
       contents:
         - text: News
-          href: /mleap/news.md
+          href: /lubridate/news.md
         - text: Reference
-          href: /mleap/reference
+          href: /lubridate/reference
+    - section: HMS 
+      href: /hms
+      contents:
+        - text: News
+          href: /hms/news.md
+        - text: Reference
+          href: /hms/reference          
 format:
   html:
     toc: true
