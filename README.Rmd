@@ -81,6 +81,7 @@ ecodown_convert(mleap_location, quarto_folder = dir_site, quarto_sub_folder = "m
 ecodown_quarto_render()
 ```
 
+
 ```{r, echo = FALSE}
 ecodown_quarto_render(dir_site)
 ```

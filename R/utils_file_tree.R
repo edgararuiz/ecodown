@@ -5,6 +5,7 @@ file_tree <- function(file_list,
                       entry_value = NULL,
                       addl_entries = list(),
                       verbosity = "summary") {
+  tree_start <- Sys.time()
   file_unique <- unique(path_dir(file_list))
   file_sort <- sort(file_unique)
   rel_sort <- substr(
@@ -28,32 +29,55 @@ file_tree <- function(file_list,
       curr_sort <- paste0(psc, flc)
     }
     no_cat <- magenta(paste0(" (", no_files, " ", file_type, no_caption, ")"))
-    cat_msg <- paste0(curr_sort, no_cat, "\n")
+    cat_msg <- paste0(curr_sort, no_cat)
+    if(verbosity == "verbose") cat_msg <- paste0(cat_msg, "\n")
+    section_start <- Sys.time()
     cat(cat_msg)
     if (command_name != "") {
       walk(
         file_list[matched_files],
         ~ {
-          stt <- Sys.time()
+          start_time <- Sys.time()
           exec_command(
             command_name = command_name,
             entry_value = entry_value,
             addl_entries = c(addl_entries, list(input = .x))
           )
-          stp <- Sys.time()
+          stop_time <- Sys.time()
           if (verbosity == "verbose") {
-            et <- stp - stt
-            ett <- round(et[[1]])
-            etc <- paste0(" [", ett, "s]")
-            cat(paste0(silver(paste0(pss, "|--- ")), path_file(.x), silver(etc), "\n"))
+            doc_time <- cat_time(start_time, stop_time)
+            cat(paste0(silver(paste0(pss, "|--- ")), path_file(.x), silver(doc_time), "\n"))
           }
         }
       )
     }
+    section_end <- Sys.time()
+    section_time <- cat_time(section_start, section_end)
+    if(verbosity == "summary") cat(paste0(section_time, "\n"))
   }
   sep_cat <- paste0(rep("=", times = 46), collapse = "")
   cat(silver(sep_cat, "\n"))
-  cat(silver("Total files: ", length(file_list), "\n"))
+  
+  tree_end <- Sys.time()
+  tree_time <- cat_time(tree_start, tree_end, add_brackets = FALSE)
+  
+  cat(silver("Total files: ", length(file_list), " ---- Total time: ", tree_time,"\n"))
+}
+
+cat_time <- function(start_time = Sys.time() - 600, 
+                     end_time = Sys.time(),
+                     add_brackets = TRUE
+                     ) {
+  time_length <- end_time - start_time
+  length_value <- time_length[[1]]
+  round_value <- round(length_value, 1)
+  time_unit <- substr(attr(time_length, "units"), 1, 1)
+  if(add_brackets) {
+    paste0(" [ ", round_value, time_unit, " ]")  
+  } else {
+    paste0(round_value, time_unit)
+  }
+  
 }
 
 exec_command <- function(command_name = "",
