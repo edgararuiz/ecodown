@@ -22,9 +22,13 @@ ecodown_quarto_render <- function(quarto_folder = here::here(),
     file_list = rend_files,
     file_type = "renderable ",
     base_folder = quarto_folder,
-    command_name = "quarto_render",
-    entry_value = NULL,
-    addl_entries = list(as_job = FALSE, quiet = TRUE),
+    command_name = "render_quarto",
     verbosity = verbosity
   )
+}
+
+render_quarto <- function(input) {
+  if(!is.null(quarto_path())) {
+    quarto_render(input, as_job = FALSE, quiet = TRUE)
+  }
 }

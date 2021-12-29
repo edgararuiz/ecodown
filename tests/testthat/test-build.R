@@ -1,10 +1,13 @@
 test_that("Build site works", {
   
-  dir_site <- paste0(tempdir(), "/build_site")
-  if (dir.exists(dir_site)) unlink(dir_site, recursive = TRUE, force = TRUE)
-  dir.create(dir_site)
-  file_utils <- test_path("assets/quarto_files")
-  lapply(dir_ls(file_utils), function(x) file_copy(x, dir_site, overwrite = TRUE))
+  dir_site <- path(tempdir(), "build1")
+  
+  dir_create(dir_site)
+  
+  lapply(
+    dir_ls(test_path("assets/quarto_files")), 
+    function(x) file_copy(x, dir_site, overwrite = TRUE)
+    )
 
   capture.output(
     ecodown_build(quarto_folder = dir_site)
@@ -12,6 +15,6 @@ test_that("Build site works", {
   
   expect_equal(
     sort(path_file(dir_ls(dir_site))),
-    c("_ecodown.yml", "_quarto.yml", "index.md", "mleap")
+    c("_ecodown.yml", "_quarto.yml", "docs", "index.md", "mleap")
   )
 })
