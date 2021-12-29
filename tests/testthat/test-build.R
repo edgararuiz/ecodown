@@ -13,8 +13,10 @@ test_that("Build site works", {
     ecodown_build(quarto_folder = dir_site)
   )
   
-  expect_equal(
-    sort(path_file(dir_ls(dir_site))),
-    c("_ecodown.yml", "_quarto.yml", "docs", "index.md", "mleap")
-  )
+  top_files <- path_file(dir_ls(dir_site))
+  
+  expect_true("index.md" %in% top_files)
+  expect_true("_quarto.yml" %in% top_files)
+  expect_true("mleap" %in% top_files)
+  
 })
