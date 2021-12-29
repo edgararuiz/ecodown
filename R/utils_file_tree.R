@@ -23,7 +23,7 @@ file_tree <- function(file_list,
       pc <- path_common(rel_sort[c(i, i - 1)])
       fln <- path_file(curr_sort)
       ps <- path_split(curr_sort)[[1]]
-      pss <- paste0(rep("|--- ", times = length(ps) - 1), collapse = "")
+      pss <- paste0(rep("|-- ", times = length(ps) - 1), collapse = "")
       psc <- silver(pss)
       flc <- black(fln)
       curr_sort <- paste0(psc, flc)
@@ -38,15 +38,21 @@ file_tree <- function(file_list,
         file_list[matched_files],
         ~ {
           start_time <- Sys.time()
-          exec_command(
+          res <- exec_command(
             command_name = command_name,
             entry_value = entry_value,
             addl_entries = c(addl_entries, list(input = .x))
           )
+          res_msg <- "" 
+          if(!is.null(res)) {
+            if(res != path_file(.x)) res_msg <- blue(" =>", res)
+          }
           stop_time <- Sys.time()
           if (verbosity == "verbose") {
             doc_time <- cat_time(start_time, stop_time)
-            cat(paste0(silver(paste0(pss, "|--- ")), path_file(.x), silver(doc_time), "\n"))
+            cat(paste0(
+              silver(paste0(pss, "|-- ")), path_file(.x), res_msg, silver(doc_time), "\n"
+              ))
           }
         }
       )
@@ -58,8 +64,7 @@ file_tree <- function(file_list,
   sep_cat <- paste0(rep("=", times = 46), collapse = "")
   cat(silver(sep_cat, "\n"))
   
-  tree_end <- Sys.time()
-  tree_time <- cat_time(tree_start, tree_end, add_brackets = FALSE)
+  tree_time <- cat_time(tree_start, Sys.time(), add_brackets = FALSE)
   
   cat(silver("Total files: ", length(file_list), " ---- Total time: ", tree_time,"\n"))
 }
@@ -94,6 +99,7 @@ exec_command <- function(command_name = "",
 
   if (x) {
     entries <- c(entry_value, addl_entries)
-    exec(command_name, !!!entries)
+    out <- exec(command_name, !!!entries)
   }
+  out
 }

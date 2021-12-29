@@ -23,21 +23,33 @@ ecodown_build <- function(quarto_folder = here::here(),
         )
       }
     )
-
-    msg_summary_entry("\n")
-    exec_command(
-      "ecodown_quarto_render",
-      config_yaml$site$quarto,
-      addl_entries = list(quarto_folder = qbf, verbosity = verbosity)
-    )
-
-    msg_summary_entry("\n")
-    exec_command(
-      "ecodown_autolink",
-      config_yaml$site$autolink,
-      list(quarto_folder = qbf, verbosity = verbosity)
-    )
-
-    msg_color_title("Complete")
+    if(null_true(config_yaml$site$quarto$run)) {
+        msg_summary_entry("\n")
+        exec_command(
+          "ecodown_quarto_render",
+          config_yaml$site$quarto,
+          addl_entries = list(quarto_folder = qbf, verbosity = verbosity)
+        )        
+    }
+  
+    if(null_true(config_yaml$site$autolink$run)) {
+        msg_summary_entry("\n")
+        exec_command(
+          "ecodown_autolink",
+          config_yaml$site$autolink,
+          list(quarto_folder = qbf, verbosity = verbosity)
+        )
+    }
   }
 }
+
+null_true <- function(x) {
+  if(is.null(x)) {
+    res <- TRUE
+  } else {
+    res <- x
+  }
+  res
+}
+
+

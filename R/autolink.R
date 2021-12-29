@@ -20,9 +20,8 @@ ecodown_autolink <- function(quarto_folder = here::here(),
   )
 
   msg_color_title("Auto-linking")
-  msg_color(bold("Path: "), quarto_path, color = green)
-
-  msg_summary_title("Autolinking")
+  msg_summary_title("Auto-linking")
+  
   file_tree(
     file_list = html_files,
     file_type = "html ",

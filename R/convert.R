@@ -30,6 +30,8 @@ ecodown_convert <- function(package_source_folder = "",
   ecodown_context_set("verbosity", verbosity)
 
   smy <- verbosity == "summary"
+  
+  msg_color_title("Copying/Converting to Quarto")
 
   pkg <- pkgdown::as_pkgdown(package_source_folder)
 
@@ -64,7 +66,8 @@ ecodown_convert <- function(package_source_folder = "",
     file_reference <- as.character()
   }
   
-  if (verbosity == "summary" && get_package_header() == 0) {
+  if (smy && get_package_header() == 0) {
+    if(get_clone_header() == 0) msg_summary_title("Copying/Converting to Quarto")
     msg_summary_entry("| R N Art Ref I |\n")
     set_package_header(1)
   }
@@ -150,13 +153,12 @@ package_file <- function(input,
                          pkg = NULL) {
   
   pkg_topics <- pkg$topics
-  pkg_source_path <- pkg$src_path
   
   input_name <- path_file(input)
   
   input_rel <- tolower(substr(
     input,
-    nchar(pkg_source_path) + 2,
+    nchar(pkg$src_path) + 2,
     nchar(input)
   ))
 
@@ -178,8 +180,10 @@ package_file <- function(input,
     list_topics <- transpose(pkg_topics)
     input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
     out <- reference_parse_topic(input_topic)
+    output_file <- path(path_ext_remove(output_file), ext = "md")
     writeLines(out, output_file)
   } else {
     file_copy(input, output_file)
   }
+  path_file(output_file)
 }
