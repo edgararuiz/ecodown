@@ -33,3 +33,7 @@ are 'verbose', 'summary', and 'silent'.}
 \description{
 Download the package's latest source code from repo
 }
+\examples{
+pkg_path <- ecodown_clone("https://github.com/edgararuiz/ecodown")
+list.files(pkg_path)
+}

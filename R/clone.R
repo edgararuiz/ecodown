@@ -10,6 +10,9 @@
 #' directory
 #' @param branch Repo branch. Defaults to 'main'
 #' @inheritParams ecodown_build
+#' @examples 
+#' pkg_path <- ecodown_clone("https://github.com/edgararuiz/ecodown")
+#' list.files(pkg_path)
 #' @export
 ecodown_clone <- function(repo_url = "",
                           commit = c("latest_tag", "latest_commit"),
