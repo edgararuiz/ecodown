@@ -12,6 +12,7 @@ ecodown_convert(
   convert_news = TRUE,
   convert_articles = TRUE,
   convert_reference = TRUE,
+  reference_examples = TRUE,
   downlit_options = TRUE,
   site_url = qe(quarto_folder, "site", "site-url"),
   verbosity = c("verbose", "summary", "silent")
@@ -32,6 +33,9 @@ the package's documentation.}
 \item{convert_articles}{Flag that indicates if the vignette files needs to be processed}
 
 \item{convert_reference}{Flag that indicates if the help files needs to be processed}
+
+\item{reference_examples}{Boolean flag to indicate if the Examples inside the
+reference page is to be evaluated.}
 
 \item{downlit_options}{Flag that indicates if the package name should be
 added to the 'options()' that tells 'downlit' that this is an internal

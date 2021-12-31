@@ -51,9 +51,14 @@ reference_index <- function(pkg = NULL, quarto_sub_folder) {
   map_chr(flatten(sections_list), ~.x)
 }
 
-reference_parse_topic <- function(topic) {
+reference_parse_topic <- function(topic, pkg, examples = TRUE) {
   tag_names <- map_chr(topic$rd, ~ class(.)[[1]])
   tags <- split(topic$rd, tag_names)
+  if(examples) {
+    ref_tag <- reference_parse_examples(tags$tag_examples, pkg, "## Examples")
+  } else {
+    ref_tag <- reference_parse_section(tags$tag_examples, "## Examples")
+  }
   c(
     paste0("# ", topic$name),
     reference_parse_section(tags$tag_title),
@@ -62,7 +67,7 @@ reference_parse_topic <- function(topic) {
     reference_parse_section_arguments(tags$tag_arguments, "## Arguments"),
     reference_parse_section(tags$tag_details, "## Details"),
     reference_parse_section(tags$tag_value, "## Value"),
-    reference_parse_section(tags$tag_examples, "## Examples"),
+    ref_tag,
     reference_parse_section(tags$tag_seealso, "## See Also")
   )
 }
@@ -75,6 +80,16 @@ reference_parse_section <- function(x, title = NULL) {
       reference_parse_tag(x[[1]]),
       "\n"
     )
+  } else {
+    ""
+  }
+}
+
+reference_parse_examples <- function(x, pkg, title = NULL) {
+  if (!is.null(x)) {
+    load_lib <- paste0("library(", pkg$package, ")\n")
+    all_code <- c(load_lib, as.character(x[[1]]))
+    c("\n", title, code_run(all_code), "\n")
   } else {
     ""
   }
@@ -136,4 +151,25 @@ reference_parse_line_tag <- function(x) {
   })
   if ("tag_item" %in% class(x)) tg_res <- "\n* "
   paste0(tg_res, collapse = "")
+}
+
+code_run <- function(x) {
+  res <- NULL
+  for(i in seq_along(x)) {
+    cl <- x[i]
+    cls <- cl
+    cr <- substr(cl, nchar(cl) - 1, nchar(cl)) == "\n"
+    if(cr) cl <- substr(cl, 1, nchar(cl) - 2)
+    res <- c(res, cl)
+    if(cl != "") {
+      if(substr(cl, 1 ,1) != "#") {
+        out <- capture.output(eval(parse_expr(cl)))
+        out1 <- paste0("#> ", out)
+        out2 <- paste0(out1, collapse = "\n")
+        if(length(out) > 0) res <- c(res, paste0(out2, "\n"))
+      }
+    }
+  }
+  p_res <- paste0(res, collapse = "")
+  paste0("```r\n", p_res, "\n```")
 }

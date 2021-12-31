@@ -6,6 +6,8 @@
 #' @param convert_news Flag that indicates if the NEWS file needs to be processed
 #' @param convert_articles Flag that indicates if the vignette files needs to be processed
 #' @param convert_reference Flag that indicates if the help files needs to be processed
+#' @param reference_examples Boolean flag to indicate if the Examples inside the
+#' reference page is to be evaluated.
 #' @param downlit_options Flag that indicates if the package name should be
 #' added to the 'options()' that tells 'downlit' that this is an internal
 #' package
@@ -20,6 +22,7 @@ ecodown_convert <- function(package_source_folder = "",
                             convert_news = TRUE,
                             convert_articles = TRUE,
                             convert_reference = TRUE,
+                            reference_examples = TRUE,
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
                             verbosity = c("verbose", "summary", "silent")) {
@@ -106,7 +109,7 @@ ecodown_convert <- function(package_source_folder = "",
     pf <- c(pf, file_reference)
     msg_summary_number(length(file_reference), size = 4)
     if (smy) {
-      walk(file_reference, package_file, qfs, pkg)
+      walk(file_reference, package_file, qfs, pkg, examples = reference_examples)
       ri <- reference_index(
         pkg = pkg,
         quarto_sub_folder = quarto_sub_folder
@@ -130,7 +133,8 @@ ecodown_convert <- function(package_source_folder = "",
       command_name = "package_file",
       addl_entries = list(
         pkg = pkg,
-        base_folder = qfs
+        base_folder = qfs,
+        examples = reference_examples
       ),
       verbosity = "verbose"
     )
@@ -150,7 +154,9 @@ ecodown_convert <- function(package_source_folder = "",
 
 package_file <- function(input,
                          base_folder = here::here(),
-                         pkg = NULL) {
+                         pkg = NULL,
+                         examples = TRUE
+                         ) {
   
   pkg_topics <- pkg$topics
   
@@ -173,13 +179,12 @@ package_file <- function(input,
     base_folder, 
     paste0(output_split, collapse = "/")
     )
-
   output_folder <- path_dir(output_file)
   if (!dir_exists(output_folder)) dir_create(output_folder)
   if (tolower(path_ext(input)) == "rd") {
     list_topics <- transpose(pkg_topics)
     input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
-    out <- reference_parse_topic(input_topic)
+    out <- reference_parse_topic(input_topic, pkg, examples = examples)
     output_file <- path(path_ext_remove(output_file), ext = "md")
     writeLines(out, output_file)
   } else {

@@ -11,7 +11,7 @@
 #' @param branch Repo branch. Defaults to 'main'
 #' @inheritParams ecodown_build
 #' @examples 
-#' pkg_path <- ecodown_clone("https://github.com/edgararuiz/ecodown")
+#' pkg_path <- ecodown_clone("https://github.com/tidyverse/hms")
 #' list.files(pkg_path)
 #' @export
 ecodown_clone <- function(repo_url = "",

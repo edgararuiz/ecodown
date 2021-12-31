@@ -7,13 +7,13 @@ site:
   google-analytics: UA-20375833-3
   sidebar:
     contents:
-    - section: MLeap 
-      href: /mleap
+    - section: ecodown 
+      href: /ecodown
       contents:
         - text: News
-          href: /mleap/news.md
+          href: /ecodown/news.md
         - text: Reference
-          href: /mleap/reference
+          href: /ecodown/reference
 format:
   html:
     toc: true

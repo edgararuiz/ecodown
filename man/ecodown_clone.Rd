@@ -34,6 +34,6 @@ are 'verbose', 'summary', and 'silent'.}
 Download the package's latest source code from repo
 }
 \examples{
-pkg_path <- ecodown_clone("https://github.com/edgararuiz/ecodown")
+pkg_path <- ecodown_clone("https://github.com/tidyverse/hms")
 list.files(pkg_path)
 }
