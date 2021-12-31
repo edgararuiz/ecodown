@@ -2,7 +2,9 @@ test_that("Default cloning works", {
   skip_if_offline("github.com")
 
   capture.output(
-    pkg_path <- ecodown_clone("https://github.com/r-lib/crayon")  
+    pkg_path <- ecodown_clone("https://github.com/r-lib/crayon", 
+                              verbosity = "summary"
+                              )  
   )
   
   expect_equal(
@@ -10,12 +12,16 @@ test_that("Default cloning works", {
     10
   )
   
-  expect_output(
+  x <- capture.output(
     checkout_commit(
       pkg_path, 
       "80bfc4c90da668a77da1410c037181d097de3354"
-      ),
-    "i Checking out SHA: 80bfc4"
+    )
+  )
+  
+  expect_equal(
+    substr(x, 1, 25),
+    "Checking out SHA: 80bfc4c"
   )
    
 })

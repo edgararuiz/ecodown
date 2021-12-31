@@ -17,6 +17,7 @@ ecodown_clone_convert(
   commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
   branch = "main",
+  reference_examples = TRUE,
   verbosity = c("verbose", "summary", "silent")
 )
 }
@@ -54,6 +55,9 @@ commit to use.}
 directory}
 
 \item{branch}{Repo branch. Defaults to 'main'}
+
+\item{reference_examples}{Boolean flag to indicate if the Examples inside the
+reference page is to be evaluated.}
 
 \item{verbosity}{Level of messaging available during run time. Possible values
 are 'verbose', 'summary', and 'silent'.}

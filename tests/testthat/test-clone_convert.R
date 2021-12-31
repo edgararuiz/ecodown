@@ -1,5 +1,4 @@
 test_that("Default cloning works", {
-  unlink(path(tempdir(), "ecodown"), recursive = TRUE, force = TRUE)
   skip_if_offline("github.com")
 
   t_folder <- path(tempdir(), "clone1")
@@ -10,7 +9,8 @@ test_that("Default cloning works", {
       repo_url = "https://github.com/edgararuiz/ecodown",
       target_folder = t_folder,
       quarto_folder = path(tempdir(), "/site1"),
-      quarto_sub_folder = "package1"
+      quarto_sub_folder = "package1", 
+      reference_examples = FALSE
     )
   )
 

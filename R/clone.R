@@ -94,5 +94,9 @@ ecodown_clone <- function(repo_url = "",
 
 checkout_commit <- function(repo = "", commit = "") {
   msg_color("Checking out SHA:", substr(commit[1], 1, 7), "...", color = magenta)
+  msg_summary_entry(
+    paste0("Checking out SHA: ", substr(commit[1], 1, 7), "..."), 
+    color = magenta
+    )
   git_branch_create("specificsha", ref = commit[1], repo = repo)
 }

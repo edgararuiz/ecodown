@@ -1,6 +1,5 @@
 test_that("Build site works", {
   
-  
   dir_site <- path(tempdir(), "build1")
 
   dir_create(dir_site)
@@ -10,8 +9,6 @@ test_that("Build site works", {
     function(x) file_copy(x, dir_site, overwrite = TRUE)
     )
 
-  unlink(path(tempdir(), "ecodown"), recursive = TRUE, force = TRUE)
-  
   capture.output(
     ecodown_build(quarto_folder = dir_site)
   )

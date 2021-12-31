@@ -14,6 +14,7 @@ ecodown_clone_convert <- function(repo_url = "",
                                   commit = c("latest_tag", "latest_commit"),
                                   target_folder = tempdir(),
                                   branch = "main",
+                                  reference_examples = TRUE,
                                   verbosity = c("verbose", "summary", "silent")) {
   verbosity <- verbosity[1]
 
@@ -63,6 +64,7 @@ ecodown_clone_convert <- function(repo_url = "",
     convert_reference = convert_reference,
     downlit_options = downlit_options,
     site_url = site_url,
-    verbosity = verbosity
+    verbosity = verbosity, 
+    reference_examples = reference_examples
   )
 }
