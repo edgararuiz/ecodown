@@ -45,7 +45,7 @@ file_tree <- function(file_list,
           )
           res_msg <- "" 
           if(!is.null(res)) {
-            if(res != path_file(.x)) res_msg <- blue(" =>", res)
+            if(path_file(res) != path_file(.x)) res_msg <- blue(" =>", res)
           }
           stop_time <- Sys.time()
           if (verbosity == "verbose") {
