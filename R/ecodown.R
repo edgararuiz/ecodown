@@ -2,7 +2,7 @@
 #' @importFrom purrr transpose keep map_lgl flatten
 #' @importFrom rlang `!!!` exec enexprs parse_expr
 #' @importFrom downlit downlit_html_path
-#' @importFrom utils capture.output
+#' @importFrom utils capture.output head
 #' @importFrom pkgdown as_pkgdown
 #' @importFrom stats setNames
 #' @import crayon
