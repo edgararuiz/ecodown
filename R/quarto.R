@@ -8,9 +8,8 @@ ecodown_quarto_render <- function(quarto_folder = here::here(),
   
   ecodown_context_set("verbosity", verbosity)
 
-  msg_color_title("Render Quarto site")
   msg_summary_entry("\n")
-  msg_summary_title("Render in Quarto")
+  msg_color_title("Render Quarto site")
 
   rend_files <- c(
     dir_ls(quarto_folder, recurse = TRUE, glob = "*.md"),

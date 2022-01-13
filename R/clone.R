@@ -24,7 +24,6 @@ ecodown_clone <- function(repo_url = "",
   ecodown_context_set("verbosity", verbosity)
 
   msg_color_title("Cloning repo")
-  msg_summary_title("Cloning repo")
 
   if (verbosity == "summary" && get_clone_header() == 0) {
     msg_summary_entry("       Clone / Checkout       \n")
@@ -38,13 +37,13 @@ ecodown_clone <- function(repo_url = "",
   msg_color("Cloning:", bold(pkg_name), return = FALSE, color = magenta)
 
   start_clone <- Sys.time()
-  git_clone(url = repo_url, path = pkg_dir, verbose = FALSE)
+  git_clone(url = repo_url, path = pkg_dir, verbose = FALSE, branch = branch)
   
   msg_color_line(cat_time(start_clone, Sys.time()), "\n")
 
   if (commit[1] == "latest_tag") {
     repo_tags <- git_tag_list(repo = pkg_dir)
-    repo_log <- git_log(repo = pkg_dir)
+    repo_log <- git_log(repo = pkg_dir, ref = branch)
     tag_logs <- map(
       repo_tags$commit,
       ~ {

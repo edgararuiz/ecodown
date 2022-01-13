@@ -23,16 +23,13 @@ ecodown_autolink <- function(quarto_folder = here::here(),
           }
           downlit_options(
             package = pkg_name,
-            url = pkg_name,
+            url = .x$quarto_sub_folder,
             site_url = site_url
           )
         }
       )
     }
-    cat("Packages")
-    print(getOption("downlit.local_packages"))
   }
-  
   
   verbosity <- verbosity[1]
   
@@ -47,7 +44,6 @@ ecodown_autolink <- function(quarto_folder = here::here(),
   )
 
   msg_color_title("Auto-linking")
-  msg_summary_title("Auto-linking")
   
   file_tree(
     file_list = html_files,

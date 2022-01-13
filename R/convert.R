@@ -26,6 +26,7 @@ ecodown_convert <- function(package_source_folder = "",
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
                             verbosity = c("verbose", "summary", "silent")) {
+  
   all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
   verbosity <- verbosity[1]
@@ -73,6 +74,7 @@ ecodown_convert <- function(package_source_folder = "",
     if(get_clone_header() == 0) msg_summary_title("Copying/Converting to Quarto")
     msg_summary_entry("| R N Art Ref I |\n")
     set_package_header(1)
+    set_clone_header(1)
   }
 
   qfs <- path(quarto_folder, quarto_sub_folder)
