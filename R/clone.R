@@ -1,28 +1,20 @@
 #' Download the package's latest source code from repo
 #' @param repo_url Repo location
-#' @param commit Commit to use as the base for the documentation.  It defaults
-#' to 'latest_tag'. That default will search for the latest Git tag.  The
-#' assumption is that the latest tag is the same as the latest release.  This
-#' way we avoid documenting work-in-progress.  The 'latest_commit' value will
-#' simply use whatever is cloned. Pass an SHA value if you wish to fix the
-#' commit to use.
 #' @param target_folder Location to copy the package to. Defaults to a temporary
 #' directory
-#' @param branch Repo branch. Defaults to 'main'
+#' @param branch Repo branch. Defaults to 'main' 
 #' @inheritParams ecodown_build
 #' @examples 
 #' pkg_path <- ecodown_clone("https://github.com/tidyverse/hms")
 #' list.files(pkg_path)
 #' @export
 ecodown_clone <- function(repo_url = "",
-                          commit = c("latest_tag", "latest_commit"),
                           target_folder = tempdir(),
                           branch = "main",
                           verbosity = c("verbose", "summary", "silent")) {
   verbosity <- verbosity[1]
-  commit <- commit[1]
-  
-  ecodown_context_set("verbosity", verbosity)
+
+    ecodown_context_set("verbosity", verbosity)
 
   msg_color_title("Cloning repo")
 
@@ -42,12 +34,8 @@ ecodown_clone <- function(repo_url = "",
   
   msg_color_line(cat_time(start_clone, Sys.time()), "\n")
   
-  checkout_repo(pkg_dir = pkg_dir, 
-                commit = commit, 
-                branch = branch, 
-                verbosity = verbosity,
-                pkg_name = pkg_name
-                )
+  pkg_dir
+  
 }
 
 checkout_repo <- function(pkg_dir = "",
@@ -90,38 +78,47 @@ checkout_repo <- function(pkg_dir = "",
     if (length(log_match) > 0) {
       using_commit <- log_match[[1]]
       matched_tag <- repo_tags[repo_tags$commit == using_commit, ]
-      msg_color("Checking out tag:", matched_tag$name, color = magenta)
-      git_branch_create("currenttag", ref = using_commit, repo = pkg_dir)
       ck_msg <- matched_tag$name
+      ck_type <- "tag"
     }
   }
+
+  if (commit != "latest_tag" && commit != "latest_commit") {
+    using_commit <- commit
+    ck_msg <- paste0(substr(commit, 1, 7), "...")
+    ck_type <- "sha"
+  } 
   
   if(is.null(using_commit) | commit == "latest_commit") {
     latest_record <- head(repo_log[repo_log$time == max(repo_log$time), ], 1)
     using_commit <- latest_record$commit
     ck_msg <- "Latest"
-    msg_color("Using", bold("latest"),"commit", color = magenta)
-    checkout_commit(pkg_dir, using_commit)
+    ck_type <- "latest"
   }
   
-  if (commit != "latest_commit" && is.null(using_commit)) {
-    checkout_commit(pkg_dir, commit)
-    ck_msg <- paste0(substr(commit, 1, 7), "...")
-  } 
+  checkout_commit(repo = pkg_dir, 
+                  commit = using_commit, 
+                  ck_type = ck_type, 
+                  tag = ck_msg
+                  )
   
   sum_msg <- paste0(pkg_name, " (", ck_msg, ")")
   if (get_package_header() == 0) msg_summary_entry("\n")
   msg_summary_number(sum_msg, size = 30, side = "right")
-
   pkg_dir
+  
 }
 
-checkout_commit <- function(repo = "", commit = "") {
+checkout_commit <- function(repo = "", commit = "", ck_type = NULL, tag = NULL) {
+  if(ck_type == "tag") {
+    msg_color("Checking out tag:", tag, color = magenta)
+  } 
+  if(ck_type == "latest") {
+    msg_color("Using", bold("latest"),"commit", color = magenta)  
+  }
   commit <- commit[1]
-  msg_color("Checking out SHA:", substr(commit, 1, 7), "...", color = magenta)
-  msg_summary_entry(
-    paste0("Checking out SHA: ", substr(commit, 1, 7), "..."), 
-    color = magenta
-    )
+  msg_commit <- paste0("Checking out SHA: ", substr(commit, 1, 7), "...")
+  msg_color(msg_commit, color = magenta)
+  msg_summary_entry(msg_commit, color = magenta)
   git_branch_create(substr(commit, 1, 7), ref = commit, repo = repo)
 }

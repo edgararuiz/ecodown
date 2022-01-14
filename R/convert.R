@@ -1,5 +1,7 @@
 #' Copies and/or converts files from package source into Quarto
 #' @param package_source_folder Path to the package's source code
+#' @param package_name Name of the package. Defaults to the top folder 
+#' in the repo URL
 #' @param quarto_sub_folder Sub folder in `quarto_folder` that will be the base for
 #' the package's documentation.
 #' @param convert_readme Flag that indicates if the README file needs to be processed
@@ -13,25 +15,44 @@
 #' package
 #' @param site_url URL of the target site.  It defaults to using the address in
 #' the '_quarto.yml' file
+#' @param commit Commit to use as the base for the documentation.  It defaults
+#' to 'latest_tag'. That default will search for the latest Git tag.  The
+#' assumption is that the latest tag is the same as the latest release.  This
+#' way we avoid documenting work-in-progress.  The 'latest_commit' value will
+#' simply use whatever is cloned. Pass an SHA value if you wish to fix the
+#' commit to use.
+#' @param branch Repo branch. Defaults to 'main' 
 #' @inheritParams ecodown_build
 #' @export
 ecodown_convert <- function(package_source_folder = "",
-                            quarto_sub_folder = fs::path_file(package_source_folder),
+                            package_name = fs::path_file(package_source_folder),
+                            quarto_sub_folder = package_name,
                             quarto_folder = here::here(),
+                            downlit_options = TRUE,
+                            site_url = qe(quarto_folder, "site", "site-url"),
+                            verbosity = c("verbose", "summary", "silent"),
                             convert_readme = TRUE,
                             convert_news = TRUE,
                             convert_articles = TRUE,
                             convert_reference = TRUE,
                             reference_examples = TRUE,
-                            downlit_options = TRUE,
-                            site_url = qe(quarto_folder, "site", "site-url"),
-                            verbosity = c("verbose", "summary", "silent")) {
+                            commit = c("latest_tag", "latest_commit"),
+                            branch = "main"
+                            ) {
   
-  all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
-
+  ecodown_context_set("verbosity", verbosity)
+  commit <- commit[1]
   verbosity <- verbosity[1]
 
-  ecodown_context_set("verbosity", verbosity)
+  checkout_repo(
+    pkg_dir = package_source_folder, 
+    commit = commit, 
+    branch = branch, 
+    verbosity = verbosity,
+    pkg_name = package_name
+    )
+    
+  all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
   smy <- verbosity == "summary"
   

@@ -15,7 +15,8 @@ test_that("Default cloning works", {
   x <- capture.output(
     checkout_commit(
       pkg_path, 
-      "80bfc4c90da668a77da1410c037181d097de3354"
+      "80bfc4c90da668a77da1410c037181d097de3354",
+      ck_type = "sha", tag = ""
     )
   )
   

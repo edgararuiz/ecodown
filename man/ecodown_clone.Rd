@@ -6,7 +6,6 @@
 \usage{
 ecodown_clone(
   repo_url = "",
-  commit = c("latest_tag", "latest_commit"),
   target_folder = tempdir(),
   branch = "main",
   verbosity = c("verbose", "summary", "silent")
@@ -14,13 +13,6 @@ ecodown_clone(
 }
 \arguments{
 \item{repo_url}{Repo location}
-
-\item{commit}{Commit to use as the base for the documentation.  It defaults
-to 'latest_tag'. That default will search for the latest Git tag.  The
-assumption is that the latest tag is the same as the latest release.  This
-way we avoid documenting work-in-progress.  The 'latest_commit' value will
-simply use whatever is cloned. Pass an SHA value if you wish to fix the
-commit to use.}
 
 \item{target_folder}{Location to copy the package to. Defaults to a temporary
 directory}

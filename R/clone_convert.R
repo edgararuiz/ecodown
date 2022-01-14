@@ -48,9 +48,7 @@ ecodown_clone_convert <- function(repo_url = "",
 
   pkg_path <- ecodown_clone(
     repo_url = repo_url,
-    commit = commit,
     target_folder = target_folder,
-    branch = branch,
     verbosity = verbosity
   )
 
@@ -64,6 +62,8 @@ ecodown_clone_convert <- function(repo_url = "",
     convert_reference = convert_reference,
     downlit_options = downlit_options,
     site_url = site_url,
+    commit = commit,
+    branch = branch,
     verbosity = verbosity, 
     reference_examples = reference_examples
   )
