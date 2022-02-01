@@ -2,6 +2,8 @@
 #' @param package_source_folder Path to the package's source code
 #' @param package_name Name of the package. Defaults to the top folder 
 #' in the repo URL
+#' @param version_folder Folder path to save the documentation version. Examples 
+#' are: "latest", "dev", "v1.0". Defaults to empty.
 #' @param quarto_sub_folder Sub folder in `quarto_folder` that will be the base for
 #' the package's documentation.
 #' @param convert_readme Flag that indicates if the README file needs to be processed
@@ -27,6 +29,7 @@
 ecodown_convert <- function(package_source_folder = "",
                             package_name = fs::path_file(package_source_folder),
                             quarto_sub_folder = package_name,
+                            version_folder  = "",
                             quarto_folder = here::here(),
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
@@ -98,7 +101,7 @@ ecodown_convert <- function(package_source_folder = "",
     set_clone_header(1)
   }
 
-  qfs <- path(quarto_folder, quarto_sub_folder)
+  qfs <- path(quarto_folder, quarto_sub_folder, version_folder)
 
   pf <- path()
 

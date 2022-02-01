@@ -10,12 +10,24 @@ ecodown_autolink <- function(quarto_folder = here::here(),
   qbf <- quarto_folder
   
   if(downlit_null()) {
-    site_url <- qe(qbf, "site", "site-url")  
+    site_url <- qe(qbf, "website", "site-url")  
     config_path <- path(qbf, "_ecodown.yml")
     if (file_exists(config_path)) {
       config_yaml <- read_yaml(config_path)
       map(
         config_yaml$site$packages, ~{
+          version_folder <- NULL
+          versions <- .x$versions
+          if(!is.null(versions)) {
+            p1 <- keep(versions, ~ !is.null(.x$current))
+            p2 <- keep(p1, ~ .x$current)
+            if(length(p2) > 0) {
+              p3 <- p2[[1]]
+              version_folder <- p3$version_folder
+            }
+          } else {
+            version_folder <- .x$version_folder
+          }
           if(is.null(.x$name)) {
             pkg_name <- path_file(.x$repo_url)  
           } else {
@@ -23,7 +35,7 @@ ecodown_autolink <- function(quarto_folder = here::here(),
           }
           downlit_options(
             package = pkg_name,
-            url = .x$quarto_sub_folder,
+            url = path(.x$quarto_sub_folder, version_folder),
             site_url = site_url
           )
         }

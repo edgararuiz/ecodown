@@ -8,6 +8,7 @@ ecodown_convert(
   package_source_folder = "",
   package_name = fs::path_file(package_source_folder),
   quarto_sub_folder = package_name,
+  version_folder = "",
   quarto_folder = here::here(),
   downlit_options = TRUE,
   site_url = qe(quarto_folder, "site", "site-url"),
@@ -29,6 +30,9 @@ in the repo URL}
 
 \item{quarto_sub_folder}{Sub folder in \code{quarto_folder} that will be the base for
 the package's documentation.}
+
+\item{version_folder}{Folder path to save the documentation version. Examples
+are: "latest", "dev", "v1.0". Defaults to empty.}
 
 \item{quarto_folder}{Base target Quarto folder. Defaults to current workspace.}
 
