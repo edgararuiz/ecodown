@@ -6,32 +6,51 @@
 ecodown_autolink <- function(quarto_folder = here::here(),
                              render_folder = qe(quarto_folder, "project", "output-dir"),
                              verbosity = c("verbose", "summary", "silent")) {
-  
-  qbf <- quarto_folder
-  config_path <- path(qbf, "_ecodown.yml")
+  verbosity <- verbosity[1]
+  ecodown_context_set("verbosity", verbosity)
 
-  site_url <- qe(qbf, "website", "site-url")  
+  downlit_env(quarto_folder = quarto_folder)
+
+  quarto_path <- path(quarto_folder, render_folder)
+
+  html_files <- dir_ls(
+    quarto_path,
+    recurse = TRUE,
+    type = "file",
+    glob = "*.html"
+  )
+
+  msg_color_title("Auto-linking")
+
+  file_tree(
+    file_list = html_files,
+    file_type = "html ",
+    base_folder = quarto_path,
+    command_name = "downlit_single",
+    verbosity = verbosity
+  )
+}
+
+downlit_env <- function(quarto_folder) {
+  config_path <- path(quarto_folder, "_ecodown.yml")
+
+  site_url <- qe(quarto_folder, "website", "site-url")
   if (file_exists(config_path)) {
     config_yaml <- read_yaml(config_path)
     map(
-      config_yaml$site$packages, ~{
+      config_yaml$site$packages, ~ {
         version_folder <- NULL
         versions <- .x$versions
-        if(!is.null(versions)) {
+        if (!is.null(versions)) {
           p1 <- keep(versions, ~ !is.null(.x$current))
           p2 <- keep(p1, ~ .x$current)
-          if(length(p2) > 0) {
-            p3 <- p2[[1]]
-            version_folder <- p3$version_folder
+          if (length(p2) > 0) {
+            version_folder <- p2[[1]]$version_folder
           }
         } else {
           version_folder <- .x$version_folder
         }
-        if(is.null(.x$name)) {
-          pkg_name <- path_file(.x$repo_url)  
-        } else {
-          pkg_name <- .x$name
-        }
+        pkg_name <- .x$name %||% path_file(.x$repo_url)
         downlit_options(
           package = pkg_name,
           url = path(.x$quarto_sub_folder, version_folder),
@@ -39,30 +58,11 @@ ecodown_autolink <- function(quarto_folder = here::here(),
         )
       }
     )
+  } else {
+    if (downlit_null()) stop(
+      "No downlit packages loaded in environment, and no '_ecodown.yml' file found on path"
+      )
   }
-
-  
-  verbosity <- verbosity[1]
-  
-  ecodown_context_set("verbosity", verbosity)
-
-  quarto_path <- path(quarto_folder, render_folder)
-
-  html_files <- dir_ls(quarto_path,
-    recurse = TRUE,
-    type = "file",
-    glob = "*.html"
-  )
-
-  msg_color_title("Auto-linking")
-  
-  file_tree(
-    file_list = html_files,
-    file_type = "html ",
-    base_folder = path(quarto_folder, render_folder),
-    command_name = "downlit_single",
-    verbosity = verbosity
-  )
 }
 
 downlit_single <- function(input = "") {

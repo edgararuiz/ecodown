@@ -1,5 +1,3 @@
 site:
   packages:
     - repo_url: https://github.com/edgararuiz/ecodown
-  autolink: 
-    run: FALSE
