@@ -28,6 +28,20 @@ ecodown_quarto_render <- function(quarto_folder = here::here(),
 
 render_quarto <- function(input) {
   if(!is.null(quarto_path())) {
-    quarto_render(input, as_job = FALSE, quiet = TRUE)
-  }
+    if(tolower(path_ext(input) == "qmd")) {
+      quarto_render(
+        input, 
+        as_job = FALSE, 
+        quiet = TRUE, 
+        pandoc_args = c("--use-freezer")
+      )      
+    } else {
+      quarto_render(
+        input, 
+        as_job = FALSE, 
+        quiet = TRUE
+      ) 
+    }
+
+  } 
 }

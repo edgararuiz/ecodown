@@ -8,6 +8,7 @@ ecodown_clone_convert(
   repo_url = "",
   quarto_sub_folder = path_file(repo_url),
   quarto_folder = here::here(),
+  version_folder = "",
   convert_readme = TRUE,
   convert_news = TRUE,
   convert_articles = TRUE,
@@ -18,7 +19,8 @@ ecodown_clone_convert(
   target_folder = tempdir(),
   branch = "main",
   reference_examples = TRUE,
-  verbosity = c("verbose", "summary", "silent")
+  verbosity = c("verbose", "summary", "silent"),
+  versions = list()
 )
 }
 \arguments{
@@ -28,6 +30,9 @@ ecodown_clone_convert(
 the package's documentation.}
 
 \item{quarto_folder}{Base target Quarto folder. Defaults to current workspace.}
+
+\item{version_folder}{Folder path to save the documentation version. Examples
+are: "latest", "dev", "v1.0". Defaults to empty.}
 
 \item{convert_readme}{Flag that indicates if the README file needs to be processed}
 
@@ -61,6 +66,11 @@ reference page is to be evaluated.}
 
 \item{verbosity}{Level of messaging available during run time. Possible values
 are 'verbose', 'summary', and 'silent'.}
+
+\item{versions}{A list of additional reference versions to convert.
+Pass the commit to use, the name of the version, and the sub-folder to use. It
+expects a named list object. Example:
+list(list(commit = "latest_commit", path = "dev"))}
 }
 \description{
 Clones repo and builds documentation

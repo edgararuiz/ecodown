@@ -138,7 +138,8 @@ ecodown_convert <- function(package_source_folder = "",
       walk(file_reference, package_file, qfs, pkg, examples = reference_examples)
       ri <- reference_index(
         pkg = pkg,
-        quarto_sub_folder = quarto_sub_folder
+        quarto_sub_folder = quarto_sub_folder,
+        version_folder = version_folder
       )
       writeLines(ri, path(qfs, "reference", "index.md"))
       msg_summary_number(1)
@@ -166,7 +167,8 @@ ecodown_convert <- function(package_source_folder = "",
     )
     ri <- reference_index(
       pkg = pkg,
-      quarto_sub_folder = quarto_sub_folder
+      quarto_sub_folder = quarto_sub_folder,
+      version_folder = version_folder
     )
     writeLines(ri, path(qfs, "reference", "index.md"))
   }
