@@ -1,7 +1,7 @@
 project:
   output-dir: docs
   type: site
-site:
+website:
   title: testsite
   site-url: https://www.mysite.com/
   google-analytics: UA-20375833-3

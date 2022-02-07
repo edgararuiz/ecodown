@@ -6,7 +6,8 @@
 \usage{
 ecodown_quarto_render(
   quarto_folder = here::here(),
-  verbosity = c("verbose", "summary", "silent")
+  verbosity = c("verbose", "summary", "silent"),
+  autolink = TRUE
 )
 }
 \arguments{
@@ -14,6 +15,9 @@ ecodown_quarto_render(
 
 \item{verbosity}{Level of messaging available during run time. Possible values
 are 'verbose', 'summary', and 'silent'.}
+
+\item{autolink}{Boolean flag that indicates if 'downlit' should run. Defaults
+to TRUE.}
 }
 \description{
 Wrapper on the Quarto Render function
