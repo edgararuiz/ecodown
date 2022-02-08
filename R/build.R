@@ -28,17 +28,12 @@ ecodown_build <- function(quarto_folder = here::here(),
         exec_command(
           "ecodown_quarto_render",
           config_yaml$site$quarto,
-          addl_entries = list(quarto_folder = qbf, verbosity = verbosity)
+          addl_entries = list(
+            quarto_folder = qbf, 
+            verbosity = verbosity,
+            autolink = null_true(config_yaml$site$autolink$run)
+            )
         )        
-    }
-  
-    if(null_true(config_yaml$site$autolink$run)) {
-        msg_summary_entry("\n")
-        exec_command(
-          "ecodown_autolink",
-          config_yaml$site$autolink,
-          list(quarto_folder = qbf, verbosity = verbosity)
-        )
     }
   }
 }

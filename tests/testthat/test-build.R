@@ -5,7 +5,7 @@ test_that("Build site works", {
   dir_create(dir_site)
 
   lapply(
-    dir_ls(test_path("assets/quarto_files")),
+    dir_ls(test_path("assets/quarto_files"), type = "file"),
     function(x) file_copy(x, dir_site, overwrite = TRUE)
     )
 
