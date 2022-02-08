@@ -12,8 +12,10 @@ msg_color_line <- function(..., color = black, return = FALSE) {
 }
 
 msg_color_title <- function(x, color = blue) {
-  x <- paste0(">> ", x, "\n")
-  cat(black(bold(x)))
+  if (get_verbosity() == "verbose") {
+    x <- paste0(">> ", x, "\n")
+    cat(black(bold(x)))
+  }
 }
 
 msg_summary_entry <- function(x, color = black) {

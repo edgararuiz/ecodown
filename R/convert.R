@@ -66,6 +66,7 @@ ecodown_convert <- function(package_source_folder = "",
         url = quarto_sub_folder,
         site_url = site_url
       )
+      msg_summary_entry("| 0 0   0   0 0 |\n")
       return()
     }
   }
