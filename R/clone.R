@@ -117,7 +117,7 @@ checkout_commit <- function(repo = "", commit = "", ck_type = NULL, tag = NULL) 
     msg_color("Using", bold("latest"),"commit", color = magenta)  
   }
   commit <- commit[1]
-  msg_commit <- paste0("Checking out SHA: ", substr(commit, 1, 7), "...")
+  msg_commit <- paste0("Checking out SHA: ", substr(commit, 1, 7), "...\n")
   msg_color_line(msg_commit, color = magenta)
   git_branch_create(substr(commit, 1, 7), ref = commit, repo = repo)
   commit

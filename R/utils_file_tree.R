@@ -26,7 +26,8 @@ file_tree <- function(file_list,
       pss <- paste0(rep("|-- ", times = length(ps) - 1), collapse = "")
       psc <- silver(pss)
       flc <- black(fln)
-      curr_sort <- paste0(psc, flc)
+      #curr_sort <- paste0(psc, flc)
+      
     }
     no_cat <- magenta(paste0(" (", no_files, " ", file_type, no_caption, ")"))
     cat_msg <- paste0(curr_sort, no_cat)
@@ -38,6 +39,7 @@ file_tree <- function(file_list,
         file_list[matched_files],
         ~ {
           start_time <- Sys.time()
+          cat(paste0(silver(paste0(pss, "|-- ")), path_file(.x)))          
           res <- exec_command(
             command_name = command_name,
             entry_value = entry_value,
@@ -50,9 +52,7 @@ file_tree <- function(file_list,
           stop_time <- Sys.time()
           if (verbosity == "verbose") {
             doc_time <- cat_time(start_time, stop_time)
-            cat(paste0(
-              silver(paste0(pss, "|-- ")), path_file(.x), res_msg, silver(doc_time), "\n"
-              ))
+            cat(paste0(res_msg, silver(doc_time), "\n"))
           }
         }
       )
