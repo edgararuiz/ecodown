@@ -164,7 +164,7 @@ ecodown_convert <- function(package_source_folder = "",
     msg_summary_number(0)
   }
 
-  msg_summary_entry(" |\n")
+  msg_summary_number(" |\n")
 
   pkg_files <- as_fs_path(pf)
 

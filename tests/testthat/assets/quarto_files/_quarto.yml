@@ -19,3 +19,6 @@ format:
     toc: true
     code-copy: true
     code-overflow: wrap
+    theme:
+      light: cosmo
+      dark: cosmo
