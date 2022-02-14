@@ -10,7 +10,10 @@ test_that("Build site works", {
     )
 
   capture.output(
-    ecodown_build(quarto_folder = dir_site)
+    ecodown_build(
+      quarto_folder = dir_site, 
+      verbosity = "verbose"
+      )
   )
 
   top_files <- path_file(dir_ls(dir_site))
