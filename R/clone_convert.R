@@ -24,22 +24,6 @@ ecodown_clone_convert <- function(repo_url = "",
 
   ecodown_context_set("verbosity", verbosity)
 
-  msg_color_title("Package documentation")
-
-  if (quarto_folder == here::here()) {
-    msg_color(bold("quarto_folder: "), here::here(), color = green)
-  }
-
-  pkg_name <- path_file(repo_url)
-  if (quarto_sub_folder == pkg_name) {
-    msg_color(bold("quarto_sub_folder: "), pkg_name, color = green)
-  }
-
-  quarto_site <- qe(quarto_folder, "site", "site-url")
-  if (site_url == quarto_site) {
-    msg_color(bold("site_url: "), quarto_site, color = green)
-  }
-
   if (verbosity == "summary" &&
     get_package_header() == 0 &&
     get_clone_header() == 0

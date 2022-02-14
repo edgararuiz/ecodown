@@ -47,13 +47,30 @@ ecodown_convert <- function(package_source_folder = "",
   commit <- commit[1]
   verbosity <- verbosity[1]
 
-  checkout_repo(
+  qfs <- path(quarto_folder, quarto_sub_folder, version_folder)
+  
+  sha <- checkout_repo(
     pkg_dir = package_source_folder, 
     commit = commit, 
     branch = branch, 
     verbosity = verbosity,
     pkg_name = package_name
     )
+  
+  sha_file <- path(qfs, ".ecodown")
+  if(file_exists(sha_file)) {
+    sha_existing <- readLines(sha_file)
+    if(sha_existing == sha) {
+      downlit_options(
+        package = package_name,
+        url = quarto_sub_folder,
+        site_url = site_url
+      )
+      msg_summary_entry("| 0 0   0   0 0 |\n")
+      msg_color("Commit already copied...skipping", color = yellow)
+      return()
+    }
+  }
     
   all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
@@ -100,8 +117,6 @@ ecodown_convert <- function(package_source_folder = "",
     set_package_header(1)
     set_clone_header(1)
   }
-
-  qfs <- path(quarto_folder, quarto_sub_folder, version_folder)
 
   pf <- path()
 
@@ -173,6 +188,8 @@ ecodown_convert <- function(package_source_folder = "",
     writeLines(ri, path(qfs, "reference", "index.md"))
   }
 
+  writeLines(sha, path(qfs, ".ecodown"))
+  
   downlit_options(
     package = pkg$package,
     url = quarto_sub_folder,
@@ -216,7 +233,7 @@ package_file <- function(input,
     output_file <- path(path_ext_remove(output_file), ext = "md")
     writeLines(out, output_file)
   } else {
-    file_copy(input, output_file)
+    file_copy(input, output_file, overwrite = TRUE)
   }
   path_file(output_file)
 }

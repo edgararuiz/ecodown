@@ -14,7 +14,7 @@ ecodown_clone <- function(repo_url = "",
                           verbosity = c("verbose", "summary", "silent")) {
   verbosity <- verbosity[1]
 
-    ecodown_context_set("verbosity", verbosity)
+  ecodown_context_set("verbosity", verbosity)
 
   msg_color_title("Cloning repo")
 
@@ -96,7 +96,7 @@ checkout_repo <- function(pkg_dir = "",
     ck_type <- "latest"
   }
   
-  checkout_commit(repo = pkg_dir, 
+  sha <- checkout_commit(repo = pkg_dir, 
                   commit = using_commit, 
                   ck_type = ck_type, 
                   tag = ck_msg
@@ -105,7 +105,7 @@ checkout_repo <- function(pkg_dir = "",
   sum_msg <- paste0(pkg_name, " (", ck_msg, ")")
   if (get_package_header() == 0) msg_summary_entry("\n")
   msg_summary_number(sum_msg, size = 30, side = "right")
-  pkg_dir
+  sha
   
 }
 
@@ -117,8 +117,8 @@ checkout_commit <- function(repo = "", commit = "", ck_type = NULL, tag = NULL) 
     msg_color("Using", bold("latest"),"commit", color = magenta)  
   }
   commit <- commit[1]
-  msg_commit <- paste0("Checking out SHA: ", substr(commit, 1, 7), "...")
-  msg_color(msg_commit, color = magenta)
-  msg_summary_entry(msg_commit, color = magenta)
+  msg_commit <- paste0("Checking out SHA: ", substr(commit, 1, 7), "...\n")
+  msg_color_line(msg_commit, color = magenta)
   git_branch_create(substr(commit, 1, 7), ref = commit, repo = repo)
+  commit
 }

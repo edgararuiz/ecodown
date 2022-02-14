@@ -19,6 +19,10 @@ ecodown_quarto_render <- function(quarto_folder = here::here(),
     dir_ls(quarto_folder, recurse = TRUE, glob = "*.qmd")
   )
   
+  ident_readme <- tolower(path_file(rend_files)) == "readme.md"
+  
+  rend_files <- rend_files[!ident_readme]
+  
   if(autolink) downlit_env(quarto_folder = quarto_folder)
 
   file_tree(
@@ -36,10 +40,13 @@ ecodown_quarto_render <- function(quarto_folder = here::here(),
 
 render_quarto <- function(input, autolink, quarto_folder) {
   if(!is.null(quarto_path())) {
+    p_args <- NULL
     if(tolower(path_ext(input) == "qmd")) {
-      p_args <- c("--use-freezer")
-    } else {
-      p_args <- NULL
+      fm <- read_front_matter(input)
+      fm_freeze <- fm$execute$freeze
+      if(!is.null(fm_freeze)) {
+        if(fm_freeze) p_args <- c("--use-freezer")
+      }
     }
     quarto_render(
       input = input, 

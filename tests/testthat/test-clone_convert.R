@@ -10,6 +10,7 @@ test_that("Default cloning works", {
       target_folder = t_folder,
       quarto_folder = path(tempdir(), "/site1"),
       quarto_sub_folder = "package1", 
+      verbosity = "summary",
       reference_examples = FALSE
     )
   )
