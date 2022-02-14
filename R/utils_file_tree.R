@@ -39,7 +39,9 @@ file_tree <- function(file_list,
         file_list[matched_files],
         ~ {
           start_time <- Sys.time()
-          cat(paste0(silver(paste0(pss, "|-- ")), path_file(.x)))          
+          if (verbosity == "verbose") {
+            cat(paste0(silver(paste0(pss, "|-- ")), path_file(.x)))            
+          }
           res <- exec_command(
             command_name = command_name,
             entry_value = entry_value,

@@ -13,6 +13,7 @@ ecodown_build <- function(quarto_folder = here::here(),
   config_path <- path(qbf, "_ecodown.yml")
   if (file_exists(config_path)) {
     config_yaml <- read_yaml(config_path)
+    cat(bold(black(">> Cloning and Converting packages from repos\n\n")))
     walk(
       config_yaml$site$packages, ~ {
         exec(
@@ -24,14 +25,17 @@ ecodown_build <- function(quarto_folder = here::here(),
       }
     )
     if(null_true(config_yaml$site$quarto$run)) {
-        msg_summary_entry("\n")
+        run_autolink <- null_true(config_yaml$site$autolink$run)
+        msg_quarto <- "\n>> Rendering to HTML"
+        if(run_autolink) msg_quarto <- paste0(msg_quarto, " and auto-linking")
+        cat(bold(black(paste0(msg_quarto, "\n"))))
         exec_command(
           "ecodown_quarto_render",
           config_yaml$site$quarto,
           addl_entries = list(
             quarto_folder = qbf, 
             verbosity = verbosity,
-            autolink = null_true(config_yaml$site$autolink$run)
+            autolink = run_autolink 
             )
         )        
     }
