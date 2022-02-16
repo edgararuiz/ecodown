@@ -21,7 +21,8 @@ ecodown_clone_convert <- function(repo_url = "",
                                   versions = list()
                                   ) {
   verbosity <- verbosity[1]
-
+  ver <-versions
+  
   ecodown_context_set("verbosity", verbosity)
 
   if (verbosity == "summary" &&
@@ -40,7 +41,7 @@ ecodown_clone_convert <- function(repo_url = "",
     verbosity = verbosity
   )
 
-  if(length(versions) > 0) {
+  if(length(ver) > 0) {
     ecodown_convert_versions(
       package_source_folder = pkg_path,
       quarto_sub_folder = quarto_sub_folder,
