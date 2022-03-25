@@ -4,3 +4,6 @@
 ^\.Rproj\.user$
 ^codecov\.yml$
 ^\.github$
+^keras$
+^_repos$
+^_ecodown.yml

@@ -40,6 +40,19 @@ test_that("Default cloning works", {
     )
   )
   
+  re_convert <- capture.output(
+    ecodown_clone_convert(
+      repo_url = "https://github.com/edgararuiz/ecodown",
+      target_folder = t_folder3,
+      quarto_folder = path(tempdir(), "site3"),
+      quarto_sub_folder = "package3", 
+      verbosity = "summary",
+      reference_examples = FALSE
+    )
+  )
+  
+  expect_equal(re_convert[1], "ecodown (Latest)              | 0 0   0   0 0 |")
+  
   new_time <- file.info(path(site_dir, ".ecodown"))$mtime
   
   expect_equal(original_time, new_time)

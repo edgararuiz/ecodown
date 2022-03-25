@@ -29,5 +29,7 @@ vignettes/*.pdf
 .DS_Store
 .quarto
 inst/doc
-
 /.quarto/
+_ecodown.yml
+_repos
+keras

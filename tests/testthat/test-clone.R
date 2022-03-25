@@ -8,6 +8,14 @@ test_that("Default cloning works", {
       )  
   )
   
+  re_clone <- capture.output(
+    ecodown_clone(
+      "https://github.com/r-lib/crayon", 
+      target_folder = path_dir(pkg_path),
+      verbosity = "summary"
+    )  
+  )
+  
   expect_equal(
     length(list.files(pkg_path)),
     10
@@ -20,6 +28,8 @@ test_that("Default cloning works", {
       ck_type = "sha", tag = ""
     )
   )
+  
+  expect_equal(pkg_path, path(re_clone))
   
   expect_equal(x, "[1] \"80bfc4c90da668a77da1410c037181d097de3354\"")
    

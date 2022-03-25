@@ -207,10 +207,12 @@ package_file <- function(input,
   
   input_name <- path_file(input)
   
+  abs_input <- path_abs(input)
+  
   input_rel <- tolower(substr(
-    input,
+    abs_input,
     nchar(pkg$src_path) + 2,
-    nchar(input)
+    nchar(abs_input)
   ))
 
   input_split <- path_split(input_rel)[[1]]

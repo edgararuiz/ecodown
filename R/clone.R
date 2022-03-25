@@ -30,7 +30,12 @@ ecodown_clone <- function(repo_url = "",
   msg_color("Cloning:", bold(pkg_name), return = FALSE, color = magenta)
 
   start_clone <- Sys.time()
-  git_clone(url = repo_url, path = pkg_dir, verbose = FALSE, branch = branch)
+  if(!dir_exists(pkg_dir)) {
+    git_clone(url = repo_url, path = pkg_dir, verbose = FALSE, branch = branch)  
+  } else {
+    system2("git", paste0("-C '", path_abs(pkg_dir),"' pull -q"))
+  }
+  
   
   msg_color_line(cat_time(start_clone, Sys.time()), "\n")
   
@@ -110,15 +115,40 @@ checkout_repo <- function(pkg_dir = "",
 }
 
 checkout_commit <- function(repo = "", commit = "", ck_type = NULL, tag = NULL) {
+  
+  commit <- commit[1]
+  branch_name <- substr(commit, 1, 7)
+  
   if(ck_type == "tag") {
     msg_color("Checking out tag:", tag, color = magenta)
   } 
   if(ck_type == "latest") {
     msg_color("Using", bold("latest"),"commit", color = magenta)  
   }
-  commit <- commit[1]
-  msg_commit <- paste0("Checking out SHA: ", substr(commit, 1, 7), "...\n")
+  
+  msg_commit <- paste0("Checking out SHA: ", branch_name, "...\n")
   msg_color_line(msg_commit, color = magenta)
-  git_branch_create(substr(commit, 1, 7), ref = commit, repo = repo)
+  
+  branch_list <- git_branch_list(repo = repo)
+  
+  commit_list <- branch_list[branch_list$commit == commit, ]
+  
+  if(nrow(commit_list) > 0) {
+    commit_list <- commit_list[commit_list$local == TRUE, ]
+  }
+  
+  branch_exists <- FALSE
+  
+  if(nrow(commit_list) > 0) {
+    branch_exists <- TRUE
+    branch_name <- commit_list$name[[1]]
+  }
+  
+  if(!branch_exists) {
+    git_branch_create(branch = branch_name, ref = commit, repo = repo)  
+  } else {
+    git_branch_checkout(branch = branch_name, repo = repo, force = TRUE)  
+  }
+  
   commit
 }
