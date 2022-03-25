@@ -19,7 +19,7 @@ jobs:
         id: cache-quarto
         uses: actions/cache@v2
         with:
-          path: /home/runner/ecodown/ecodown/quarto-cli
+          path: /home/runner/work/ecodown/ecodown/quarto-cli
           key: c81d3bb3d44d65500efd90772a438f2534a0a19c
           
       - name: Clone Quarto
@@ -30,8 +30,7 @@ jobs:
           path: quarto-cli
 
       - name: Install Quarto
-        run: /home/runner/ecodown/ecodown/quarto-cli/configure-linux.sh
-      
+        run: /home/runner/work/ecodown/ecodown/quarto-cli/configure-linux.sh
       - name: Checkout project
         uses: actions/checkout@v2
 
