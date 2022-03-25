@@ -99,16 +99,19 @@ reference_parse_section_arguments <- function(x, title = NULL) {
   if (!is.null(x)) {
     args_p <- map_chr(x[[1]], ~ {
       et <- .x
-      paste0(map(et, reference_parse_tag), collapse = " | ")
+      ec <- paste0(map(et, reference_parse_tag), collapse = " | ")
+      
     })
     args_ret <- map_lgl(args_p, ~ .x != "\n")
+    args_filter <- args_p[args_ret]
+    args_all <- map_chr(args_filter, ~ paste0(strsplit(.x, "\n")[[1]], collapse = " "))
     c(
       "\n",
       title,
       "\n",
       "Argument      |Description",
       "------------- |----------------",
-      args_p[args_ret],
+      args_all,
       "\n"
     )
   } else {
