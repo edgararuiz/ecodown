@@ -22,8 +22,15 @@ jobs:
           ref: c81d3bb3d44d65500efd90772a438f2534a0a19c
           path: quarto-cli
 
+      - name: Set Path
+        shell: bash
+        run: |
+          echo "$HOME/bin" >> $GITHUB_PATH
+
       - name: Install Quarto
-        run: ./quarto-cli/configure-linux.sh
+        shell: bash
+        run: ./quarto-cli/configure-linux.sh  
+        
       - name: Checkout project
         uses: actions/checkout@v2
 
