@@ -16,8 +16,10 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
     steps:
       - name: Clonse Quarto
-        uses: actions/checkout@v2
-        repository: quarto-dev/quarto-cli
+        uses: actions/checkout@v3
+        with:
+          repository: quarto-dev/quarto-cli
+          ref: c81d3bb3d44d65500efd90772a438f2534a0a19c
       
       - name: Install Quarto
         run: quarto-cli/configure-linux.sh
