@@ -22,7 +22,7 @@ cat_tree <- function(x, ...) {
 
 ```
 
-# ecodown
+# ecodown <img src="man/figures/logo.png" align="right" alt="" width="130" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/edgararuiz/ecodown/workflows/R-CMD-check/badge.svg)](https://github.com/edgararuiz/ecodown/actions)
