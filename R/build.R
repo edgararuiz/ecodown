@@ -42,9 +42,19 @@ ecodown_build <- function(quarto_folder = here::here(),
     )
     
     if(null_true(config_yaml$site$quarto$run)) {
-        msg_quarto <- "\n>> Rendering to HTML"
-        quiet_flag <- ifelse(verbosity == "silent", TRUE, FALSE)
-        quarto_render(input = quarto_folder, as_job = FALSE, quiet = quiet_flag)     
+      run_autolink <- null_true(config_yaml$site$autolink$run)
+      msg_quarto <- "\n>> Rendering to HTML"
+      if(run_autolink) msg_quarto <- paste0(msg_quarto, " and auto-linking")
+      cat(bold(black(paste0(msg_quarto, "\n"))))
+      exec_command(
+        "ecodown_quarto_render",
+        config_yaml$site$quarto,
+        addl_entries = list(
+          quarto_folder = qbf, 
+          verbosity = verbosity,
+          autolink = run_autolink 
+        )
+      )        
     }
     
     if(null_true(config_yaml$site$autolink$run)) {

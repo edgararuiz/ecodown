@@ -33,14 +33,12 @@ ecodown_clone <- function(repo_url = "",
   if(!dir_exists(pkg_dir)) {
     git_clone(url = repo_url, path = pkg_dir, verbose = FALSE, branch = branch)  
   } else {
-    system2("git", paste0("-C '", path_abs(pkg_dir),"' pull -q"))
+    system2("git", paste0("-C '", path_abs(pkg_dir),"' pull ", repo_url ," -q"))
   }
-  
   
   msg_color_line(cat_time(start_clone, Sys.time()), "\n")
   
   pkg_dir
-  
 }
 
 checkout_repo <- function(pkg_dir = "",
@@ -51,7 +49,6 @@ checkout_repo <- function(pkg_dir = "",
   
   verbosity <- verbosity[1]
   commit <- commit[1]
-  
   ecodown_context_set("verbosity", verbosity)
   
   repo_tags <- git_tag_list(repo = pkg_dir)
@@ -131,7 +128,7 @@ checkout_commit <- function(repo = "", commit = "", ck_type = NULL, tag = NULL) 
   
   branch_list <- git_branch_list(repo = repo)
   
-  commit_list <- branch_list[branch_list$commit == commit, ]
+  commit_list <- branch_list[branch_list$name == branch_name, ]
   
   if(nrow(commit_list) > 0) {
     commit_list <- commit_list[commit_list$local == TRUE, ]

@@ -21,6 +21,7 @@ Imports:
     downlit,
     crayon,
     quarto,
+    git2r,
     purrr,
     rlang,
     here,

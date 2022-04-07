@@ -1,20 +1,26 @@
-#' @export 
 diff_files <- function(quarto_folder) {
   
   e_file <- path(quarto_folder, ".ecodown")
   
   if(!file_exists(e_file)) {
-    cat("No .ecodown file found \n")
-    return(list("file"))
+    msg_color("No '.ecodown' file found", color = red)
+    return("full")
   }  
   
   ecodown_file <- readLines(e_file)[[1]]
   
+  msg_color("Getting commits")
   all_commits <- commits()
+  
   all_shas <- map_chr(all_commits, ~.x$sha)
   
   y <- all_commits[all_shas == ecodown_file][[1]]
   x <- last_commit()
+  
+  x_lab <- paste0("'", substr(x$sha, 1, 7), "...'")
+  y_lab <- paste0("'", substr(y$sha, 1, 7), "...'")
+  
+  msg_color("Comparing commits:", x_lab, "and", y_lab, color = green)
   
   all_diffs <- diff(tree(y), tree(x))
   
@@ -26,21 +32,21 @@ diff_files <- function(quarto_folder) {
   
   quarto_file <- any(path_file(all_files) == "_quarto.yml")
   if(quarto_file) {
-    cat("FULL UPDATE TRIGGERED - Quarto file update\n")
+    msg_color("FULL UPDATE TRIGGERED - Quarto file update", color = yellow)
   } else {
-    cat("Quarto file not updated\n")
+    msg_color("Quarto file not updated", color = blue)
   }
   js_ext <- any(all_ext == "js")
   if(js_ext) {
-    cat("FULL UPDATE TRIGGERED - JavaScript files updated\n")
+    msg_color("FULL UPDATE TRIGGERED - JavaScript files updated", color = yellow)
   } else {
-    cat("No JS file changes\n")
+    msg_color("No JS file changes", color = blue)
   }
   css_ext <- any(all_ext == "css")
   if(css_ext) {
-    cat("FULL UPDATE TRIGGERED - CSS files updated\n")
+    msg_color("FULL UPDATE TRIGGERED - CSS files updated", color = yellow)
   } else {
-    cat("No CSS file changes\n")
+    msg_color("No CSS file changes", color = blue)
   }
   
   full_refresh <- any(c(quarto_file, js_ext, css_ext))
@@ -105,15 +111,15 @@ diff_files <- function(quarto_folder) {
     if(length(rend_mtc) > 0) {
       rend_red <- reduce(rend_mtc, function(x, y) c(x,y) )  
     } else {
-      rend_red <- list()
+      rend_red <- NULL
     }
     
     files_diff <- unique(c(rend_abs, rend_red))
     
-    cat(length(files_diff), "renderable files to be updated\n")
+    msg_color(length(files_diff), "renderable files to be updated", color = blue)
     
     files_diff
   } else {
-    list("full")
+    "full"
   }
 }
