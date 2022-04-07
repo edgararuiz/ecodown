@@ -59,8 +59,8 @@ ecodown_quarto_render <- function(quarto_folder = here::here(),
     
     quarto_render(input = quarto_folder, 
                   as_job = FALSE, 
-                  quiet = quiet_flag, 
-                  use_freezer = TRUE
+                  quiet = quiet_flag,
+                  pandoc_args = "--use-freezer"
                   )   
   }
   
