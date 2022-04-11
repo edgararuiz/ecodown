@@ -21,11 +21,10 @@ ecodown_quarto_render <- function(quarto_folder = here::here(),
   run <- null_true(run)
   run <- ifelse(run == TRUE, "smart", run)
   
-  if(run == "smart") {
-    rend_files <- diff_files(quarto_folder =  quarto_folder)
-    if(!is.null(rend_files)) {
-      if(rend_files[[1]] == "full") run <- "full"  
-    }
+  rend_files <- NULL
+  if(run == "smart") rend_files <- diff_files(quarto_folder =  quarto_folder)
+  if(!is.null(rend_files) && length(rend_files) == 1) {
+    if(rend_files == "full") run <- "full"
   }
   
   if(run == "smart" && !is.null(rend_files)) {

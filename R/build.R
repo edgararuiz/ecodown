@@ -61,6 +61,9 @@ ecodown_build <- function(quarto_folder = here::here(),
       ecodown_autolink(quarto_folder = quarto_folder, verbosity = verbosity)
     }
   }
+  lc <- last_commit()
+  lc_sha <- lc$sha
+  writeLines(lc_sha, con = path(quarto_folder, ".ecodown"))
 }
 
 null_true <- function(x) {
