@@ -15,7 +15,7 @@ Description: Makes it possible for your R package's documentation to be
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Imports:
     pkgdown,
     downlit,

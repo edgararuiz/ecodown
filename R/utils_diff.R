@@ -63,7 +63,8 @@ diff_files <- function(quarto_folder) {
 
     list_href <- function(x) {
       ft <- map(x, ~ {
-        if (class(.x) == "list") {
+        x_class <- class(.x)
+        if (x_class == "list") {
           xc <- .x
           map(xc, ~ {
             xr <- .x$href
