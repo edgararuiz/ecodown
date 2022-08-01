@@ -17,7 +17,7 @@ jobs:
     steps:
   
       - name: Install Quarto
-        uses: quarto-dev/quarto-actions/install-quarto@main
+        uses: quarto-dev/quarto-actions/setup@main
         with:
           version: 1.0.37
         
