@@ -13,8 +13,8 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder) {
         ~ {
           cr <- .x
           ma <- map_lgl(pkg_topics$alias, ~ any(cr == .x))
-          if(sum(ma) == 1) {
-            pkg_topics$name[ma]  
+          if (sum(ma) == 1) {
+            pkg_topics$name[ma]
           } else {
             ""
           }
@@ -54,7 +54,7 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder) {
 reference_parse_topic <- function(topic, pkg, examples = TRUE) {
   tag_names <- map_chr(topic$rd, ~ class(.)[[1]])
   tags <- split(topic$rd, tag_names)
-  if(examples) {
+  if (examples) {
     ref_tag <- reference_parse_examples(tags$tag_examples, pkg, "## Examples")
   } else {
     ref_tag <- reference_parse_section(tags$tag_examples, "## Examples")
@@ -100,7 +100,6 @@ reference_parse_section_arguments <- function(x, title = NULL) {
     args_p <- map_chr(x[[1]], ~ {
       et <- .x
       ec <- paste0(map(et, reference_parse_tag), collapse = " | ")
-      
     })
     args_ret <- map_lgl(args_p, ~ .x != "\n")
     args_filter <- args_p[args_ret]
@@ -158,18 +157,18 @@ reference_parse_line_tag <- function(x) {
 
 code_run <- function(x) {
   res <- NULL
-  for(i in seq_along(x)) {
+  for (i in seq_along(x)) {
     cl <- x[i]
     cls <- cl
     cr <- substr(cl, nchar(cl) - 1, nchar(cl)) == "\n"
-    if(cr) cl <- substr(cl, 1, nchar(cl) - 2)
+    if (cr) cl <- substr(cl, 1, nchar(cl) - 2)
     res <- c(res, cl)
-    if(cl != "") {
-      if(substr(cl, 1 ,1) != "#") {
+    if (cl != "") {
+      if (substr(cl, 1, 1) != "#") {
         out <- capture.output(eval(parse_expr(cl)))
         out1 <- paste0("#> ", out)
         out2 <- paste0(out1, collapse = "\n")
-        if(length(out) > 0) res <- c(res, paste0(out2, "\n"))
+        if (length(out) > 0) res <- c(res, paste0(out2, "\n"))
       }
     }
   }

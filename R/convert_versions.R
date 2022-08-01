@@ -1,14 +1,14 @@
 #' Copies and/or converts files from package source into Quarto
 #' @param versions A list of additional reference versions to convert.
 #' Pass the commit to use, the name of the version, and the sub-folder to use. It
-#' expects a named list object. Example: 
+#' expects a named list object. Example:
 #' list(list(commit = "latest_commit", path = "dev"))
 #' @inheritParams ecodown_convert
 #' @export
 ecodown_convert_versions <- function(package_source_folder = "",
                                      package_name = fs::path_file(package_source_folder),
                                      quarto_sub_folder = package_name,
-                                     version_folder  = "",
+                                     version_folder = "",
                                      quarto_folder = here::here(),
                                      downlit_options = FALSE,
                                      site_url = qe(quarto_folder, "site", "site-url"),
@@ -19,15 +19,14 @@ ecodown_convert_versions <- function(package_source_folder = "",
                                      convert_reference = TRUE,
                                      reference_examples = TRUE,
                                      branch = "main",
-                                     versions = list()
-) {
+                                     versions = list()) {
   walk(
-    versions, ~{
+    versions, ~ {
       ecodown_convert(
         package_source_folder = package_source_folder,
         quarto_sub_folder = quarto_sub_folder,
         quarto_folder = quarto_folder,
-        version_folder = .x$version_folder %||% version_folder, 
+        version_folder = .x$version_folder %||% version_folder,
         downlit_options = downlit_options,
         site_url = site_url,
         verbosity = verbosity,
@@ -41,5 +40,4 @@ ecodown_convert_versions <- function(package_source_folder = "",
       )
     }
   )
-  
 }

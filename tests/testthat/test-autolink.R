@@ -1,5 +1,4 @@
 test_that("Auto-linking works", {
-  
   options("downlit.attached" = "crayon")
   options("downlit.local_packages" = "crayon")
   expect_output(
@@ -10,7 +9,7 @@ test_that("Auto-linking works", {
     ),
     "Auto-linking"
   )
-  
+
   options("downlit.attached" = NULL)
   options("downlit.local_packages" = NULL)
   expect_error(
@@ -19,7 +18,7 @@ test_that("Auto-linking works", {
       render_folder = NULL
     )
   )
-  
+
   expect_output(
     ecodown_autolink(
       quarto_folder = test_path("assets/quarto_files"),
@@ -37,6 +36,4 @@ test_that("Auto-linking works", {
     ),
     "Auto-linking"
   )
-  
 })
-

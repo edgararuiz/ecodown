@@ -1,8 +1,8 @@
 #' Copies and/or converts files from package source into Quarto
 #' @param package_source_folder Path to the package's source code
-#' @param package_name Name of the package. Defaults to the top folder 
+#' @param package_name Name of the package. Defaults to the top folder
 #' in the repo URL
-#' @param version_folder Folder path to save the documentation version. Examples 
+#' @param version_folder Folder path to save the documentation version. Examples
 #' are: "latest", "dev", "v1.0". Defaults to empty.
 #' @param quarto_sub_folder Sub folder in `quarto_folder` that will be the base for
 #' the package's documentation.
@@ -23,13 +23,13 @@
 #' way we avoid documenting work-in-progress.  The 'latest_commit' value will
 #' simply use whatever is cloned. Pass an SHA value if you wish to fix the
 #' commit to use.
-#' @param branch Repo branch. Defaults to 'main' 
+#' @param branch Repo branch. Defaults to 'main'
 #' @inheritParams ecodown_build
 #' @export
 ecodown_convert <- function(package_source_folder = "",
                             package_name = fs::path_file(package_source_folder),
                             quarto_sub_folder = package_name,
-                            version_folder  = "",
+                            version_folder = "",
                             quarto_folder = here::here(),
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
@@ -40,27 +40,25 @@ ecodown_convert <- function(package_source_folder = "",
                             convert_reference = TRUE,
                             reference_examples = TRUE,
                             commit = c("latest_tag", "latest_commit"),
-                            branch = "main"
-                            ) {
-  
+                            branch = "main") {
   ecodown_context_set("verbosity", verbosity)
   commit <- commit[1]
   verbosity <- verbosity[1]
 
   qfs <- path(quarto_folder, quarto_sub_folder, version_folder)
-  
+
   sha <- checkout_repo(
-    pkg_dir = package_source_folder, 
-    commit = commit, 
-    branch = branch, 
+    pkg_dir = package_source_folder,
+    commit = commit,
+    branch = branch,
     verbosity = verbosity,
     pkg_name = package_name
-    )
-  
+  )
+
   sha_file <- path(qfs, ".ecodown")
-  if(file_exists(sha_file)) {
+  if (file_exists(sha_file)) {
     sha_existing <- readLines(sha_file)
-    if(sha_existing == sha) {
+    if (sha_existing == sha) {
       downlit_options(
         package = package_name,
         url = quarto_sub_folder,
@@ -71,11 +69,11 @@ ecodown_convert <- function(package_source_folder = "",
       return()
     }
   }
-    
+
   all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
   smy <- verbosity == "summary"
-  
+
   msg_color_title("Copying/Converting to Quarto")
 
   pkg <- pkgdown::as_pkgdown(package_source_folder)
@@ -110,9 +108,9 @@ ecodown_convert <- function(package_source_folder = "",
   } else {
     file_reference <- as.character()
   }
-  
+
   if (smy && get_package_header() == 0) {
-    if(get_clone_header() == 0) msg_summary_title("Copying/Converting to Quarto")
+    if (get_clone_header() == 0) msg_summary_title("Copying/Converting to Quarto")
     msg_summary_entry("| R N Art Ref I |\n")
     set_package_header(1)
     set_clone_header(1)
@@ -189,7 +187,7 @@ ecodown_convert <- function(package_source_folder = "",
   }
 
   writeLines(sha, path(qfs, ".ecodown"))
-  
+
   downlit_options(
     package = pkg$package,
     url = quarto_sub_folder,
@@ -200,15 +198,13 @@ ecodown_convert <- function(package_source_folder = "",
 package_file <- function(input,
                          base_folder = here::here(),
                          pkg = NULL,
-                         examples = TRUE
-                         ) {
-  
+                         examples = TRUE) {
   pkg_topics <- pkg$topics
-  
+
   input_name <- path_file(input)
-  
+
   abs_input <- path_abs(input)
-  
+
   input_rel <- tolower(substr(
     abs_input,
     nchar(pkg$src_path) + 2,
@@ -216,16 +212,16 @@ package_file <- function(input,
   ))
 
   input_split <- path_split(input_rel)[[1]]
-  
+
   output_split <- input_split
-  if(input_split[[1]] == "man") output_split[[1]] <- "reference"
-  if(input_split[[1]] == "vignettes") output_split[[1]] <- "articles"
+  if (input_split[[1]] == "man") output_split[[1]] <- "reference"
+  if (input_split[[1]] == "vignettes") output_split[[1]] <- "articles"
   li <- length(input_split)
-  if(input_split[li] == "readme.md") output_split[li] <- "index.md"
+  if (input_split[li] == "readme.md") output_split[li] <- "index.md"
   output_file <- path(
-    base_folder, 
+    base_folder,
     paste0(output_split, collapse = "/")
-    )
+  )
   output_folder <- path_dir(output_file)
   if (!dir_exists(output_folder)) dir_create(output_folder)
   if (tolower(path_ext(input)) == "rd") {

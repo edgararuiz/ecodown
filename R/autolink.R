@@ -59,9 +59,11 @@ downlit_env <- function(quarto_folder) {
       }
     )
   } else {
-    if (downlit_null()) stop(
-      "No downlit packages loaded in environment, and no '_ecodown.yml' file found on path"
+    if (downlit_null()) {
+      stop(
+        "No downlit packages loaded in environment, and no '_ecodown.yml' file found on path"
       )
+    }
   }
 }
 

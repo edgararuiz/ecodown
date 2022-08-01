@@ -1,13 +1,13 @@
 msg_color <- function(..., color = black, return = TRUE) {
   if (get_verbosity() == "verbose") {
-    msg <- paste0(blue(bold("i ")), color(..., ifelse(return, "\n", "") ))
+    msg <- paste0(blue(bold("i ")), color(..., ifelse(return, "\n", "")))
     cat(msg)
   }
 }
 
 msg_color_line <- function(..., color = black, return = FALSE) {
   if (get_verbosity() == "verbose") {
-    cat(color(paste0(..., ifelse(return, "\n", "") )))
+    cat(color(paste0(..., ifelse(return, "\n", ""))))
   }
 }
 
