@@ -29,10 +29,11 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
         if (length(fns) > 0) {
           alias <- me$alias[[1]]
           alias_func <- paste0(alias, "()")
+          title <- gsub("\n", " ", me$title)
           n_path <- path("/", quarto_sub_folder, version_folder, reference_folder, me$file_out)
           fn2 <- paste0("[", alias_func, "](", n_path, ")")
           fn3 <- paste0(fn2, collapse = " ")
-          fn3 <- paste0(fn3, " | ", me$title)
+          fn3 <- paste0(fn3, " | ", title)
         }
       })
 
