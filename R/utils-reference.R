@@ -1,4 +1,5 @@
-reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder) {
+reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
+                            reference_folder, vignettes_folder) {
   pkg_ref <- pkg$meta$reference
   pkg_topics <- pkg$topics
 
@@ -26,7 +27,7 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder) {
         me <- pkg_topics[pkg_topics$name == .x, ]
         fns <- me$funs[[1]]
         if (length(fns) > 0) {
-          n_path <- path("/", quarto_sub_folder, version_folder, "reference", me$file_out)
+          n_path <- path("/", quarto_sub_folder, version_folder, reference_folder, me$file_out)
           fn2 <- paste0("[", fns, "](", n_path, ")")
           fn3 <- paste0(fn2, collapse = " ")
           fn3 <- paste0(fn3, " | ", me$title)
