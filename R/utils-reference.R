@@ -1,46 +1,44 @@
 reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
                             reference_folder, vignettes_folder) {
   pkg_ref <- pkg$meta$reference
-  pkg_topics <- pkg$topics
-
-  # For packages that do not have a _pkgdown.yml spec
+  
   if (is.null(pkg_ref)) pkg_ref <- list(data.frame(contents = pkg_topics$name))
-
+  
+  pkg_topics <- pkg$topics
+  topics_env <- match_env(pkg_topics)
+  
   sections_list <- map(
-    pkg_ref, ~ {
-      ref <- .x
-      matched_names <- map_chr(
+    seq_along(pkg_ref),
+    ~ {
+      ref <- pkg_ref[[.x]]
+      topic_list <- map(
         ref$contents,
         ~ {
-          cr <- .x
-          ma <- map_lgl(pkg_topics$alias, ~ any(cr == .x))
-          if (sum(ma) == 1) {
-            pkg_topics$name[ma]
-          } else {
-            ""
+          func <- .x
+          if(is_infix(func)) func <- paste0("`", func, "`")
+          eval(parse_expr(func), topics_env)
           }
-        }
-      )
-      unique_names <- unique(matched_names[matched_names != ""])
-
-      refs_html <- map(unique_names, ~ {
-        me <- pkg_topics[pkg_topics$name == .x, ]
+        )
+      topic_ids <- as.numeric(flatten(topic_list))
+      
+      refs_html <- map(topic_ids, ~ {
+        me <- pkg_topics[.x, ]
         fns <- me$funs[[1]]
         if (length(fns) > 0) {
           alias <- me$alias[[1]]
           alias_func <- paste0(alias, "()")
           title <- gsub("\n", " ", me$title)
           n_path <- path("/", quarto_sub_folder, version_folder, reference_folder, me$file_out)
-          fn2 <- paste0("[", alias_func, "](", n_path, ")")
+          fn2 <- paste0("[", fns, "](", n_path, ")")
           fn3 <- paste0(fn2, collapse = " ")
           fn3 <- paste0(fn3, " | ", title)
         }
       })
-
+      
       null_refs <- map_lgl(refs_html, is.null)
-
+      
       refs_chr <- refs_html[!null_refs]
-
+      
       ref_section <- c(
         ifelse(!is.null(ref$title), paste0("## ", ref$title), ""),
         "",
