@@ -17,6 +17,8 @@ ecodown_convert(
   convert_news = TRUE,
   convert_articles = TRUE,
   convert_reference = TRUE,
+  reference_folder = "reference",
+  vignettes_folder = "articles",
   reference_examples = TRUE,
   commit = c("latest_tag", "latest_commit"),
   branch = "main"
@@ -53,6 +55,12 @@ are 'verbose', 'summary', and 'silent'.}
 \item{convert_articles}{Flag that indicates if the vignette files needs to be processed}
 
 \item{convert_reference}{Flag that indicates if the help files needs to be processed}
+
+\item{reference_folder}{The sub folder where the reference files will be placed.
+Defaults to "reference".}
+
+\item{vignettes_folder}{The sub folder where the vignette files will be placed.
+Defaults to "articles".}
 
 \item{reference_examples}{Boolean flag to indicate if the Examples inside the
 reference page is to be evaluated.}

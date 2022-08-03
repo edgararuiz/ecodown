@@ -10,6 +10,10 @@
 #' @param convert_news Flag that indicates if the NEWS file needs to be processed
 #' @param convert_articles Flag that indicates if the vignette files needs to be processed
 #' @param convert_reference Flag that indicates if the help files needs to be processed
+#' @param reference_folder The sub folder where the reference files will be placed.
+#' Defaults to "reference". 
+#' @param vignettes_folder The sub folder where the vignette files will be placed.
+#' Defaults to "articles". 
 #' @param reference_examples Boolean flag to indicate if the Examples inside the
 #' reference page is to be evaluated.
 #' @param downlit_options Flag that indicates if the package name should be
@@ -38,9 +42,12 @@ ecodown_convert <- function(package_source_folder = "",
                             convert_news = TRUE,
                             convert_articles = TRUE,
                             convert_reference = TRUE,
+                            reference_folder = "reference",
+                            vignettes_folder = "articles",
                             reference_examples = TRUE,
                             commit = c("latest_tag", "latest_commit"),
-                            branch = "main") {
+                            branch = "main"
+                            ) {
   ecodown_context_set("verbosity", verbosity)
   commit <- commit[1]
   verbosity <- verbosity[1]
@@ -123,7 +130,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_readme && length(file_readme) > 0) {
     pf <- c(pf, file_readme)
     msg_summary_number(length(file_readme))
-    if (smy) walk(file_readme, package_file, qfs, pkg)
+    if (smy) walk(file_readme, package_file, qfs, pkg, reference_folder, vignettes_folder)
   } else {
     msg_summary_number(0)
   }
@@ -131,7 +138,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_news && length(file_news) > 0) {
     pf <- c(pf, file_news)
     msg_summary_number(length(file_news))
-    if (smy) walk(file_news, package_file, qfs, pkg)
+    if (smy) walk(file_news, package_file, qfs, pkg, reference_folder, vignettes_folder)
   } else {
     msg_summary_number(0)
   }
@@ -139,7 +146,7 @@ ecodown_convert <- function(package_source_folder = "",
   if (convert_articles && length(file_vignettes) > 0) {
     pf <- c(pf, file_vignettes)
     msg_summary_number(length(file_vignettes), size = 4)
-    if (smy) walk(file_vignettes, package_file, qfs, pkg)
+    if (smy) walk(file_vignettes, package_file, qfs, pkg, reference_folder, vignettes_folder)
   } else {
     msg_summary_number(0, size = 4)
   }
@@ -148,13 +155,15 @@ ecodown_convert <- function(package_source_folder = "",
     pf <- c(pf, file_reference)
     msg_summary_number(length(file_reference), size = 4)
     if (smy) {
-      walk(file_reference, package_file, qfs, pkg, examples = reference_examples)
+      walk(file_reference, package_file, qfs, pkg, reference_folder, vignettes_folder, examples = reference_examples)
       ri <- reference_index(
         pkg = pkg,
+        reference_folder = reference_folder,
+        vignettes_folder = vignettes_folder,        
         quarto_sub_folder = quarto_sub_folder,
         version_folder = version_folder
       )
-      writeLines(ri, path(qfs, "reference", "index.md"))
+      writeLines(ri, path(qfs, reference_folder, "index.md"))
       msg_summary_number(1)
     }
   } else {
@@ -174,16 +183,20 @@ ecodown_convert <- function(package_source_folder = "",
       addl_entries = list(
         pkg = pkg,
         base_folder = qfs,
+        reference_folder = reference_folder,
+        vignettes_folder = vignettes_folder,
         examples = reference_examples
       ),
       verbosity = "verbose"
     )
     ri <- reference_index(
       pkg = pkg,
+      reference_folder = reference_folder,
+      vignettes_folder = vignettes_folder,
       quarto_sub_folder = quarto_sub_folder,
       version_folder = version_folder
     )
-    writeLines(ri, path(qfs, "reference", "index.md"))
+    writeLines(ri, path(qfs, reference_folder, "index.md"))
   }
 
   writeLines(sha, path(qfs, ".ecodown"))
@@ -198,6 +211,8 @@ ecodown_convert <- function(package_source_folder = "",
 package_file <- function(input,
                          base_folder = here::here(),
                          pkg = NULL,
+                         reference_folder,
+                         vignettes_folder,
                          examples = TRUE) {
   pkg_topics <- pkg$topics
 
@@ -214,8 +229,8 @@ package_file <- function(input,
   input_split <- path_split(input_rel)[[1]]
 
   output_split <- input_split
-  if (input_split[[1]] == "man") output_split[[1]] <- "reference"
-  if (input_split[[1]] == "vignettes") output_split[[1]] <- "articles"
+  if (input_split[[1]] == "man") output_split[[1]] <- reference_folder
+  if (input_split[[1]] == "vignettes") output_split[[1]] <- vignettes_folder
   li <- length(input_split)
   if (input_split[li] == "readme.md") output_split[li] <- "index.md"
   output_file <- path(
