@@ -17,13 +17,26 @@ get_verbosity <- function() {
   x[[1]]
 }
 
+set_verbosity <- function(x) {
+  ecodown_context_set("verbosity", x[[1]])  
+  invisible()
+}
+
+is_summary <- function() {
+  get_verbosity() == "summary"
+}
+
 get_clone_header <- function() {
   x <- ecodown_context_get("clone_header")
   if (is.null(x)) x <- 0
   x[[1]]
 }
 
-set_clone_header <- function(x) {
+clone_header <- function() {
+  get_clone_header() == 0
+}
+
+set_clone_header <- function(x = 1) {
   ecodown_context_set("clone_header", x)
 }
 
@@ -33,6 +46,10 @@ get_package_header <- function() {
   x[[1]]
 }
 
-set_package_header <- function(x) {
+package_header <- function() {
+  get_package_header() == 0
+}
+
+set_package_header <- function(x = 1) {
   ecodown_context_set("package_header", x)
 }

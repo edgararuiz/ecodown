@@ -12,7 +12,7 @@ ecodown_clone_convert <- function(repo_url = "",
                                   convert_articles = TRUE,
                                   convert_reference = TRUE,
                                   reference_folder = "reference",
-                                  vignettes_folder = "articles",                                  
+                                  vignettes_folder = "articles",
                                   downlit_options = TRUE,
                                   site_url = qe(quarto_folder, "site", "site-url"),
                                   commit = c("latest_tag", "latest_commit"),
@@ -21,19 +21,13 @@ ecodown_clone_convert <- function(repo_url = "",
                                   reference_examples = TRUE,
                                   verbosity = c("verbose", "summary", "silent"),
                                   versions = list()) {
-  verbosity <- verbosity[1]
-  ver <- versions
+  set_verbosity(verbosity)
 
-  ecodown_context_set("verbosity", verbosity)
-
-  if (verbosity == "summary" &&
-    get_package_header() == 0 &&
-    get_clone_header() == 0
-  ) {
+  if (is_summary() && package_header() && clone_header()) {
     msg_summary_entry("       Clone / Checkout       ")
     msg_summary_entry("| R N Art Ref I |\n")
-    set_package_header(1)
-    set_clone_header(1)
+    set_package_header()
+    set_clone_header()
   }
 
   pkg_path <- ecodown_clone(
@@ -42,41 +36,30 @@ ecodown_clone_convert <- function(repo_url = "",
     verbosity = verbosity
   )
 
-  if (length(ver) > 0) {
-    ecodown_convert_versions(
-      package_source_folder = pkg_path,
-      quarto_sub_folder = quarto_sub_folder,
-      version_folder = version_folder,
-      quarto_folder = quarto_folder,
-      convert_readme = convert_readme,
-      convert_news = convert_news,
-      convert_articles = convert_articles,
-      convert_reference = convert_reference,
-      downlit_options = downlit_options,
-      site_url = site_url,
-      branch = branch,
-      verbosity = verbosity,
-      reference_examples = reference_examples,
-      versions = versions
-    )
+  args <- list(
+    package_source_folder = pkg_path,
+    quarto_sub_folder = quarto_sub_folder,
+    version_folder = version_folder,
+    quarto_folder = quarto_folder,
+    convert_readme = convert_readme,
+    convert_news = convert_news,
+    convert_articles = convert_articles,
+    convert_reference = convert_reference,
+    reference_folder = reference_folder,
+    vignettes_folder = vignettes_folder,
+    downlit_options = downlit_options,
+    site_url = site_url,
+    branch = branch,
+    verbosity = verbosity,
+    reference_examples = reference_examples
+  )
+
+  if (length(versions) > 0) {
+    args <- c(args, list(versions = versions))
+    convert_func <- "ecodown_convert_versions"
   } else {
-    ecodown_convert(
-      package_source_folder = pkg_path,
-      quarto_sub_folder = quarto_sub_folder,
-      version_folder = version_folder,
-      quarto_folder = quarto_folder,
-      convert_readme = convert_readme,
-      convert_news = convert_news,
-      convert_articles = convert_articles,
-      convert_reference = convert_reference,
-      reference_folder = reference_folder,
-      vignettes_folder = reference_folder,      
-      downlit_options = downlit_options,
-      site_url = site_url,
-      commit = commit,
-      branch = branch,
-      verbosity = verbosity,
-      reference_examples = reference_examples
-    )
+    args <- c(args, list(commit = commit))
+    convert_func <- "ecodown_convert"
   }
+  exec(convert_func, !!!args)
 }
