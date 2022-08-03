@@ -153,7 +153,7 @@ ecodown_convert <- function(package_source_folder = "",
     msg_summary_number(length(file_reference), size = 4)
     if (smy) {
       walk(file_reference, package_file, qfs, pkg, reference_folder, vignettes_folder, examples = reference_examples)
-      ri <- reference_index(
+      ri <- md_reference_index(
         pkg = pkg,
         reference_folder = reference_folder,
         vignettes_folder = vignettes_folder,        
@@ -186,7 +186,7 @@ ecodown_convert <- function(package_source_folder = "",
       ),
       verbosity = "verbose"
     )
-    ri <- reference_index(
+    ri <- md_reference_index(
       pkg = pkg,
       reference_folder = reference_folder,
       vignettes_folder = vignettes_folder,
@@ -239,7 +239,7 @@ package_file <- function(input,
   if (tolower(path_ext(input)) == "rd") {
     list_topics <- transpose(pkg_topics)
     input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
-    out <- reference_parse_topic(input_topic, pkg, examples = examples)
+    out <- md_reference_parse_topic(input_topic, pkg, examples = examples)
     output_file <- path(path_ext_remove(output_file), ext = "md")
     writeLines(out, output_file)
   } else {

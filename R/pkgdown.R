@@ -16,7 +16,7 @@ match_env <- function(topics) {
   
   # As is each \name{} - we bind these second so that if \name{x} and \alias{x}
   # are in different files, \name{x} wins. This doesn't usually matter, but
-  # \name{} needs to win so that the default_reference_index() matches the
+  # \name{} needs to win so that the default_md_reference_index() matches the
   # correct files
   env_bind(out, !!!set_names(topic_index, topics$name))
   

@@ -1,0 +1,17 @@
+---
+title: "{name}"
+subtitle: "{title}"
+---
+
+## Description
+
+{description}
+
+
+## Arguments
+
++---------------+---------------+
+| Argument      | Description   |
++===============+===============+
+| {argument}    | {description} |
++---------------+---------------+
