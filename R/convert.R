@@ -48,6 +48,7 @@ ecodown_convert <- function(package_source_folder = "",
                             commit = c("latest_tag", "latest_commit"),
                             branch = "main"
                             ) {
+  
   ecodown_context_set("verbosity", verbosity)
   commit <- commit[1]
   verbosity <- verbosity[1]
@@ -116,12 +117,8 @@ ecodown_convert <- function(package_source_folder = "",
     file_reference <- as.character()
   }
 
-  if (smy && get_package_header() == 0) {
-    if (get_clone_header() == 0) msg_summary_title("Copying/Converting to Quarto")
-    msg_summary_entry("| R N Art Ref I |\n")
-    set_package_header(1)
-    set_clone_header(1)
-  }
+  if(clone_header()) msg_summary_title("Copying/Converting to Quarto")
+  msg_summary_header()
 
   pf <- path()
 

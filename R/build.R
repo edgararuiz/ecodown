@@ -5,9 +5,7 @@
 #' @export
 ecodown_build <- function(quarto_folder = here::here(),
                           verbosity = c("summary", "verbose", "silent")) {
-  verbosity <- verbosity[1]
-
-  ecodown_context_set("verbosity", verbosity)
+  set_verbosity(verbosity)
 
   qbf <- quarto_folder
 
@@ -16,8 +14,7 @@ ecodown_build <- function(quarto_folder = here::here(),
   if (file_exists(config_path)) {
     config_yaml <- read_yaml(config_path)
 
-    cat(bold(black(">> Cloning and Converting packages from repos\n\n")))
-
+    msg_title("Cloning and Converting packages from repos") 
 
     pkgs <- config_yaml$site$clone_convert$packages
     if (!is.null(pkgs)) {
@@ -28,24 +25,21 @@ ecodown_build <- function(quarto_folder = here::here(),
       cc_args <- NULL
     }
 
-
     walk(
       pkgs, ~ {
-        all_args <- c(cc_args, .x)
+        all_args <- c(cc_args, .x, quarto_folder = qbf, verbosity = get_verbosity())
         exec(
           "ecodown_clone_convert",
-          !!!all_args,
-          quarto_folder = qbf,
-          verbosity = verbosity
+          !!!all_args
         )
       }
     )
 
     if (null_true(config_yaml$site$quarto$run)) {
       run_autolink <- null_true(config_yaml$site$autolink$run)
-      msg_quarto <- "\n>> Rendering to HTML"
+      msg_quarto <- "Rendering to HTML"
       if (run_autolink) msg_quarto <- paste0(msg_quarto, " and auto-linking")
-      cat(bold(black(paste0(msg_quarto, "\n"))))
+      msg_title(msg_quarto)
       exec_command(
         "ecodown_quarto_render",
         config_yaml$site$quarto,
@@ -57,7 +51,7 @@ ecodown_build <- function(quarto_folder = here::here(),
       )
     }
 
-    if (null_true(config_yaml$site$autolink$run)) {
+    if (run_autolink) {
       ecodown_autolink(quarto_folder = quarto_folder, verbosity = verbosity)
     }
   }

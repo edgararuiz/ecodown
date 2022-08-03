@@ -23,12 +23,7 @@ ecodown_clone_convert <- function(repo_url = "",
                                   versions = list()) {
   set_verbosity(verbosity)
 
-  if (is_summary() && package_header() && clone_header()) {
-    msg_summary_entry("       Clone / Checkout       ")
-    msg_summary_entry("| R N Art Ref I |\n")
-    set_package_header()
-    set_clone_header()
-  }
+  msg_summary_header()
 
   pkg_path <- ecodown_clone(
     repo_url = repo_url,

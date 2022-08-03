@@ -18,6 +18,11 @@ msg_color_title <- function(x, color = blue) {
   }
 }
 
+msg_title <- function(x, color = blue) {
+    x <- paste0(">> ", x, "\n")
+    cat(black(bold(x)))
+}
+
 msg_summary_entry <- function(x, color = black) {
   if (get_verbosity() == "summary") {
     cat(color(x))
@@ -40,5 +45,15 @@ msg_summary_number <- function(x, size = 2, color = black, side = c("left", "rig
     pad <- paste0(rep(" ", times = (size - xn)), collapse = "")
     if (side == "left") cat(color(paste0(pad, x)))
     if (side == "right") cat(color(paste0(x, pad)))
+  }
+}
+
+msg_summary_header <- function() {
+  if (is_summary() && package_header() && clone_header()) {
+    msg_summary_entry("       Clone / Checkout       ")
+    msg_summary_entry("| R N Art Ref I |")
+    cat("\n")
+    set_package_header()
+    set_clone_header()
   }
 }
