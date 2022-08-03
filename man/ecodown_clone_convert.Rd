@@ -22,6 +22,8 @@ ecodown_clone_convert(
   branch = "main",
   reference_examples = TRUE,
   verbosity = c("verbose", "summary", "silent"),
+  reference_output = "qmd",
+  reference_qmd_options = NULL,
   versions = list()
 )
 }

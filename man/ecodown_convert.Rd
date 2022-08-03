@@ -21,7 +21,9 @@ ecodown_convert(
   vignettes_folder = "articles",
   reference_examples = TRUE,
   commit = c("latest_tag", "latest_commit"),
-  branch = "main"
+  branch = "main",
+  reference_output = "qmd",
+  reference_qmd_options = NULL
 )
 }
 \arguments{

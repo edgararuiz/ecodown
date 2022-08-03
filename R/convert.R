@@ -46,7 +46,9 @@ ecodown_convert <- function(package_source_folder = "",
                             vignettes_folder = "articles",
                             reference_examples = TRUE,
                             commit = c("latest_tag", "latest_commit"),
-                            branch = "main"
+                            branch = "main",
+                            reference_output = "qmd",
+                            reference_qmd_options = NULL
                             ) {
   
   ecodown_context_set("verbosity", verbosity)
@@ -152,15 +154,29 @@ ecodown_convert <- function(package_source_folder = "",
     pf <- c(pf, file_reference)
     msg_summary_number(length(file_reference), size = 4)
     if (smy) {
-      walk(file_reference, package_file, qfs, pkg, reference_folder, vignettes_folder, examples = reference_examples)
+      walk(
+        file_reference, 
+        package_file, 
+        qfs, 
+        pkg, 
+        reference_folder, 
+        vignettes_folder, 
+        examples = reference_examples,
+        output = reference_output,
+        output_options = reference_qmd_options
+        )
       ri <- reference_index(
         pkg = pkg,
         reference_folder = reference_folder,
         vignettes_folder = vignettes_folder,        
         quarto_sub_folder = quarto_sub_folder,
-        version_folder = version_folder
+        version_folder = version_folder, 
+        output = reference_output
       )
-      writeLines(ri, path(qfs, reference_folder, "index.md"))
+      
+      if(reference_output == "qmd") output_file <- "index.qmd"
+      if(reference_output == "md") output_file <- "index.md"
+      writeLines(ri, path(qfs, reference_folder, output_file))
       msg_summary_number(1)
     }
   } else {
@@ -210,7 +226,9 @@ package_file <- function(input,
                          pkg = NULL,
                          reference_folder,
                          vignettes_folder,
-                         examples = TRUE) {
+                         examples = FALSE,
+                         output,
+                         output_options) {
   pkg_topics <- pkg$topics
 
   input_name <- path_file(input)
@@ -239,8 +257,10 @@ package_file <- function(input,
   if (tolower(path_ext(input)) == "rd") {
     list_topics <- transpose(pkg_topics)
     input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
-    out <- reference_parse_topic(input_topic, pkg, examples = examples)
-    output_file <- path(path_ext_remove(output_file), ext = "md")
+    out <- reference_parse_topic(input_topic, pkg, examples = examples, 
+                                 output = output, output_options = output_options
+                                 )
+    output_file <- path(path_ext_remove(output_file), ext = output)
     writeLines(out, output_file)
   } else {
     file_copy(input, output_file, overwrite = TRUE)
