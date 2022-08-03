@@ -2,10 +2,10 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
                             reference_folder, vignettes_folder) {
   pkg_ref <- pkg$meta$reference
   
-  if (is.null(pkg_ref)) pkg_ref <- list(data.frame(contents = pkg_topics$name))
-  
   pkg_topics <- pkg$topics
   topics_env <- match_env(pkg_topics)
+  
+  if (is.null(pkg_ref)) pkg_ref <- list(data.frame(contents = pkg_topics$name))
   
   sections_list <- map(
     seq_along(pkg_ref),
@@ -21,18 +21,20 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
         )
       topic_ids <- as.numeric(flatten(topic_list))
       
-      refs_html <- map(topic_ids, ~ {
-        me <- pkg_topics[.x, ]
-        fns <- me$funs[[1]]
-        if (length(fns) > 0) {
-          alias <- me$alias[[1]]
+      refs_html <- map(
+        topic_ids, 
+        ~ {
+          me <- pkg_topics[.x, ]
+          fns <- me$funs[[1]]
+          if (length(fns) > 0) {
+            alias <- me$alias[[1]]
           alias_func <- paste0(alias, "()")
           title <- gsub("\n", " ", me$title)
           n_path <- path("/", quarto_sub_folder, version_folder, reference_folder, me$file_out)
           fn2 <- paste0("[", fns, "](", n_path, ")")
           fn3 <- paste0(fn2, collapse = " ")
           fn3 <- paste0(fn3, " | ", title)
-        }
+          }
       })
       
       null_refs <- map_lgl(refs_html, is.null)
