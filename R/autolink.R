@@ -6,9 +6,9 @@
 ecodown_autolink <- function(quarto_folder = here::here(),
                              render_folder = qe(quarto_folder, "project", "output-dir"),
                              verbosity = c("verbose", "summary", "silent")) {
-  verbosity <- verbosity[1]
-  ecodown_context_set("verbosity", verbosity)
 
+  set_verbosity(verbosity)
+  
   downlit_env(quarto_folder = quarto_folder)
 
   quarto_path <- path(quarto_folder, render_folder)
@@ -27,7 +27,7 @@ ecodown_autolink <- function(quarto_folder = here::here(),
     file_type = "html ",
     base_folder = quarto_path,
     command_name = "downlit_single",
-    verbosity = verbosity
+    verbosity = get_verbosity()
   )
 }
 

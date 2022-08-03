@@ -14,7 +14,7 @@ ecodown_build <- function(quarto_folder = here::here(),
   if (file_exists(config_path)) {
     config_yaml <- read_yaml(config_path)
 
-    msg_title("Cloning and Converting packages from repos") 
+    msg_title("Cloning and Converting packages from repos")
 
     pkgs <- config_yaml$site$clone_convert$packages
     if (!is.null(pkgs)) {

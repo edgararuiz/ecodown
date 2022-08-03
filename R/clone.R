@@ -12,17 +12,10 @@ ecodown_clone <- function(repo_url = "",
                           target_folder = tempdir(),
                           branch = "main",
                           verbosity = c("verbose", "summary", "silent")) {
-  verbosity <- verbosity[1]
-
-  ecodown_context_set("verbosity", verbosity)
-
+  set_verbosity(verbosity)
+  
   msg_color_title("Cloning repo")
-
-  if (verbosity == "summary" && get_clone_header() == 0) {
-    msg_summary_entry("       Clone / Checkout       \n")
-    set_clone_header(1)
-  }
-
+  
   pkg_name <- path_file(repo_url)
 
   pkg_dir <- path(target_folder, pkg_name)
@@ -46,9 +39,8 @@ checkout_repo <- function(pkg_dir = "",
                           branch,
                           verbosity,
                           pkg_name) {
-  verbosity <- verbosity[1]
+  set_verbosity(verbosity)
   commit <- commit[1]
-  ecodown_context_set("verbosity", verbosity)
 
   repo_tags <- git_tag_list(repo = pkg_dir)
   repo_log <- git_log(repo = pkg_dir, ref = branch)
