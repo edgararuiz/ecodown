@@ -55,3 +55,13 @@ code_run <- function(x) {
   p_res <- paste0(res, collapse = "")
   paste0("```r\n", p_res, "\n```")
 }
+
+reference_arguments <- function(x) {
+  args_p <- map_chr(x[[1]], ~ {
+    et <- .x
+    ec <- paste0(map(et, reference_parse_tag), collapse = " | ")
+  })
+  args_ret <- map_lgl(args_p, ~ .x != "\n")
+  args_filter <- args_p[args_ret]
+  map_chr(args_filter, ~ paste0(strsplit(.x, "\n")[[1]], collapse = " "))
+}

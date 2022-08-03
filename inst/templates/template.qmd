@@ -7,11 +7,20 @@ subtitle: "{title}"
 
 {description}
 
+## Usage
+
+```r
+{usage}
+```
 
 ## Arguments
 
-+---------------+---------------+
-| Argument      | Description   |
-+===============+===============+
-| {argument}    | {description} |
-+---------------+---------------+
+
+   Argument     |   Description      
+----------------|-------------------
+  {argument}    |    {argument}      
+
+
+## Details
+
+{details}
