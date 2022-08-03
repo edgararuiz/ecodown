@@ -1,8 +1,6 @@
 on:
   push:
     branches: main
-  pull_request:
-    branches: main
 
 name: Build Site
 
@@ -23,7 +21,7 @@ jobs:
           use-public-rspm: true
 
       - name: Install Quarto
-        uses: quarto-dev/quarto-actions/setup@main
+        uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: 1.0.37s
 
@@ -59,10 +57,6 @@ jobs:
         shell: Rscript {0}
 
       - name: Commit changes back to branch
-        if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          clean: false
-          folder: docs
-          branch: testsite
-          target-folder: docs
+          commit_message: Updated by ecodown
