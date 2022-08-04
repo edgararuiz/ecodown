@@ -83,7 +83,7 @@ reference_parse_topic <- function(topic, pkg, examples,
     reference_parse_section(tags$tag_seealso, "## See Also")
   )
   if(output == "qmd") {
-    res <- c("---", output_options, "---", res)
+    res <- c("---", output_options, "", "---", res)
   }
   res
 }

@@ -16,6 +16,11 @@
 #' Defaults to "articles". 
 #' @param reference_examples Boolean flag to indicate if the Examples inside the
 #' reference page is to be evaluated.
+#' @param reference_output File type for all the reference files. Possible options
+#' are `qmd` and `md`. Defaults to `qmd`.
+#' @param reference_qmd_options A character variable that contains the text version
+#' of additions to the reference front matter. It applies only to when reference
+#' output is `qmd`
 #' @param downlit_options Flag that indicates if the package name should be
 #' added to the 'options()' that tells 'downlit' that this is an internal
 #' package
@@ -198,7 +203,9 @@ ecodown_convert <- function(package_source_folder = "",
         base_folder = qfs,
         reference_folder = reference_folder,
         vignettes_folder = vignettes_folder,
-        examples = reference_examples
+        examples = reference_examples,
+        output = reference_output,
+        output_options = reference_qmd_options        
       ),
       verbosity = "verbose"
     )
@@ -207,7 +214,8 @@ ecodown_convert <- function(package_source_folder = "",
       reference_folder = reference_folder,
       vignettes_folder = vignettes_folder,
       quarto_sub_folder = quarto_sub_folder,
-      version_folder = version_folder
+      version_folder = version_folder,
+      output = reference_output      
     )
     writeLines(ri, path(qfs, reference_folder, "index.md"))
   }

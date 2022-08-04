@@ -20,6 +20,8 @@ ecodown_convert_versions(
   reference_folder = "reference",
   vignettes_folder = "articles",
   reference_examples = TRUE,
+  reference_output = "qmd",
+  reference_qmd_options = NULL,
   branch = "main",
   versions = list()
 )
@@ -64,6 +66,13 @@ Defaults to "articles".}
 
 \item{reference_examples}{Boolean flag to indicate if the Examples inside the
 reference page is to be evaluated.}
+
+\item{reference_output}{File type for all the reference files. Possible options
+are \code{qmd} and \code{md}. Defaults to \code{qmd}.}
+
+\item{reference_qmd_options}{A character variable that contains the text version
+of additions to the reference front matter. It applies only to when reference
+output is \code{qmd}}
 
 \item{branch}{Repo branch. Defaults to 'main'}
 
