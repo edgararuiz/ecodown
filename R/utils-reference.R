@@ -1,5 +1,5 @@
 reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
-                            reference_folder, vignettes_folder) {
+                            reference_folder, vignettes_folder, output) {
   pkg_ref <- pkg$meta$reference
   
   pkg_topics <- pkg$topics
@@ -52,10 +52,18 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
     }
   )
 
-  map_chr(flatten(sections_list), ~.x)
+  res <- map_chr(flatten(sections_list), ~.x)
+  
+  if(output == "qmd") {
+    res <- c("---", "---", res)
+  }
+  
+  res
 }
 
-reference_parse_topic <- function(topic, pkg, examples = TRUE) {
+reference_parse_topic <- function(topic, pkg, examples, 
+                                  output, output_options = list()
+                                  ) {
   tag_names <- map_chr(topic$rd, ~ class(.)[[1]])
   tags <- split(topic$rd, tag_names)
   if (examples) {
@@ -63,7 +71,7 @@ reference_parse_topic <- function(topic, pkg, examples = TRUE) {
   } else {
     ref_tag <- reference_parse_section(tags$tag_examples, "## Examples")
   }
-  c(
+  res <- c(
     paste0("# ", topic$name),
     reference_parse_section(tags$tag_title),
     reference_parse_section(tags$tag_description, "## Description"),
@@ -74,6 +82,10 @@ reference_parse_topic <- function(topic, pkg, examples = TRUE) {
     ref_tag,
     reference_parse_section(tags$tag_seealso, "## See Also")
   )
+  if(output == "qmd") {
+    res <- c("---", output_options, "", "---", res)
+  }
+  res
 }
 
 reference_parse_section <- function(x, title = NULL) {

@@ -22,6 +22,8 @@ ecodown_clone_convert(
   branch = "main",
   reference_examples = TRUE,
   verbosity = c("verbose", "summary", "silent"),
+  reference_output = "qmd",
+  reference_qmd_options = NULL,
   versions = list()
 )
 }
@@ -74,6 +76,13 @@ reference page is to be evaluated.}
 
 \item{verbosity}{Level of messaging available during run time. Possible values
 are 'verbose', 'summary', and 'silent'.}
+
+\item{reference_output}{File type for all the reference files. Possible options
+are \code{qmd} and \code{md}. Defaults to \code{qmd}.}
+
+\item{reference_qmd_options}{A character variable that contains the text version
+of additions to the reference front matter. It applies only to when reference
+output is \code{qmd}}
 
 \item{versions}{A list of additional reference versions to convert.
 Pass the commit to use, the name of the version, and the sub-folder to use. It

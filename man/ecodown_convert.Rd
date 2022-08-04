@@ -21,7 +21,9 @@ ecodown_convert(
   vignettes_folder = "articles",
   reference_examples = TRUE,
   commit = c("latest_tag", "latest_commit"),
-  branch = "main"
+  branch = "main",
+  reference_output = "qmd",
+  reference_qmd_options = NULL
 )
 }
 \arguments{
@@ -73,6 +75,13 @@ simply use whatever is cloned. Pass an SHA value if you wish to fix the
 commit to use.}
 
 \item{branch}{Repo branch. Defaults to 'main'}
+
+\item{reference_output}{File type for all the reference files. Possible options
+are \code{qmd} and \code{md}. Defaults to \code{qmd}.}
+
+\item{reference_qmd_options}{A character variable that contains the text version
+of additions to the reference front matter. It applies only to when reference
+output is \code{qmd}}
 }
 \description{
 Copies and/or converts files from package source into Quarto

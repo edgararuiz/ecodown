@@ -16,6 +16,11 @@
 #' Defaults to "articles". 
 #' @param reference_examples Boolean flag to indicate if the Examples inside the
 #' reference page is to be evaluated.
+#' @param reference_output File type for all the reference files. Possible options
+#' are `qmd` and `md`. Defaults to `qmd`.
+#' @param reference_qmd_options A character variable that contains the text version
+#' of additions to the reference front matter. It applies only to when reference
+#' output is `qmd`
 #' @param downlit_options Flag that indicates if the package name should be
 #' added to the 'options()' that tells 'downlit' that this is an internal
 #' package
@@ -46,7 +51,9 @@ ecodown_convert <- function(package_source_folder = "",
                             vignettes_folder = "articles",
                             reference_examples = TRUE,
                             commit = c("latest_tag", "latest_commit"),
-                            branch = "main"
+                            branch = "main",
+                            reference_output = "qmd",
+                            reference_qmd_options = NULL
                             ) {
   
   ecodown_context_set("verbosity", verbosity)
@@ -152,15 +159,29 @@ ecodown_convert <- function(package_source_folder = "",
     pf <- c(pf, file_reference)
     msg_summary_number(length(file_reference), size = 4)
     if (smy) {
-      walk(file_reference, package_file, qfs, pkg, reference_folder, vignettes_folder, examples = reference_examples)
+      walk(
+        file_reference, 
+        package_file, 
+        qfs, 
+        pkg, 
+        reference_folder, 
+        vignettes_folder, 
+        examples = reference_examples,
+        output = reference_output,
+        output_options = reference_qmd_options
+        )
       ri <- reference_index(
         pkg = pkg,
         reference_folder = reference_folder,
         vignettes_folder = vignettes_folder,        
         quarto_sub_folder = quarto_sub_folder,
-        version_folder = version_folder
+        version_folder = version_folder, 
+        output = reference_output
       )
-      writeLines(ri, path(qfs, reference_folder, "index.md"))
+      
+      if(reference_output == "qmd") output_file <- "index.qmd"
+      if(reference_output == "md") output_file <- "index.md"
+      writeLines(ri, path(qfs, reference_folder, output_file))
       msg_summary_number(1)
     }
   } else {
@@ -182,7 +203,9 @@ ecodown_convert <- function(package_source_folder = "",
         base_folder = qfs,
         reference_folder = reference_folder,
         vignettes_folder = vignettes_folder,
-        examples = reference_examples
+        examples = reference_examples,
+        output = reference_output,
+        output_options = reference_qmd_options        
       ),
       verbosity = "verbose"
     )
@@ -191,7 +214,8 @@ ecodown_convert <- function(package_source_folder = "",
       reference_folder = reference_folder,
       vignettes_folder = vignettes_folder,
       quarto_sub_folder = quarto_sub_folder,
-      version_folder = version_folder
+      version_folder = version_folder,
+      output = reference_output      
     )
     writeLines(ri, path(qfs, reference_folder, "index.md"))
   }
@@ -210,7 +234,9 @@ package_file <- function(input,
                          pkg = NULL,
                          reference_folder,
                          vignettes_folder,
-                         examples = TRUE) {
+                         examples = FALSE,
+                         output,
+                         output_options) {
   pkg_topics <- pkg$topics
 
   input_name <- path_file(input)
@@ -239,8 +265,10 @@ package_file <- function(input,
   if (tolower(path_ext(input)) == "rd") {
     list_topics <- transpose(pkg_topics)
     input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
-    out <- reference_parse_topic(input_topic, pkg, examples = examples)
-    output_file <- path(path_ext_remove(output_file), ext = "md")
+    out <- reference_parse_topic(input_topic, pkg, examples = examples, 
+                                 output = output, output_options = output_options
+                                 )
+    output_file <- path(path_ext_remove(output_file), ext = output)
     writeLines(out, output_file)
   } else {
     file_copy(input, output_file, overwrite = TRUE)
