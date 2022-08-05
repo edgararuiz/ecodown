@@ -56,17 +56,17 @@ ecodown_convert <- function(package_source_folder = "",
                             reference_qmd_options = NULL
                             ) {
   
-  ecodown_context_set("verbosity", verbosity)
+  set_verbosity(verbosity)
+  
   commit <- commit[1]
-  verbosity <- verbosity[1]
-
+  
   qfs <- path(quarto_folder, quarto_sub_folder, version_folder)
 
   sha <- checkout_repo(
     pkg_dir = package_source_folder,
     commit = commit,
     branch = branch,
-    verbosity = verbosity,
+    verbosity = get_verbosity(),
     pkg_name = package_name
   )
 
@@ -87,109 +87,54 @@ ecodown_convert <- function(package_source_folder = "",
 
   all_files <- dir_ls(package_source_folder, recurse = TRUE, type = "file")
 
-  smy <- verbosity == "summary"
-
   msg_color_title("Copying/Converting to Quarto")
 
-  pkg <- pkgdown::as_pkgdown(package_source_folder)
+  pkg <- as_pkgdown(package_source_folder)
 
   rel_files <- substr(
     all_files,
     nchar(path_common(all_files)) + 2,
     nchar(all_files)
   )
+  
+  if(clone_header()) msg_summary_title("Copying/Converting to Quarto")
+  msg_summary_header()
+  msg_summary_entry("|")
+  
+  package_file_args <- list(
+    pkg = pkg,
+    base_folder = qfs,
+    reference_folder = reference_folder,
+    vignettes_folder = vignettes_folder,
+    examples = reference_examples,
+    output = reference_output,
+    output_options = reference_qmd_options        
+  )
+  
+  get_files <- function(pkg_folder) {
+    p_path <- path(path_common(all_files), pkg_folder)
+    x <- as.character()
+    if (dir_exists(p_path)) x <- dir_ls(p_path, recurse = TRUE, type = "file")
+  }
+  
+  pf <- path()
+  summary_package_files <- function(file_list, summary_width = 2) {
+    pf <<- c(pf, file_list)
+    msg_summary_number(length(file_list), size = summary_width)
+    if (is_summary()) {
+      walk(file_list, ~ exec("package_file", !!! package_file_args, input = .x))
+    }
+  }
 
   file_readme <- all_files[rel_files == "README.md"]
   file_news <- all_files[rel_files == "NEWS.md"]
-
-  vignette_path <- path(path_common(all_files), "vignettes")
-  if (dir_exists(vignette_path)) {
-    file_vignettes <- dir_ls(
-      vignette_path,
-      recurse = TRUE,
-      type = "file"
-    )
-  } else {
-    file_vignettes <- as.character()
-  }
-
-  reference_path <- path(path_common(all_files), "man")
-  if (dir_exists(reference_path)) {
-    file_reference <- dir_ls(
-      reference_path,
-      recurse = TRUE,
-      type = "file"
-    )
-  } else {
-    file_reference <- as.character()
-  }
-
-  if(clone_header()) msg_summary_title("Copying/Converting to Quarto")
-  msg_summary_header()
-
-  pf <- path()
-
-  msg_summary_entry("|")
-
-  if (convert_readme && length(file_readme) > 0) {
-    pf <- c(pf, file_readme)
-    msg_summary_number(length(file_readme))
-    if (smy) walk(file_readme, package_file, qfs, pkg, reference_folder, vignettes_folder)
-  } else {
-    msg_summary_number(0)
-  }
-
-  if (convert_news && length(file_news) > 0) {
-    pf <- c(pf, file_news)
-    msg_summary_number(length(file_news))
-    if (smy) walk(file_news, package_file, qfs, pkg, reference_folder, vignettes_folder)
-  } else {
-    msg_summary_number(0)
-  }
-
-  if (convert_articles && length(file_vignettes) > 0) {
-    pf <- c(pf, file_vignettes)
-    msg_summary_number(length(file_vignettes), size = 4)
-    if (smy) walk(file_vignettes, package_file, qfs, pkg, reference_folder, vignettes_folder)
-  } else {
-    msg_summary_number(0, size = 4)
-  }
-
-  if (convert_reference && length(file_reference) > 0) {
-    pf <- c(pf, file_reference)
-    msg_summary_number(length(file_reference), size = 4)
-    if (smy) {
-      walk(
-        file_reference, 
-        package_file, 
-        qfs, 
-        pkg, 
-        reference_folder, 
-        vignettes_folder, 
-        examples = reference_examples,
-        output = reference_output,
-        output_options = reference_qmd_options
-        )
-      ri <- reference_index(
-        pkg = pkg,
-        reference_folder = reference_folder,
-        vignettes_folder = vignettes_folder,        
-        quarto_sub_folder = quarto_sub_folder,
-        version_folder = version_folder, 
-        output = reference_output
-      )
-      
-      if(reference_output == "qmd") output_file <- "index.qmd"
-      if(reference_output == "md") output_file <- "index.md"
-      writeLines(ri, path(qfs, reference_folder, output_file))
-      msg_summary_number(1)
-    }
-  } else {
-    msg_summary_number(0, size = 4)
-    msg_summary_number(0)
-  }
-
-  msg_summary_entry(" |\n")
+  file_vignettes <- get_files("vignettes")
+  file_reference <- get_files("man")
+  
+  if (convert_readme) summary_package_files(file_readme)
+  if (convert_news) summary_package_files(file_news)
+  if (convert_articles) summary_package_files(file_vignettes)
+  if (convert_reference) summary_package_files(file_reference, 4)
 
   pkg_files <- as_fs_path(pf)
 
@@ -198,27 +143,27 @@ ecodown_convert <- function(package_source_folder = "",
       pkg_files,
       base_folder = package_source_folder,
       command_name = "package_file",
-      addl_entries = list(
-        pkg = pkg,
-        base_folder = qfs,
-        reference_folder = reference_folder,
-        vignettes_folder = vignettes_folder,
-        examples = reference_examples,
-        output = reference_output,
-        output_options = reference_qmd_options        
-      ),
+      addl_entries = package_file_args,
       verbosity = "verbose"
     )
+  }
+  
+  if (convert_reference && length(file_reference) > 0) {
     ri <- reference_index(
       pkg = pkg,
       reference_folder = reference_folder,
-      vignettes_folder = vignettes_folder,
+      vignettes_folder = vignettes_folder,        
       quarto_sub_folder = quarto_sub_folder,
-      version_folder = version_folder,
-      output = reference_output      
+      version_folder = version_folder, 
+      output = reference_output
     )
-    writeLines(ri, path(qfs, reference_folder, "index.md"))
+    writeLines(ri, path(qfs, reference_folder, "index", ext = reference_output))
+    msg_summary_number(1)
+  } else {
+    msg_summary_number(0)
   }
+  
+  msg_summary_entry(" |\n")
 
   writeLines(sha, path(qfs, ".ecodown"))
 
