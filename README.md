@@ -28,7 +28,9 @@ all of the reference pages automatically.
 
 ### Moving to Quarto
 
-The move to Quarto presented some challenges, and opportunities:
+Moving [spark.rstudio.com](https://spark.rstudio.com/), and
+[tensorflow.rstudio.com](https://tensorflow.rstudio.com/) to Quarto
+presented some challenges, and opportunities:
 
 -   Unlike Hugo, Quarto does not accept HTML as input files, and
     `pkgdown` only produces HTML output. We needed a way to create the

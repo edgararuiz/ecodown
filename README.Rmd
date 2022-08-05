@@ -35,13 +35,20 @@ cat_tree <- function(x, ...) {
 
 ### Before Quarto
 
-The [spark.rstudio.com](https://spark.rstudio.com/), and [tensorflow.rstudio.com](https://tensorflow.rstudio.com/) websites were initially built
-in Hugo, via `blogdown`. They used custom R scripts to build the reference sections. Those scripts used `pkgdown` to build the bare HTML files. This method worked to an extend, but it was highly manual. Because website's repository is not the same as the package's 
-repository it documents, we would have to manually clone and then run the update scripts. There was no easy GitHub Action that would update all of the reference pages automatically. 
+The [spark.rstudio.com](https://spark.rstudio.com/), and 
+[tensorflow.rstudio.com](https://tensorflow.rstudio.com/) websites were initially 
+built in Hugo, via `blogdown`. They used custom R scripts to build the reference 
+sections. Those scripts used `pkgdown` to build the bare HTML files. This method 
+worked to an extend, but it was highly manual. Because website's repository is 
+not the same as the package's repository it documents, we would have to manually 
+clone and then run the update scripts. There was no easy GitHub Action that would
+update all of the reference pages automatically. 
 
 ### Moving to Quarto
 
-The move to Quarto presented some challenges, and opportunities:
+Moving [spark.rstudio.com](https://spark.rstudio.com/), and
+[tensorflow.rstudio.com](https://tensorflow.rstudio.com/) to Quarto presented 
+some challenges, and opportunities:
 
 - Unlike Hugo, Quarto does not accept HTML as input files, and `pkgdown` only produces
 HTML output. We needed a way to create the reference index, and reference pages
