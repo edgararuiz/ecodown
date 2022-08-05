@@ -67,7 +67,12 @@ reference_parse_topic <- function(topic, pkg, examples,
   tag_names <- map_chr(topic$rd, ~ class(.)[[1]])
   tags <- split(topic$rd, tag_names)
   if (examples) {
-    ref_tag <- reference_parse_examples(tags$tag_examples, pkg, "## Examples")
+    ref_tag <- reference_parse_examples(
+      tags$tag_examples, 
+      pkg,
+      "## Examples", 
+      output
+      )
   } else {
     ref_tag <- reference_parse_section(tags$tag_examples, "## Examples")
   }
@@ -101,11 +106,11 @@ reference_parse_section <- function(x, title = NULL) {
   }
 }
 
-reference_parse_examples <- function(x, pkg, title = NULL) {
+reference_parse_examples <- function(x, pkg, title = NULL, output) {
   if (!is.null(x)) {
     load_lib <- paste0("library(", pkg$package, ")\n")
     all_code <- c(load_lib, as.character(x[[1]]))
-    c("\n", title, code_run(all_code), "\n")
+    c("\n", title, code_run(all_code, output), "\n")
   } else {
     ""
   }
@@ -171,23 +176,29 @@ reference_parse_line_tag <- function(x) {
   paste0(tg_res, collapse = "")
 }
 
-code_run <- function(x) {
-  res <- NULL
-  for (i in seq_along(x)) {
-    cl <- x[i]
-    cls <- cl
-    cr <- substr(cl, nchar(cl) - 1, nchar(cl)) == "\n"
-    if (cr) cl <- substr(cl, 1, nchar(cl) - 2)
-    res <- c(res, cl)
-    if (cl != "") {
-      if (substr(cl, 1, 1) != "#") {
-        out <- capture.output(eval(parse_expr(cl)))
-        out1 <- paste0("#> ", out)
-        out2 <- paste0(out1, collapse = "\n")
-        if (length(out) > 0) res <- c(res, paste0(out2, "\n"))
+code_run <- function(x, output) {
+  if(output == "md") {
+    res <- NULL
+    for (i in seq_along(x)) {
+      cl <- x[i]
+      cls <- cl
+      cr <- substr(cl, nchar(cl) - 1, nchar(cl)) == "\n"
+      if (cr) cl <- substr(cl, 1, nchar(cl) - 2)
+      res <- c(res, cl)
+      if (cl != "") {
+        if (substr(cl, 1, 1) != "#") {
+          out <- capture.output(eval(parse_expr(cl)))
+          out1 <- paste0("#> ", out)
+          out2 <- paste0(out1, collapse = "\n")
+          if (length(out) > 0) res <- c(res, paste0(out2, "\n"))
+        }
       }
     }
+    p_res <- paste0(res, collapse = "")
+    ret <- paste0("```r\n", p_res, "\n```")
   }
-  p_res <- paste0(res, collapse = "")
-  paste0("```r\n", p_res, "\n```")
+  if(output == "qmd") {
+    ret <- paste0("```{r}\n", paste0(x, collapse = ""), "\n```")
+  }
+  ret
 }
