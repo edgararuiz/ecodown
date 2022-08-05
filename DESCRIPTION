@@ -1,6 +1,6 @@
 Package: ecodown
 Title: Publish package documents in Quarto
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Authors@R: 
     person(
     given = "Edgar", 
@@ -8,10 +8,9 @@ Authors@R:
     email = "edgararuiz@gmail.com", 
     role = c("aut", "cre")
     )
-Description: Makes it possible for your R package's documentation to be 
-    published in a Quarto site. The vision for this package is that it is used 
-    to document a group of related packages that will be published to a single 
-    Quarto site.  
+Description: Automates refreshing package documentation in a website. 
+    It can clone, copy, convert and render the pages. It is meant to 
+    be used in Quarto websites.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -25,11 +25,11 @@ match_env <- function(topics) {
   any_alias <- function(f, ..., .internal = FALSE) {
     alias_match <- topics$alias %>%
       unname() %>%
-      purrr::map(f, ...) %>%
-      purrr::map_lgl(any)
+      map(f, ...) %>%
+      map_lgl(any)
     
     name_match <- topics$name %>%
-      purrr::map_lgl(f, ...)
+      map_lgl(f, ...)
     
     which((alias_match | name_match) & is_public(.internal))
   }
@@ -50,19 +50,19 @@ match_env <- function(topics) {
     any_alias(~ grepl(x, ., fixed = TRUE), .internal = internal)
   }
   out$has_keyword <- function(x) {
-    which(purrr::map_lgl(topics$keywords, ~ any(. %in% x)))
+    which(map_lgl(topics$keywords, ~ any(. %in% x)))
   }
   out$has_concept <- function(x, internal = FALSE) {
     match <- topics$concepts %>%
-      purrr::map(~ str_trim(.) == x) %>%
-      purrr::map_lgl(any)
+      map(~ str_trim(.) == x) %>%
+      map_lgl(any)
     
     which(match & is_public(internal))
   }
   out$lacks_concepts <- function(x, internal = FALSE) {
     nomatch <- topics$concepts %>%
-      purrr::map(~ match(str_trim(.), x, nomatch = FALSE)) %>%
-      purrr::map_lgl(~ length(.) == 0L | all(. == 0L))
+      map(~ match(str_trim(.), x, nomatch = FALSE)) %>%
+      map_lgl(~ length(.) == 0L | all(. == 0L))
     
     which(nomatch & is_public(internal))
   }
