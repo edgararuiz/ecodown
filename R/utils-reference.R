@@ -1,6 +1,6 @@
 reference_parse <- function(file_in, pkg) {
-  file_in %>% 
-    reference_get_tags(pkg) %>% 
+  file_in %>%
+    reference_get_tags(pkg) %>%
     reference_get_sections()
 }
 
@@ -44,33 +44,43 @@ reference_tag <- function(x) {
         code_dont_run = NULL
       )
     }
-  } 
-  
+  }
+
   if ("tag_arguments" %in% class(sub_x)) {
     res <- list()
-    for(i in seq_along(sub_x)) {
+    for (i in seq_along(sub_x)) {
       item <- sub_x[[i]]
-      if("tag_item" %in% class(item)) {
+      if ("tag_item" %in% class(item)) {
         arg <- reference_single_tag(item[[1]])
         desc <- reference_tag_lvl2(item[[2]], "")
         res <- c(res, list(c(arg, desc)))
       }
     }
   }
-  
-  if (is.null(res)) {
-    res <- map(sub_x, reference_tag_lvl1)
-    #res <- paste0(res, collapse = "")
+
+  if ("tag_usage" %in% class(sub_x)) {
+    res <- map(x, ~ map(.x, reference_tag_lvl2))
+    res <- res[res != ""]
   }
-  
+
+  curr_res <- NULL
+  if (is.null(res)) {
+    for (i in seq_along(sub_x)) {
+      out <- reference_tag_lvl1(sub_x[[i]])
+      if ("tag_itemize" %in% class(sub_x[[i]])) {
+        res <- c(res, curr_res, out)
+        curr_res <- NULL
+      }
+      curr_res <- paste0(curr_res, out, collapse = "")
+    }
+  }
+  res <- c(res, curr_res)
   res
 }
 
 reference_tag_lvl1 <- function(x) {
   res <- NULL
 
-  print(class(x))
-  
   if ("tag_href" %in% class(x)) {
     address <- as.character(x[[1]])
     label_list <- map_chr(x[[2]], reference_single_tag)
@@ -78,18 +88,19 @@ reference_tag_lvl1 <- function(x) {
     res <- paste0("[", label, "](", address, ")")
   }
 
+  # Verify if this is still needed
   if ("tag_arguments" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
     res <- res[res != ""]
   }
-  
+
   if ("tag_item" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
     res <- res[res != ""]
   }
-  
+
   res <- tag_itemize(x, res)
-  
+
   if (is.null(res)) {
     res <- map_chr(x, reference_tag_lvl2)
     res <- paste0(res, collapse = "")
