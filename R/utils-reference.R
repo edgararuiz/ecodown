@@ -24,6 +24,7 @@ reference_get_sections <- function(tags) {
 }
 
 reference_tag <- function(x) {
+  run_last <- FALSE
   sub_x <- x[[1]]
   res <- NULL
   if ("tag_examples" %in% class(sub_x)) {
@@ -53,6 +54,7 @@ reference_tag <- function(x) {
       if ("tag_item" %in% class(item)) {
         arg <- reference_single_tag(item[[1]])
         desc <- reference_tag_lvl2(item[[2]], "")
+        desc <- paste0(desc, collapse = "")
         res <- c(res, list(c(arg, desc)))
       }
     }
@@ -60,11 +62,21 @@ reference_tag <- function(x) {
 
   if ("tag_usage" %in% class(sub_x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
-    #res <- res[res != ""]
     res <- flatten(res)
   }
   
-  if (is.null(res)) {
+  title <- NULL
+  if ("tag_section" %in% class(sub_x)) {
+    run_last <- TRUE
+    title <- as.character((sub_x[[1]]))
+    sec <- map(sub_x[[2]], ~ map(.x, reference_tag_lvl1))
+    sec <- flatten(sec)
+    sub_x <- sec
+  }
+  
+  if (is.null(res)) run_last <- TRUE
+  
+  if (run_last) {
     curr_res <- NULL
     for (i in seq_along(sub_x)) {
       out <- reference_tag_lvl1(sub_x[[i]])
@@ -72,17 +84,22 @@ reference_tag <- function(x) {
         res <- c(res, curr_res, out)
         curr_res <- NULL
       }
-      #curr_res <- paste0(curr_res, out, collapse = "")
-      if(out == "\n") {
-        res <- c(res, curr_res)
-        curr_res <- NULL
+      if(length(out) == 1) {
+        if(out == "\n") {
+          res <- c(res, curr_res)
+          curr_res <- NULL
+        } else {
+          curr_res <- paste0(curr_res, out, collapse= "")
+        }  
       } else {
-        curr_res <- paste0(curr_res, out, collapse= "")
+        curr_res <- out
       }
+      
     }
     res <- c(res, curr_res)
   }
 
+  if(!is.null(title)) res <- list(section = title, contents = res)
   res
 }
 
