@@ -60,21 +60,29 @@ reference_tag <- function(x) {
 
   if ("tag_usage" %in% class(sub_x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
-    res <- res[res != ""]
+    #res <- res[res != ""]
+    res <- flatten(res)
   }
-
-  curr_res <- NULL
+  
   if (is.null(res)) {
+    curr_res <- NULL
     for (i in seq_along(sub_x)) {
       out <- reference_tag_lvl1(sub_x[[i]])
       if ("tag_itemize" %in% class(sub_x[[i]])) {
         res <- c(res, curr_res, out)
         curr_res <- NULL
       }
-      curr_res <- paste0(curr_res, out, collapse = "")
+      #curr_res <- paste0(curr_res, out, collapse = "")
+      if(out == "\n") {
+        res <- c(res, curr_res)
+        curr_res <- NULL
+      } else {
+        curr_res <- paste0(curr_res, out, collapse= "")
+      }
     }
+    res <- c(res, curr_res)
   }
-  res <- c(res, curr_res)
+
   res
 }
 
@@ -91,20 +99,37 @@ reference_tag_lvl1 <- function(x) {
   # Verify if this is still needed
   if ("tag_arguments" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
-    res <- res[res != ""]
+    #res <- res[res != ""]
   }
 
   if ("tag_item" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
-    res <- res[res != ""]
+    #res <- res[res != ""]
   }
 
   res <- tag_itemize(x, res)
 
   if (is.null(res)) {
-    res <- map_chr(x, reference_tag_lvl2)
-    res <- paste0(res, collapse = "")
-    res <- reference_single_tag(x, res)
+    res_map <- map(x, reference_tag_lvl2)
+    if(length(res_map) == 1) {
+      res <- res_map[[1]]
+    } else {
+      curr_res <- NULL
+      for(i in seq_along(res_map)) {
+        curr <- res_map[[i]]
+        if (length(curr) == 1) {
+          if(curr == "\n") {
+            res <- c(res, curr_res)
+            curr_res <- NULL
+          } else {
+            curr_res <- paste0(curr_res, curr, collapse= "")
+          }
+        } else {
+          res <- c(res, flatten(curr))
+        }
+      }
+    }
+    
   }
 
   res
@@ -115,21 +140,22 @@ reference_tag_example <- function(x) {
     res <- reference_single_tag(x)
   } else {
     res <- map_chr(x, reference_single_tag)
-    res <- res[res != ""]
+    #res <- res[res != ""]
   }
   res
 }
 
 reference_tag_lvl2 <- function(x, col = "\n") {
+  res <- NULL
   if (length(x) == 1) {
-    res <- reference_single_tag(x)
-  } else {
-    res <- ""
     res <- tag_itemize(x, res)
-    if (res == "") {
+    if(is.null(res)) res <- reference_single_tag(x, x)
+  } else {
+    res <- tag_itemize(x, res)
+    if (is.null(res)) {
       res <- map(x, reference_single_tag)
-      res <- res[res != ""]
-      res <- paste0(res, collapse = col)
+      #res <- res[res != ""]
+      #res <- paste0(res, collapse = col)
     }
   }
   res
@@ -141,13 +167,24 @@ tag_itemize <- function(x, res) {
     for (i in seq_along(x)) {
       curr <- x[[i]]
       if (length(curr) == 0) {
-        res <- c(res, curr_res)
+        if (curr_res == "") {
+          item <- curr
+        } else {
+          item <- paste0("- ", curr_res)
+        }
+        res <- c(res, item)
         curr_res <- NULL
       } else {
-        curr_res <- paste(curr_res, reference_single_tag(curr))
+        curr_res <- trimws(paste0(curr_res, " ", reference_single_tag(curr))) 
       }
     }
-    res <- c(res, curr_res)
+    if (curr_res == "") {
+      item <- curr
+    } else {
+      item <- paste0("- ", curr_res)
+    }
+    res <- c(res, item)
+    res <- flatten(res)
   }
   res
 }
