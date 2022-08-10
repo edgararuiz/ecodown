@@ -1,45 +1,85 @@
 reference_qmd <- function(file_in, pkg, output_options = NULL) {
-  parsed <- reference_parse_qmd(file_in, pkg)
-  
-  new <- parsed$section
+  parsed <- reference_content_default(file_in, pkg)
 
   writeLines(
-    c("---", "  ", "---", as.character(new)),
+    c("---", "  ", "---", as.character(parsed)),
     "test.qmd"
   )  
+  quarto::quarto_render("test.qmd")
 }
 
-reference_parse_qmd <- function(file_in, pkg) {
+reference_content_default <- function(file_in, pkg) {
+  #parsed <- reference_parse("here.Rd", pkgdown::as_pkgdown("../ecodown-test/_packages/here"))
+  parsed <- reference_parse("ml_evaluate.Rd", pkgdown::as_pkgdown("../sparklyr"))
+  con <- reference_convert(parsed)
   
-  parsed <- reference_parse("here.Rd", pkgdown::as_pkgdown("../ecodown-test/_packages/here"))
+  out <- c(
+    reference_entry(paste("##", con$name)), 
+    reference_entry(con$title),
+    reference_entry(con$description, "Description"),
+    reference_entry(con$usage, "Usage"),
+    reference_entry(con$arguments, "Arguments"),
+    reference_entry(con$details, "Details"),
+    reference_entry(con$section[[2]], con$section[[1]]),
+    reference_entry(con$examples, "Examples"),
+    reference_entry(con$value, "Value")
+  )
   
-  res <- purrr::imap(parsed, ~ {
-    res <- NULL
+  out
+}
+
+reference_entry <- function(x, title = NULL) {
+  out <- NULL
+  if(!is.null(title)) title <- paste("##", title)
+  if(!is.null(x)) out <- c(title, "", x, "")
+  out
+}
+
+reference_convert <- function(x) {
+  res <- list()
+  for(i in seq_along(x)) {
+    curr <- x[[i]]
+    curr_name <- names(x[i])
+    out <- NULL
     
-    if(.y == "examples") {
-      res <- map(.x, reference_qmd_example, FALSE)
-    } 
-    
-    if(is.null(res)) {
-      res <- map(.x, ~ reduce(.x, function(x, y) c(x, "", "", y)))
+    if(curr_name == "examples") {
+      out <- map(curr, reference_qmd_example, FALSE)
+      out <- flatten(out)
     }
     
+    if(curr_name == "usage") {
+      out <- reference_qmd_example(curr, FALSE)
+    }
     
-    res
-  })
-  map(res, ~ reduce(.x, function(x, y) c(x, "", y)))
+    if(curr_name == "arguments") out <- reference_arguments(curr)
+      
+    if(curr_name == "section") {
+      out <- curr
+      out[[2]] <- reduce(out[[2]], function(x, y) c(x, "", y))
+    }
+    
+    if(is.null(out)) {
+      out <- curr
+      if(is.list(out)) out <- flatten(out)
+      out <- reduce(out, function(x, y) c(x, "", y))
+    }
+
+    out <- list(out)  
+    names(out) <- curr_name
+    
+    res <- c(res, out)
+  }
+  
+  res  
+  
 }
 
-reference_qmd_generic <- function(x, title = NULL) {
-  if (!is.null(x)) {
-    c(
-      pate("##", title),
-      reference_tag(x)
-    )
-  } else {
-    ""
-  }
+reference_arguments <- function(x) {
+  lines <- map_chr(x, ~ paste0(.x[[1]], " | ", .x[[2]]))
+  rows <- paste0("| ", lines, " |")
+  c("|Arguments|Description|", "|---|---|", rows)
 }
+
 
 reference_qmd_example <- function(x, run = FALSE) {
   if(run) {

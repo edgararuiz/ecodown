@@ -55,14 +55,29 @@ reference_tag <- function(x) {
         arg <- reference_single_tag(item[[1]])
         desc <- reference_tag_lvl2(item[[2]], "")
         desc <- paste0(desc, collapse = "")
+        desc <- gsub("\n", "<br>", desc)
         res <- c(res, list(c(arg, desc)))
       }
     }
   }
 
   if ("tag_usage" %in% class(sub_x)) {
-    res <- map(x, ~ map(.x, reference_tag_lvl2))
-    res <- flatten(res)
+    res <- list()
+    has_methods <- any(map_lgl(sub_x, ~ "tag_method" %in% class(.x)))
+    for (i in seq_along(sub_x)) {
+      item <- sub_x[[i]]
+      if(has_methods) {
+        if ("tag_method" %in% class(item)) {
+          item_method <- paste0("## S3 method for class '", item[[2]], "'")
+          item_args <- gsub("\n", "", sub_x[[i+1]])
+          item_func <- paste0(as.character(item[[1]]), item_args)
+          res <- c(res, item_method, item_func, "")
+        }  
+      } else {
+        item <- gsub("\n", "", item)
+        res <- c(res, as.character(item))
+      }
+    }
   }
   
   title <- NULL
