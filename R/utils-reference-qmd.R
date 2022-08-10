@@ -9,8 +9,9 @@ reference_qmd <- function(file_in, pkg, output_options = NULL) {
 }
 
 reference_content_default <- function(file_in, pkg) {
-  #parsed <- reference_parse("here.Rd", pkgdown::as_pkgdown("../ecodown-test/_packages/here"))
-  parsed <- reference_parse("ml_evaluate.Rd", pkgdown::as_pkgdown("../sparklyr"))
+  #parsed <- reference_to_list_page("here.Rd", pkgdown::as_pkgdown("../ecodown-test/_packages/here"))
+  #parsed <- reference_to_list_page("ml_bisecting_kmeans.Rd", pkgdown::as_pkgdown("../sparklyr"))
+  parsed <- reference_to_list_page(file_in, pkg)
   con <- reference_convert(parsed)
   
   out <- c(
@@ -21,11 +22,12 @@ reference_content_default <- function(file_in, pkg) {
     reference_entry(con$arguments, "Arguments"),
     reference_entry(con$details, "Details"),
     reference_entry(con$section[[2]], con$section[[1]]),
+    reference_entry(con$value, "Value"),
     reference_entry(con$examples, "Examples"),
-    reference_entry(con$value, "Value")
+    reference_entry(con$seealso, "See Also")
   )
   
-  out
+  as.character(out)
 }
 
 reference_entry <- function(x, title = NULL) {
@@ -61,7 +63,7 @@ reference_convert <- function(x) {
     if(is.null(out)) {
       out <- curr
       if(is.list(out)) out <- flatten(out)
-      out <- reduce(out, function(x, y) c(x, "", y))
+      out <- reduce(out, function(x, y) c(x, "", y), .init = NULL)
     }
 
     out <- list(out)  
@@ -82,6 +84,7 @@ reference_arguments <- function(x) {
 
 
 reference_qmd_example <- function(x, run = FALSE) {
+  #x <- x[x != "\n"]
   if(run) {
     out <- c("```{r}",  x, "```")
   } else {

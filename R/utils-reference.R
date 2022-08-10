@@ -1,4 +1,4 @@
-reference_parse <- function(file_in, pkg) {
+reference_to_list_page <- function(file_in, pkg) {
   file_in %>%
     reference_get_tags(pkg) %>%
     reference_get_sections()
@@ -35,10 +35,11 @@ reference_tag <- function(x) {
       code_dont_run_tags <- sub_x[dontrun_flags][[1]]
       code_run <- reference_tag_example(code_run_tags)
       code_dont_run <- reference_tag_example(code_dont_run_tags)
-      res <- list(
-        code_run = code_run,
-        code_dont_run = code_dont_run
-      )
+      if(length(code_run) == 1 && code_run == "\n") code_run <- NULL
+      if(length(code_dont_run) == 1 && code_dont_run == "\n") code_dont_run <- NULL
+      res <- list()
+      if(!is.null(code_run)) res$code_run <- code_run
+      if(!is.null(code_dont_run)) res$code_dont_run <- code_dont_run
     } else {
       res <- list(
         code_run = reference_tag_example(sub_x),
@@ -78,13 +79,15 @@ reference_tag <- function(x) {
         res <- c(res, as.character(item))
       }
     }
+    res <- clip_top_blanks(res)
   }
   
   title <- NULL
   if ("tag_section" %in% class(sub_x)) {
     run_last <- TRUE
     title <- as.character((sub_x[[1]]))
-    sec <- map(sub_x[[2]], ~ map(.x, reference_tag_lvl1))
+    #sec <- map(sub_x[[2]], ~ map(.x, reference_tag_lvl1))
+    sec <- map(sub_x[[2]], reference_tag_lvl1)
     sec <- flatten(sec)
     sub_x <- sec
   }
@@ -115,12 +118,15 @@ reference_tag <- function(x) {
   }
 
   if(!is.null(title)) res <- list(section = title, contents = res)
+  
   res
 }
 
 reference_tag_lvl1 <- function(x) {
   res <- NULL
 
+  res <- tag_itemize(x, res)
+  
   if ("tag_href" %in% class(x)) {
     address <- as.character(x[[1]])
     label_list <- map_chr(x[[2]], reference_single_tag)
@@ -138,8 +144,6 @@ reference_tag_lvl1 <- function(x) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
     #res <- res[res != ""]
   }
-
-  res <- tag_itemize(x, res)
 
   if (is.null(res)) {
     res_map <- map(x, reference_tag_lvl2)
@@ -174,7 +178,7 @@ reference_tag_example <- function(x) {
     res <- map_chr(x, reference_single_tag)
     #res <- res[res != ""]
   }
-  res
+  clip_top_blanks(res)
 }
 
 reference_tag_lvl2 <- function(x, col = "\n") {
@@ -217,6 +221,8 @@ tag_itemize <- function(x, res) {
     }
     res <- c(res, item)
     res <- flatten(res)
+    res <- reduce(res, function(x, y) c(x, "\n", y))
+    res <- c("\n", res, "\n")
   }
   res
 }
@@ -237,5 +243,11 @@ reference_single_tag <- function(x, label = NULL) {
   } else {
     res <- ""
   }
+  res
+}
+
+clip_top_blanks <- function(res) {
+  if(length(res) > 1 && (res[1] == "\n" | res[1] == "")) res <- res[2:length(res)]
+  if(length(res) > 1 && (res[1] == "\n" | res[1] == "")) res <- res[2:length(res)]
   res
 }

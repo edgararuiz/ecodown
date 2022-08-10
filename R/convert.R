@@ -210,9 +210,7 @@ package_file <- function(input,
   if (tolower(path_ext(input)) == "rd") {
     list_topics <- transpose(pkg_topics)
     input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
-    out <- reference_parse_topic(input_topic, pkg, examples = examples, 
-                                 output = output, output_options = output_options
-                                 )
+    out <- reference_content_default(input_name[[1]], pkg)
     output_file <- path(path_ext_remove(output_file), ext = output)
     writeLines(out, output_file)
   } else {
