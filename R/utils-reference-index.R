@@ -20,7 +20,12 @@ reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
 
 reference_index_convert <- function(index_list, dir_out = "") {
   out <- map(index_list, ~ map(.x, ~ {
-    funcs <- paste0(.x$funs, collapse = " ")
+    
+    # Manual fixes of special characters in funs variable
+    funcs <- gsub("&lt;", "<", .x$funs)
+    funcs <- gsub("&gt;", ">", funcs)
+    funcs <- paste0(funcs, collapse = " ")
+    
     file_out <- path(dir_out, .x$file_out)
     desc <- .x$title
     c(
@@ -47,12 +52,15 @@ reference_to_list_index <- function(pkg) {
       topic_list <- map(
         ref$contents,
         ~ {
-          func <- .x
-          if(is_infix(func)) func <- paste0("`", func, "`")
-          if(length(grep("-", func) > 0)) func <- paste0("`", func, "`")
-          if(length(grep("\\[", func) > 0)) func <- paste0("`", func, "`")
-          func_found <- rlang::env_get(topics_env, nm = func, default = NA)
-          if(!is.na(func_found)) eval(parse_expr(func), topics_env)
+          item_numbers <- NULL
+          try(
+            item_numbers <- eval(parse(text = paste0("`", .x,"`")), topics_env), 
+            silent = TRUE
+            )
+          if(is.null(item_numbers)) {
+            item_numbers <- eval(parse(text = .x), topics_env)
+          }
+          item_numbers
         }
       )
       topic_ids <- as.numeric(flatten(topic_list))
