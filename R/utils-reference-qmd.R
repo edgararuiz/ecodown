@@ -21,7 +21,7 @@ reference_content_default <- function(file_in, pkg) {
     reference_entry(con$usage, "Usage"),
     reference_entry(con$arguments, "Arguments"),
     reference_entry(con$details, "Details"),
-    reference_entry(con$section[[2]], con$section[[1]]),
+    reference_entry(con$section),
     reference_entry(con$value, "Value"),
     reference_entry(con$examples, "Examples"),
     reference_entry(con$seealso, "See Also")
@@ -56,8 +56,10 @@ reference_convert <- function(x) {
     if(curr_name == "arguments") out <- reference_arguments(curr)
       
     if(curr_name == "section") {
-      out <- curr
-      out[[2]] <- reduce(out[[2]], function(x, y) c(x, "", y))
+      out <- curr %>% 
+        map(~ c(paste("##", .x$title), .x$contents)) %>% 
+        flatten() %>% 
+        reduce(function(x, y) c(x, "", y), .init = NULL)
     }
     
     if(is.null(out)) {

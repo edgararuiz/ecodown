@@ -24,7 +24,6 @@ reference_get_sections <- function(tags) {
 }
 
 reference_tag <- function(x) {
-  run_last <- FALSE
   sub_x <- x[[1]]
   res <- NULL
   if ("tag_examples" %in% class(sub_x)) {
@@ -54,10 +53,11 @@ reference_tag <- function(x) {
       item <- sub_x[[i]]
       if ("tag_item" %in% class(item)) {
         arg <- reference_single_tag(item[[1]])
-        desc <- reference_tag_lvl2(item[[2]], "")
-        desc <- paste0(desc, collapse = "")
-        desc <- gsub("\n", "<br>", desc)
-        res <- c(res, list(c(arg, desc)))
+        desc <- item[[2]] %>% 
+          reference_tag_lvl2("") %>% 
+          paste0(collapse = "") 
+        desc_br <- gsub("\n", "<br>", desc)
+        res <- c(res, list(c(arg, desc_br)))
       }
     }
   }
@@ -84,42 +84,47 @@ reference_tag <- function(x) {
   
   title <- NULL
   if ("tag_section" %in% class(sub_x)) {
-    run_last <- TRUE
-    title <- as.character((sub_x[[1]]))
-    #sec <- map(sub_x[[2]], ~ map(.x, reference_tag_lvl1))
-    sec <- map(sub_x[[2]], reference_tag_lvl1)
-    sec <- flatten(sec)
-    sub_x <- sec
+    res <- map(
+      x, ~{
+        title <- as.character((.x[[1]]))
+        
+        sec <- .x[[2]] %>% 
+          map(reference_tag_lvl1) %>% 
+          flatten() %>% 
+          reference_parse_last()
+        
+        list(title = title, contents = sec)
+      }
+    )
   }
   
-  if (is.null(res)) run_last <- TRUE
-  
-  if (run_last) {
-    curr_res <- NULL
-    for (i in seq_along(sub_x)) {
-      out <- reference_tag_lvl1(sub_x[[i]])
-      if ("tag_itemize" %in% class(sub_x[[i]])) {
-        res <- c(res, curr_res, out)
-        curr_res <- NULL
-      }
-      if(length(out) == 1) {
-        if(out == "\n") {
-          res <- c(res, curr_res)
-          curr_res <- NULL
-        } else {
-          curr_res <- paste0(curr_res, out, collapse= "")
-        }  
-      } else {
-        curr_res <- out
-      }
-      
-    }
-    res <- c(res, curr_res)
-  }
+  if (is.null(res)) res <- c(res, reference_parse_last(sub_x))
 
-  if(!is.null(title)) res <- list(section = title, contents = res)
-  
   res
+}
+
+reference_parse_last <- function(sub_x) {
+  res <- NULL
+  curr_res <- NULL
+  for (i in seq_along(sub_x)) {
+    out <- reference_tag_lvl1(sub_x[[i]])
+    if ("tag_itemize" %in% class(sub_x[[i]])) {
+      res <- c(res, curr_res, out)
+      curr_res <- NULL
+    }
+    if(length(out) == 1) {
+      if(out == "\n") {
+        res <- c(res, curr_res)
+        curr_res <- NULL
+      } else {
+        curr_res <- paste0(curr_res, out, collapse= "")
+      }  
+    } else {
+      curr_res <- out
+    }
+  }
+  res <- paste0(res, curr_res, collapse = "")
+  trimws(res)
 }
 
 reference_tag_lvl1 <- function(x) {
@@ -142,7 +147,6 @@ reference_tag_lvl1 <- function(x) {
 
   if ("tag_item" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
-    #res <- res[res != ""]
   }
 
   if (is.null(res)) {
