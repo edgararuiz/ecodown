@@ -45,14 +45,14 @@ ecodown_build <- function(quarto_folder = here::here(),
         config_yaml$site$quarto,
         addl_entries = list(
           quarto_folder = qbf,
-          verbosity = verbosity,
+          verbosity = get_verbosity(),
           autolink = run_autolink
         )
       )
     }
 
     if (run_autolink) {
-      ecodown_autolink(quarto_folder = quarto_folder, verbosity = verbosity)
+      ecodown_autolink(quarto_folder = quarto_folder, verbosity = get_verbosity())
     }
   }
   lc <- last_commit()

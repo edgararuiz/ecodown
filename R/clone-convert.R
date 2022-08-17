@@ -30,7 +30,7 @@ ecodown_clone_convert <- function(repo_url = "",
   pkg_path <- ecodown_clone(
     repo_url = repo_url,
     target_folder = target_folder,
-    verbosity = verbosity
+    verbosity = get_verbosity()
   )
 
   args <- list(
@@ -47,7 +47,7 @@ ecodown_clone_convert <- function(repo_url = "",
     downlit_options = downlit_options,
     site_url = site_url,
     branch = branch,
-    verbosity = verbosity,
+    verbosity = get_verbosity(),
     reference_examples = reference_examples,
     reference_output = reference_output,
     reference_qmd_options = reference_qmd_options

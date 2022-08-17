@@ -138,7 +138,7 @@ ecodown_convert <- function(package_source_folder = "",
 
   pkg_files <- as_fs_path(pf)
 
-  if (verbosity == "verbose") {
+  if (get_verbosity() == "verbose") {
     file_tree(
       pkg_files,
       base_folder = package_source_folder,
@@ -208,10 +208,18 @@ package_file <- function(input,
   output_folder <- path_dir(output_file)
   if (!dir_exists(output_folder)) dir_create(output_folder)
   if (tolower(path_ext(input)) == "rd") {
-    list_topics <- transpose(pkg_topics)
-    input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
-    out <- reference_content_default(input_name[[1]], pkg)
-    output_file <- path(path_ext_remove(output_file), ext = output)
+    
+    out <- reference_content_default(
+      input_name[[1]], pkg, 
+      output, 
+      output_options, 
+      examples
+      )
+    
+    output_file <- output_file %>% 
+      path_ext_remove() %>%  
+      path(ext = output)
+    
     writeLines(out, output_file)
   } else {
     file_copy(input, output_file, overwrite = TRUE)
