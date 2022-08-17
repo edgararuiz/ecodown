@@ -1,21 +1,13 @@
-reference_qmd <- function(file_in, pkg, output_options = NULL) {
-  parsed <- reference_content_default(file_in, pkg)
-
-  writeLines(
-    c("---", "  ", "---", as.character(parsed)),
-    "test.qmd"
-  )  
-  quarto::quarto_render("test.qmd")
-}
-
-reference_content_default <- function(file_in, pkg) {
-  #parsed <- reference_to_list_page("here.Rd", pkgdown::as_pkgdown("../ecodown-test/_packages/here"))
-  #parsed <- reference_to_list_page("ml_bisecting_kmeans.Rd", pkgdown::as_pkgdown("../sparklyr"))
+reference_content_default <- function(file_in, 
+                                      pkg, 
+                                      output = "qmd", 
+                                      output_options = ""
+                                      ) {
   parsed <- reference_to_list_page(file_in, pkg)
   con <- reference_convert(parsed)
   
   out <- c(
-    reference_entry(paste("##", con$name)), 
+    paste("##", con$name), 
     reference_entry(con$title),
     reference_entry(con$description, "Description"),
     reference_entry(con$usage, "Usage"),
@@ -27,6 +19,8 @@ reference_content_default <- function(file_in, pkg) {
     reference_entry(con$seealso, "See Also")
   )
   
+  if(output == "qmd") out <- c("---", output_options, "---", out)
+  
   as.character(out)
 }
 
@@ -37,7 +31,7 @@ reference_entry <- function(x, title = NULL) {
   out
 }
 
-reference_convert <- function(x) {
+reference_convert <- function(x, output = "qmd") {
   res <- list()
   for(i in seq_along(x)) {
     curr <- x[[i]]
@@ -45,7 +39,9 @@ reference_convert <- function(x) {
     out <- NULL
     
     if(curr_name == "examples") {
-      out <- map(curr, reference_qmd_example, FALSE)
+      run_examples <- FALSE
+      if(output == "md") run_examples <- FALSE
+      out <- map(curr, reference_qmd_example, run_examples)
       out <- flatten(out)
     }
     
