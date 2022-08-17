@@ -106,6 +106,7 @@ reference_tag <- function(x) {
 reference_parse_last <- function(sub_x) {
   res <- NULL
   curr_res <- NULL
+
   for (i in seq_along(sub_x)) {
     out <- reference_tag_lvl1(sub_x[[i]])
     if ("tag_itemize" %in% class(sub_x[[i]])) {
@@ -117,19 +118,20 @@ reference_parse_last <- function(sub_x) {
         res <- c(res, curr_res)
         curr_res <- NULL
       } else {
-        curr_res <- paste0(curr_res, out, collapse= "")
+        curr_res <- trimws(paste0(curr_res, out, collapse= ""))
       }  
     } else {
-      curr_res <- out
+      curr_res <- trimws(out) 
     }
   }
-  res <- paste0(res, curr_res, collapse = "")
-  trimws(res)
+  res <- c(res, curr_res)
+  res
 }
 
 reference_tag_lvl1 <- function(x) {
   res <- NULL
-
+  label <- NULL
+  
   res <- tag_itemize(x, res)
   
   if ("tag_href" %in% class(x)) {
@@ -142,11 +144,19 @@ reference_tag_lvl1 <- function(x) {
   # Verify if this is still needed
   if ("tag_arguments" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
-    #res <- res[res != ""]
   }
 
   if ("tag_item" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
+  }
+  
+  if ("tag_code" %in% class(x)) {
+    res <- x %>% 
+      map(~ map(.x, reference_tag_lvl2, label = .x)) %>% 
+      flatten() %>% 
+      as.character() %>% 
+      paste0(collapse = "") %>% 
+      paste0("`", ., "`")
   }
 
   if (is.null(res)) {
@@ -168,6 +178,7 @@ reference_tag_lvl1 <- function(x) {
           res <- c(res, flatten(curr))
         }
       }
+      res <- c(res, curr_res)
     }
     
   }
@@ -180,12 +191,11 @@ reference_tag_example <- function(x) {
     res <- reference_single_tag(x)
   } else {
     res <- map_chr(x, reference_single_tag)
-    #res <- res[res != ""]
   }
   clip_top_blanks(res)
 }
 
-reference_tag_lvl2 <- function(x, col = "\n") {
+reference_tag_lvl2 <- function(x, label = NULL) {
   res <- NULL
   if (length(x) == 1) {
     res <- tag_itemize(x, res)
@@ -193,9 +203,7 @@ reference_tag_lvl2 <- function(x, col = "\n") {
   } else {
     res <- tag_itemize(x, res)
     if (is.null(res)) {
-      res <- map(x, reference_single_tag)
-      #res <- res[res != ""]
-      #res <- paste0(res, collapse = col)
+      res <- map(x, reference_single_tag, label = label)
     }
   }
   res

@@ -19,7 +19,8 @@ ecodown_convert(
   convert_reference = TRUE,
   reference_folder = "reference",
   vignettes_folder = "articles",
-  reference_examples = TRUE,
+  reference_examples = FALSE,
+  reference_examples_not_run = FALSE,
   commit = c("latest_tag", "latest_commit"),
   branch = "main",
   reference_output = "qmd",
@@ -66,6 +67,9 @@ Defaults to "articles".}
 
 \item{reference_examples}{Boolean flag to indicate if the Examples inside the
 reference page is to be evaluated.}
+
+\item{reference_examples_not_run}{Boolean flag to indicate if the Examples
+marked as DO NOT RUN is to be ignored and the code should be evaluated.}
 
 \item{commit}{Commit to use as the base for the documentation.  It defaults
 to 'latest_tag'. That default will search for the latest Git tag.  The

@@ -1,7 +1,9 @@
 reference_content_default <- function(file_in, 
                                       pkg, 
                                       output = "qmd", 
-                                      output_options = ""
+                                      output_options = "",
+                                      examples = FALSE,
+                                      examples_not_run = FALSE
                                       ) {
   parsed <- reference_to_list_page(file_in, pkg)
   con <- reference_convert(parsed)
@@ -40,9 +42,19 @@ reference_convert <- function(x, output = "qmd") {
     
     if(curr_name == "examples") {
       run_examples <- FALSE
-      if(output == "md") run_examples <- FALSE
-      out <- map(curr, reference_qmd_example, run_examples)
-      out <- flatten(out)
+      if(output == "md") {
+        out <- map(curr, reference_qmd_example, FALSE)
+        out <- flatten(out)
+      } else {
+        out <- list()
+        if(!is.null(curr$code_run)) {
+          out <- c(out, "```{r, eval=ecodown::examples_run()}", curr$code_run, "```")
+        } 
+        if(!is.null(curr$code_dont_run)) {
+          out <- c(out, "```{r, eval=ecodown::examples_not_run()}", curr$code_dont_run, "```")
+        } 
+        
+      }
     }
     
     if(curr_name == "usage") {

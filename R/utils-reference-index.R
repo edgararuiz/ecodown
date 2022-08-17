@@ -1,9 +1,11 @@
-reference_index <- function(pkg = NULL, quarto_sub_folder, version_folder,
-                            reference_folder, vignettes_folder, output) {
+reference_index <- function(pkg = NULL, quarto_sub_folder = "", version_folder = "",
+                            reference_folder = "", vignettes_folder, output = "qmd") {
+  
+  if(is.character(pkg)) pkg <- pkgdown::as_pkgdown(pkg)
   
   ref_list <- reference_to_list_index(pkg)
   
-  dir_out <- path(quarto_sub_folder, version_folder, reference_folder)
+  dir_out <- path("/", quarto_sub_folder, version_folder, reference_folder)
   
   ref_convert <- reference_index_convert(ref_list, dir_out)
   
