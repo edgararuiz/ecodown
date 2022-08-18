@@ -14,7 +14,9 @@ examples_run_not_run <- function(x = "") {
   if(file_exists(yml_path)) {
     yml_file <- read_yaml(yml_path)  
     re <- yml_file$site$clone_convert
-    out <- re[[x]]
+    if (!is.null(re[[x]]))  out <- re[[x]]
   }
   out
 }
+
+
