@@ -26,7 +26,6 @@ file_tree <- function(file_list,
       pss <- paste0(rep("|-- ", times = length(ps) - 1), collapse = "")
       psc <- silver(pss)
       flc <- black(fln)
-      # curr_sort <- paste0(psc, flc)
     }
     no_cat <- magenta(paste0(" (", no_files, " ", file_type, no_caption, ")"))
     cat_msg <- paste0(curr_sort, no_cat)

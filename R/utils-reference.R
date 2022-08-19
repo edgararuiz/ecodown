@@ -54,8 +54,7 @@ reference_tag <- function(x) {
       if ("tag_item" %in% class(item)) {
         arg <- reference_single_tag(item[[1]])
         desc <- item[[2]] %>% 
-          reference_tag_lvl2("") %>% 
-          paste0(collapse = "") 
+          tag_paragraphs() 
         desc_br <- gsub("\n", "<br>", desc)
         res <- c(res, list(c(arg, desc_br)))
       }
@@ -140,12 +139,7 @@ reference_tag_lvl1 <- function(x) {
     label <- paste0(label_list, collapse = " ")
     res <- paste0("[", label, "](", address, ")")
   }
-
-  # Verify if this is still needed
-  if ("tag_arguments" %in% class(x)) {
-    res <- map(x, ~ map(.x, reference_tag_lvl2))
-  }
-
+  
   if ("tag_item" %in% class(x)) {
     res <- map(x, ~ map(.x, reference_tag_lvl2))
   }
@@ -197,15 +191,24 @@ reference_tag_example <- function(x) {
 
 reference_tag_lvl2 <- function(x, label = NULL) {
   res <- NULL
-  if (length(x) == 1) {
-    res <- tag_itemize(x, res)
-    if(is.null(res)) res <- reference_single_tag(x, x)
-  } else {
-    res <- tag_itemize(x, res)
-    if (is.null(res)) {
-      res <- map(x, reference_single_tag, label = label)
+  res <- tag_itemize(x, res)
+  if(!is.null(res)) {
+    if (length(x) == 1) {
+      
+      if("tag_code" %in% class(x)) {
+        x <- flatten(x)
+        res <- reference_single_tag(x, x)
+        res <- paste0("`", res, "`")
+      } 
+      if(is.null(res)) res <- reference_single_tag(x, x)
+    } else {
+      res <- tag_itemize(x, res)
+      if (is.null(res)) {
+        res <- map(x, reference_single_tag, label = label)
+      }
     }
   }
+  
   res
 }
 
