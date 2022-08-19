@@ -3,6 +3,19 @@ version_time <- function() {
  "10:47"
 }
 
+tag_process <- function(x) {
+  map(x, ~ {
+    x <- .x[[1]]
+    class_x <- class(x)[[1]]
+    out <- NULL
+    if(class_x == "tag_examples") out <- tag_examples(x)
+    if(class_x == "tag_arguments") out <- tag_arguments(x)
+    if(class_x == "tag_section") out <- tag_sections(.x)
+    if(is.null(out)) out <- tag_paragraphs(x)
+    out
+  })
+}
+
 tag_paragraphs <- function(x) {
   rf <- tag_flatten(x)
   
@@ -18,7 +31,17 @@ tag_paragraphs <- function(x) {
     }
   }
   rf_cr
-  
+}
+
+tag_sections <- function(x) {
+  map(x, tag_section)
+}
+
+tag_section <- function(x) {
+  list(
+    title = tag_paragraphs(x[[1]]),
+    contents = tag_paragraphs(x[[2]])
+  )
 }
 
 tag_examples <- function(x) {
@@ -46,14 +69,13 @@ tag_examples <- function(x) {
     }
   }
   list(
-    run = examples_run,
-    dont_run = examples_dont_run
+    code_run = examples_run,
+    code_dont_run = examples_dont_run
   )
 }
 
 new_paragraph_symbol <- "<<<<<<<<<<<<<<<<<<<<<<<<<"
 do_not_run_symbol <- ";;;;;;;;;;;;;;;;;;;;;;;;;"
-examples_symbol <- "@@@@@@@@@@@@@@@@@@@@@@@@"
 
 remove_return <- function(x) {
   if(x == "\n") x <- new_paragraph_symbol
@@ -120,17 +142,13 @@ tag_arguments <- function(x) {
   for (i in seq_along(x)) {
     item <- x[[i]]
     if ("tag_item" %in% class(item)) {
-      arg <- tag_paragraphs(item[[1]])
-      desc <- tag_paragraphs(item[[2]]) 
-      
-      if(length(desc) > 1) {
-        desc_br <- desc %>% 
-          reduce(function(x, y) paste0(x, " <br> ", y, collapse = ""))
-      } else {
-        desc_br <- gsub("\n", " <br> ", desc)
-      }
-      
-      res <- c(res, list(c(arg, desc_br)))
+      res <- c(
+        res, 
+        list(
+          argument = tag_paragraphs(item[[1]]), 
+          description = tag_paragraphs(item[[2]])
+          )
+        )
     }
   }
   res
@@ -178,4 +196,10 @@ tag_href <- function(x) {
   res <- paste0("[", label, "](", address, ")")
 }
 
-
+# FOR PARSING ARGUMENTS INTO QMD LATER
+# if(length(desc) > 1) {
+#   desc_br <- desc %>% 
+#     reduce(function(x, y) paste0(x, " <br> ", y, collapse = ""))
+# } else {
+#   desc_br <- gsub("\n", " <br> ", desc)
+# }
