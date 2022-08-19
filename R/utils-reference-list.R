@@ -285,7 +285,7 @@ tag_href <- function(x) {
 # }
 
 
-reference_parse_all <- function(pkg) {
+check_rd_parsing <- function(pkg) {
   if(is.character(pkg)) pkg <- as_pkgdown(pkg)
   topics <- pkg$topics
   files_in <- topics$file_in
@@ -294,9 +294,23 @@ reference_parse_all <- function(pkg) {
     tags <-reference_get_tags(files_in[[i]], pkg) 
     reference_process_tags(tags)
   }
-  
 }
 
+check_dont_runs <- function(pkg) {
+  if(is.character(pkg)) pkg <- as_pkgdown(pkg)
+  topics <- pkg$topics
+  files_in <- topics$file_in
+  out <- NULL
+  for(i in seq_len(length(files_in))) {
+    print(paste(i, " - Processing:", files_in[[i]]))
+    tags <-reference_get_tags(files_in[[i]], pkg) 
+    x <- reference_process_tags(tags)
+    code_run <- x$examples$code_run
+    if(!is.null(code_run)) {
+      
+    }
+  }
+}
 
 
 
