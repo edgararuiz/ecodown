@@ -9,7 +9,7 @@ reference_content_default <- function(file_in,
   con <- reference_convert(parsed)
   
   out <- c(
-    paste("##", con$name), 
+    paste("#", con$name), 
     reference_entry(con$title),
     reference_entry(con$description, "Description"),
     reference_entry(con$usage, "Usage"),
@@ -87,7 +87,7 @@ reference_convert <- function(x, output = "qmd") {
 }
 
 reference_arguments <- function(x) {
-  lines <- map_chr(x, ~ paste0(.x[[1]], " | ", .x[[2]]))
+  lines <- map_chr(x, ~ paste0(.x[[1]], " | ", paste0(.x[[2]], collapse = "<br>")))
   rows <- paste0("| ", lines, " |")
   c("|Arguments|Description|", "|---|---|", rows)
 }

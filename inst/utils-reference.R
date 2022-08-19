@@ -1,7 +1,7 @@
 reference_to_list_page <- function(file_in, pkg) {
   file_in %>%
     reference_get_tags(pkg) %>%
-    reference_get_sections()
+    reference_process_tags()
 }
 
 reference_get_tags <- function(file_in, pkg) {
