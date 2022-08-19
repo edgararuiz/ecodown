@@ -125,6 +125,7 @@ tag_single_base <- function(x) {
   if(x_class == "tag_if") res <- ""
   if(x_class == "tag_cr") res <- ""
   if(x_class == "tag_link") res <- as.character(x[[1]])
+  if(class(x)[[1]] == "tag_describe") res <- tag_code(x)
   if(x_class == "tag_preformatted") res <- tag_preformatted(x)
   res
 }
@@ -133,8 +134,22 @@ tag_single <- function(x) {
   res <- tag_single_base(x)
   if(class(x)[[1]] == "tag_dontrun") res <- tag_dontrun(x)
   if(class(x)[[1]] == "tag_itemize") res <- tag_itemize1(x)
+  if(class(x)[[1]] == "tag_describe") res <- tag_describe(x)
   if(is.null(res)) stop(paste0("Class '", class(x)[[1]], "' not recognized"))
   res <- map_chr(res, remove_return)
+}
+
+tag_describe <- function(x) {
+  out <- x %>%  
+    flatten() %>% 
+    map(~.x[[1]]) %>% 
+    map(tag_single_base)
+  out_nulls <- !map_lgl(out, is.null)
+  out <- out[out_nulls]
+  
+  out <- reduce(out, function(x, y) c(x, new_paragraph_symbol, y))
+  
+  out
 }
 
 tag_single_item <- function(x) {
