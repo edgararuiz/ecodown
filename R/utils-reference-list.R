@@ -22,6 +22,7 @@ reference_process_tags <- function(x) {
     class_x <- class(x)[[1]]
     out <- NULL
     if(class_x == "tag_examples") out <- tag_examples(x)
+    if(class_x == "tag_usage") out <- tag_usage(x)
     if(class_x == "tag_arguments") out <- tag_arguments(x)
     if(class_x == "tag_section") out <- tag_sections(.x)
     if(is.null(out)) out <- tag_paragraphs(x)
@@ -30,6 +31,14 @@ reference_process_tags <- function(x) {
   new_names <- substr(names(x), 5, nchar(names(x)))
   names(out) <- new_names
   out
+}
+
+tag_method <- function(x) {
+  c(
+    paste0("## S3 method for class '", x[[2]],"'"),
+    as.character(x[[1]])
+  )
+  
 }
 
 tag_paragraphs <- function(x) {
@@ -90,6 +99,11 @@ tag_examples <- function(x) {
   )
 }
 
+tag_usage <- function(x) {
+  out <- tag_examples(x)
+  out$code_run
+}
+
 new_paragraph_symbol <- "<<<<<<<<<<<<<<<<<<<<<<<<<"
 do_not_run_symbol <- ";;;;;;;;;;;;;;;;;;;;;;;;;"
 
@@ -117,26 +131,44 @@ tag_single_base <- function(x) {
   if(x_class == "TEXT") res <- x
   if(x_class == "RCODE") res <- x
   if(x_class == "VERB") res <- x
+  if(x_class == "tag_method") res <- tag_method(x)
   if(x_class == "tag_href") res <- tag_href(x)
   if(x_class == "tag_code") res <- tag_code(x)
   if(x_class == "tag_verb") res <- tag_code(x)
   if(x_class == "tag_pkg") res <- tag_code(x)
+  if(x_class == "tag_usage") res <- tag_code(x)
   if(x_class == "tag_url") res <- tag_url(x)
   if(x_class == "tag_if") res <- ""
   if(x_class == "tag_cr") res <- ""
+  if(x_class == "tag_R") res <- "`R`"
   if(x_class == "tag_link") res <- as.character(x[[1]])
-  if(class(x)[[1]] == "tag_describe") res <- tag_code(x)
   if(x_class == "tag_preformatted") res <- tag_preformatted(x)
+  if(x_class == "tag_emph") res <- paste0("**", x, "**")
+  if(x_class == "tag_strong") res <- paste0("**", x, "**")
+  if(x_class == "tag_cite") res <- paste0("*", x, "*")
+  if(x_class == "tag_email") res <- tag_url(x)
+  if(x_class == "tag_itemize") res <- tag_itemize1(x)
+  if(class(x)[[1]] == "tag_tabular") res <- ""
   res
 }
 
 tag_single <- function(x) {
   res <- tag_single_base(x)
-  if(class(x)[[1]] == "tag_dontrun") res <- tag_dontrun(x)
-  if(class(x)[[1]] == "tag_itemize") res <- tag_itemize1(x)
-  if(class(x)[[1]] == "tag_describe") res <- tag_describe(x)
-  if(is.null(res)) stop(paste0("Class '", class(x)[[1]], "' not recognized"))
+  x_class <- class(x)[[1]]
+  if(x_class == "tag_dontrun") res <- tag_dontrun(x)
+  if(x_class == "tag_enumerate") res <- tag_itemize1(x)
+  if(x_class == "tag_describe") res <- tag_describe(x)
+  if(x_class == "tag_subsection") res <- tag_sub_section(x)
+  if(x_class == "LIST") res <- tag_LIST(x)
+  if(is.null(res)) stop(paste0("Class '", class(x)[[1]], "' not recognized. Value: ", x))
   res <- map_chr(res, remove_return)
+}
+
+tag_LIST <- function(x) {
+  x %>% 
+    map(tag_single) %>% 
+    paste(collapse = "") %>% 
+    paste0("\n")
 }
 
 tag_describe <- function(x) {
@@ -195,6 +227,21 @@ tag_dontrun <- function(x) {
   c(do_not_run_symbol, out)
 }
 
+
+tag_sub_section <- function(x) {
+  x_class <- map_chr(x, class)
+  if(any(x_class == "tag")) {
+    out <- map(x, map, tag_single)
+  } else {
+    out <-  map(x, tag_single)   
+  }
+
+  out %>% 
+    flatten() %>% 
+    map(remove_return) %>% 
+    c(., new_paragraph_symbol)
+}
+
 tag_itemize1 <- function(x) {
   x %>% 
     map(tag_single_item) %>% 
@@ -243,9 +290,11 @@ reference_parse_all <- function(pkg) {
   topics <- pkg$topics
   files_in <- topics$file_in
   for(i in seq_len(length(files_in))) {
-    print(paste("Processing:", files_in[[i]]))
-    reference_to_list_page(files_in[[i]], pkg)
+    print(paste(i, " - Processing:", files_in[[i]]))
+    tags <-reference_get_tags(files_in[[i]], pkg) 
+    reference_process_tags(tags)
   }
+  
 }
 
 
