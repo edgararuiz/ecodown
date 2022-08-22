@@ -1,47 +1,44 @@
 reference_to_list_page <- function(file_in, pkg) {
   file_in %>%
-    reference_get_tags(pkg) %>%
-    reference_process_tags()
+    tags_get(pkg) %>%
+    tags_process()
 }
 
-reference_get_tags <- function(file_in, pkg) {
+tags_get <- function(file_in, pkg) {
+  if(is.character(pkg)) pkg <- as_pkgdown(pkg)
   pkg_topics <- pkg$topics
   topic_row <- pkg_topics[pkg_topics$file_in == file_in, ]
   topic <- transpose(topic_row)
   topic_rd <- topic[[1]]$rd
   tag_names <- map_chr(topic_rd, ~ class(.)[[1]])
   tag_split <- split(topic_rd, tag_names)
+  
   tag_split <- tag_split[names(tag_split) != "COMMENT"]
   tag_split <- tag_split[names(tag_split) != "TEXT"]
-  tag_split
+  
+  imap(tag_split, 
+       ~{ 
+         nm <- .y 
+         class(.x) <- c(nm, class(.x))
+         .x
+        })
 }
 
-reference_process_tags <- function(x) {
-  out <- map(x, ~ {
-    x <- .x[[1]]
-    class_x <- class(x)[[1]]
-    out <- NULL
-    if(class_x == "tag_examples") out <- tag_examples(x)
-    if(class_x == "tag_usage") out <- tag_usage(x)
-    if(class_x == "tag_arguments") out <- tag_arguments(x)
-    if(class_x == "tag_section") out <- tag_sections(.x)
-    if(is.null(out)) out <- tag_paragraphs(x)
-    out
-  })
+tags_process <- function(x) {
+  out <- map(x, ~  tag_convert(.x))
   new_names <- substr(names(x), 5, nchar(names(x)))
   names(out) <- new_names
   out
 }
 
-tag_method <- function(x) {
-  c(
-    paste0("## S3 method for class '", x[[2]],"'"),
-    as.character(x[[1]])
-  )
-  
+## ------------------ Conversion methods for the Major Tags  -------------------
+
+tag_convert <- function(x) {
+  UseMethod("tag_convert", x)
 }
 
-tag_paragraphs <- function(x) {
+tag_convert_default <- function(x) {
+  x <- x[[1]]
   rf <- tag_flatten(x)
   
   rf_cr <- NULL
@@ -58,18 +55,19 @@ tag_paragraphs <- function(x) {
   rf_cr
 }
 
-tag_sections <- function(x) {
-  map(x, tag_section)
+tag_convert.default <- tag_convert_default
+
+tag_convert.tag_section <- function(x) {
+  map(x, ~{
+    list(
+      title = tag_convert_default(.x[1]),
+      contents = tag_convert_default(.x[2])
+    )
+  })
 }
 
-tag_section <- function(x) {
-  list(
-    title = tag_paragraphs(x[[1]]),
-    contents = tag_paragraphs(x[[2]])
-  )
-}
-
-tag_examples <- function(x) {
+tag_convert.tag_examples <- function(x) {
+  x <- x[[1]]
   rf <- tag_flatten(x)
   on_examples <- TRUE
   examples_run <- NULL
@@ -99,31 +97,30 @@ tag_examples <- function(x) {
   )
 }
 
-tag_usage <- function(x) {
-  out <- tag_examples(x)
+tag_convert.tag_usage <- function(x) {
+  out <- tag_convert.tag_examples(x)
   out$code_run
 }
 
-new_paragraph_symbol <- "<<<<<<<<<<<<<<<<<<<<<<<<<"
-do_not_run_symbol <- ";;;;;;;;;;;;;;;;;;;;;;;;;"
-
-remove_return <- function(x) {
-  if(x == "\n") x <- new_paragraph_symbol
-  remove_generic(x)
-}
-
-remove_return_code <- function(x) {
-  if(x == "\n") x <- "```r"
-  remove_generic(x)
-}
-
-remove_generic <- function(x) {
-  if(substr(x, nchar(x), nchar(x)) == "\n") {
-    x <- substr(x, 1, nchar(x) - 1)
-    x <- paste0(x, " ")
+tag_convert.tag_arguments <- function(x) {
+  x <- x[[1]]
+  res <- list()
+  for (i in seq_along(x)) {
+    item <- x[[i]]
+    if ("tag_item" %in% class(item)) {
+      res <- c(
+        res, 
+        list(list(
+          argument = tag_convert(item[1]), 
+          description = tag_convert(item[2])
+        )
+        ))
+    }
   }
-  x
+  res
 }
+
+## -------------------------------- Tag translation ----------------------------
 
 tag_single_base <- function(x) {
   res <- NULL
@@ -198,23 +195,25 @@ tag_flatten <-  function(x) {
     c(., new_paragraph_symbol)  
 }
 
-## -------------------------- RD section tag functions -------------------------- 
+new_paragraph_symbol <- "<<<<<<<<<<<<<<<<<<<<<<<<<"
+do_not_run_symbol <- ";;;;;;;;;;;;;;;;;;;;;;;;;"
 
-tag_arguments <- function(x) {
-  res <- list()
-  for (i in seq_along(x)) {
-    item <- x[[i]]
-    if ("tag_item" %in% class(item)) {
-      res <- c(
-        res, 
-        list(list(
-          argument = tag_paragraphs(item[[1]]), 
-          description = tag_paragraphs(item[[2]])
-          )
-        ))
-    }
+remove_return <- function(x) {
+  if(x == "\n") x <- new_paragraph_symbol
+  remove_generic(x)
+}
+
+remove_return_code <- function(x) {
+  if(x == "\n") x <- "```r"
+  remove_generic(x)
+}
+
+remove_generic <- function(x) {
+  if(substr(x, nchar(x), nchar(x)) == "\n") {
+    x <- substr(x, 1, nchar(x) - 1)
+    x <- paste0(x, " ")
   }
-  res
+  x
 }
 
 ## -------------------------- Atomic RD tag functions ---------------------------
@@ -276,14 +275,15 @@ tag_href <- function(x) {
   res <- paste0("[", label, "](", address, ")")
 }
 
-# FOR PARSING ARGUMENTS INTO QMD LATER
-# if(length(desc) > 1) {
-#   desc_br <- desc %>% 
-#     reduce(function(x, y) paste0(x, " <br> ", y, collapse = ""))
-# } else {
-#   desc_br <- gsub("\n", " <br> ", desc)
-# }
+tag_method <- function(x) {
+  c(
+    paste0("## S3 method for class '", x[[2]],"'"),
+    as.character(x[[1]])
+  )
+  
+}
 
+## ---------------------- Checker functions --------------------------------
 
 check_rd_parsing <- function(pkg) {
   if(is.character(pkg)) pkg <- as_pkgdown(pkg)
@@ -291,8 +291,8 @@ check_rd_parsing <- function(pkg) {
   files_in <- topics$file_in
   for(i in seq_len(length(files_in))) {
     print(paste(i, " - Processing:", files_in[[i]]))
-    tags <-reference_get_tags(files_in[[i]], pkg) 
-    reference_process_tags(tags)
+    tags <-tags_get(files_in[[i]], pkg) 
+    tags_process(tags)
   }
 }
 
@@ -300,16 +300,17 @@ check_dont_runs <- function(pkg) {
   if(is.character(pkg)) pkg <- as_pkgdown(pkg)
   topics <- pkg$topics
   files_in <- topics$file_in
-  out <- NULL
+  out <- list()
   for(i in seq_len(length(files_in))) {
     print(paste(i, " - Processing:", files_in[[i]]))
-    tags <-reference_get_tags(files_in[[i]], pkg) 
-    x <- reference_process_tags(tags)
-    code_run <- x$examples$code_run
-    if(!is.null(code_run)) {
-      
+    tags <-tags_get(files_in[[i]], pkg) 
+    x <- tags_process(tags)
+    code_dont_run <- x$examples$code_dont_run
+    if(!is.null(code_dont_run)) {
+      out <- c(out, list(code_dont_run))
     }
   }
+  out
 }
 
 
