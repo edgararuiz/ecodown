@@ -15,7 +15,7 @@ tags_get <- function(file_in, pkg) {
   tag_names <- map_chr(topic_rd, ~ class(.)[[1]])
   tag_split <- split(topic_rd, tag_names)
   
-  tag_split <- tag_split[names(tag_split) != "COMMENT"]
+  #tag_split <- tag_split[names(tag_split) != "COMMENT"]
   tag_split <- tag_split[names(tag_split) != "TEXT"]
   
   imap(tag_split, 
@@ -28,8 +28,19 @@ tags_get <- function(file_in, pkg) {
 
 tags_process <- function(x) {
   out <- map(x, ~  tag_convert(.x))
-  new_names <- substr(names(x), 5, nchar(names(x)))
+  
+  comment <- NULL
+  comment <- names(out) == "COMMENT"
+  if(length(comment) > 0) {
+    comment_list <- flatten(out$COMMENT)
+    reg_list <- out[!comment]
+    out <- c(comment_list, reg_list)
+  }
+  
+  new_names <- substr(names(out), 5, nchar(names(out)))
   names(out) <- new_names
+  
+  
   out
 }
 
@@ -55,6 +66,14 @@ tag_convert_default <- function(x) {
     }
   }
   rf_cr
+}
+
+tag_convert.COMMENT <- function(x) {
+  edit_text <- "% Please edit documentation in "
+  find_edit <- grepl(edit_text, x)
+  out <- list(gsub(edit_text, "", x[find_edit]))
+  names(out) <- "tag_source"
+  out
 }
 
 tag_convert.default <- tag_convert_default

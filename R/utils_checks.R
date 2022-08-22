@@ -26,10 +26,11 @@ check_dont_runs <- function(pkg) {
 
 check_identified_sections <- function(pkg) {
   
-  identified <- c("name", "title", "usage", "description", "arguments", 
-                  "section","value", "examples", "seealso", "details",
-                  "format", "alias", "docType", "keyword", "note",
-                  "concept", "author"
+  identified <- c(
+    "name", "title", "usage", "description", "arguments", 
+    "section","value", "examples", "seealso", "details",
+    "format", "alias", "docType", "keyword", "note",
+    "concept", "author"
   )
   
   pkg %>% 
