@@ -292,36 +292,3 @@ tag_method <- function(x) {
   )
   
 }
-
-## ---------------------- Checker functions --------------------------------
-
-check_rd_parsing <- function(pkg) {
-  if(is.character(pkg)) pkg <- as_pkgdown(pkg)
-  topics <- pkg$topics
-  files_in <- topics$file_in
-  for(i in seq_len(length(files_in))) {
-    print(paste(i, " - Processing:", files_in[[i]]))
-    tags <-tags_get(files_in[[i]], pkg) 
-    tags_process(tags)
-  }
-}
-
-check_dont_runs <- function(pkg) {
-  if(is.character(pkg)) pkg <- as_pkgdown(pkg)
-  topics <- pkg$topics
-  files_in <- topics$file_in
-  out <- list()
-  for(i in seq_len(length(files_in))) {
-    print(paste(i, " - Processing:", files_in[[i]]))
-    tags <-tags_get(files_in[[i]], pkg) 
-    x <- tags_process(tags)
-    code_dont_run <- x$examples$code_dont_run
-    if(!is.null(code_dont_run)) {
-      out <- c(out, list(code_dont_run))
-    }
-  }
-  out
-}
-
-
-

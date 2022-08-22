@@ -12,13 +12,16 @@ reference_content_default <- function(file_in,
     paste("#", con$name), 
     reference_entry(con$title),
     reference_entry(con$description, "Description"),
+    reference_entry(con$format, "Format"),
     reference_entry(con$usage, "Usage"),
     reference_entry(con$arguments, "Arguments"),
     reference_entry(con$details, "Details"),
     reference_entry(con$section),
     reference_entry(con$value, "Value"),
+    reference_entry(con$note, "Note"),
     reference_entry(con$examples, "Examples"),
-    reference_entry(con$seealso, "See Also")
+    reference_entry(con$seealso, "See Also"),
+    reference_entry(con$author, "Author(s)")
   )
   
   if(output == "qmd") out <- c("---", output_options, "---", out)
