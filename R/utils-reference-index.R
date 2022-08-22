@@ -45,12 +45,16 @@ reference_to_list_index <- function(pkg) {
   pkg_topics <- pkg$topics
   topics_env <- match_env(pkg_topics)
   
-  if (is.null(pkg_ref)) pkg_ref <- list(data.frame(contents = pkg_topics$name))
+  if (is.null(pkg_ref)) {
+    x <- list(data.frame(contents = pkg_topics$name))
+  }  else {
+    x <- pkg_ref
+  }
   
   sections_list <- map(
-    seq_along(pkg_ref),
+    seq_along(x),
     ~ {
-      ref <- pkg_ref[[.x]]
+      ref <- x[[.x]]
       topic_list <- map(
         ref$contents,
         ~ {
@@ -69,9 +73,10 @@ reference_to_list_index <- function(pkg) {
       transpose(pkg_topics[topic_ids, ])
     })
   
-  sections_title <- map_chr(pkg_ref, ~.x$title)
-  
-  names(sections_list) <- sections_title
+  if(!is.null(pkg_ref)) {
+    sections_title <- map_chr(pkg_ref, ~.x$title)
+    names(sections_list) <- sections_title
+  }
   
   sections_list
 }

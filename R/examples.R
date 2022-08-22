@@ -1,8 +1,13 @@
+#' Functions that flag if the example is to run
+#' @details These functions are placed in the converted `.qmd` files
+#' by `ecodown_convert()`. They serve as flexible flags that indicate if the
+#' examples, and examples don't run are executed when rendering Quarto.
 #' @export
 examples_run <- function() {
   examples_run_not_run("reference_examples_not_run")
 }
 
+#' @rdname examples_run
 #' @export
 examples_not_run <- function() {
   examples_run_not_run("reference_examples")
