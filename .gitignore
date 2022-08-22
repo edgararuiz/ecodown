@@ -35,3 +35,6 @@ _repos
 keras
 README_files
 README.html
+/test_files/
+test.html
+test.qmd

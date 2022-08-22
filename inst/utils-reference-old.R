@@ -98,7 +98,7 @@ reference_parse_section <- function(x, title = NULL) {
     c(
       "\n",
       title,
-      reference_parse_tag(x[[1]]),
+      reference_tag(x),
       "\n"
     )
   } else {

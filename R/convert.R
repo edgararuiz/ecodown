@@ -16,6 +16,8 @@
 #' Defaults to "articles". 
 #' @param reference_examples Boolean flag to indicate if the Examples inside the
 #' reference page is to be evaluated.
+#' @param reference_examples_not_run Boolean flag to indicate if the Examples 
+#' marked as DO NOT RUN is to be ignored and the code should be evaluated.
 #' @param reference_output File type for all the reference files. Possible options
 #' are `qmd` and `md`. Defaults to `qmd`.
 #' @param reference_qmd_options A character variable that contains the text version
@@ -49,7 +51,8 @@ ecodown_convert <- function(package_source_folder = "",
                             convert_reference = TRUE,
                             reference_folder = "reference",
                             vignettes_folder = "articles",
-                            reference_examples = TRUE,
+                            reference_examples = FALSE,
+                            reference_examples_not_run = FALSE,
                             commit = c("latest_tag", "latest_commit"),
                             branch = "main",
                             reference_output = "qmd",
@@ -138,7 +141,7 @@ ecodown_convert <- function(package_source_folder = "",
 
   pkg_files <- as_fs_path(pf)
 
-  if (verbosity == "verbose") {
+  if (get_verbosity() == "verbose") {
     file_tree(
       pkg_files,
       base_folder = package_source_folder,
@@ -208,12 +211,18 @@ package_file <- function(input,
   output_folder <- path_dir(output_file)
   if (!dir_exists(output_folder)) dir_create(output_folder)
   if (tolower(path_ext(input)) == "rd") {
-    list_topics <- transpose(pkg_topics)
-    input_topic <- list_topics[pkg_topics$file_in == input_name][[1]]
-    out <- reference_parse_topic(input_topic, pkg, examples = examples, 
-                                 output = output, output_options = output_options
-                                 )
-    output_file <- path(path_ext_remove(output_file), ext = output)
+    
+    out <- reference_content_default(
+      input_name[[1]], pkg, 
+      output, 
+      output_options, 
+      examples
+      )
+    
+    output_file <- output_file %>% 
+      path_ext_remove() %>%  
+      path(ext = output)
+    
     writeLines(out, output_file)
   } else {
     file_copy(input, output_file, overwrite = TRUE)
