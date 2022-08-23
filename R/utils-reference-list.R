@@ -1,7 +1,13 @@
 reference_to_list_page <- function(file_in, pkg) {
-  file_in %>%
+  if(is.character(pkg)) pkg <- as_pkgdown(pkg)
+  
+  out <- file_in %>%
     tags_get(pkg) %>%
     tags_process()
+  
+  out$repo <- pkg$repo$url$home
+  
+  out
 }
 
 tags_get <- function(file_in, pkg) {

@@ -1,3 +1,68 @@
+reference_content_template <- function() {
+  
+  file_in <- "activation_relu.Rd"
+  pkg <- "../keras"
+  parsed <- reference_to_list_page(file_in, pkg)
+  con <- reference_convert(parsed)
+  
+  template_path <- system.file("templates/reference.qmd", package = "ecodown")
+  
+  template <- readLines(template_path)
+  
+  template %>% 
+    map(parse_line_tag) %>% 
+    flatten() 
+  
+}
+
+parse_line_tag <- function(line) {
+  start_tag <- "\\{\\{\\{\\{"
+  end_tag <- "\\}\\}\\}\\}"
+  
+  tr <- c(
+    "description" = "Description",
+    "format" = "Format", 
+    "usage" = "Usage", 
+    "arguments" = "Arguments", 
+    "value" = "Value", 
+    "note" = "Note",
+    "examples" = "Examples", 
+    "seealso" = "See Also", 
+    "author" = "Author(s)"
+  )
+  
+  if(grepl(start_tag, line)) {
+    start_half <- strsplit(line, start_tag)[[1]]
+    end_half <- strsplit(start_half[[2]], end_tag)[[1]]
+    tag_full <-strsplit(end_half[[1]], "\\.")[[1]]
+    tag_title <- tag_full[[1]]
+    tag_name <- tag_full[[2]]
+    
+    
+    start_with <- NULL 
+    if(length(start_half) > 1) start_with <- start_half[[1]]
+    end_with <- NULL
+    if(length(end_half) > 1) end_with <- end_half[[2]]
+    
+    start_with <- start_with[start_with != ""]
+    end_with <- end_with[end_with != ""]
+    
+    tag_content <- con[[tag_name]]
+  
+    if(tag_title == "title") tag_content <- c(paste0("## ", tag_name), tag_content)
+    
+    out <- NULL
+    if(length(tag_content) == 1) {
+      out <- paste0(start_with, tag_content, end_with)
+    } else {
+      out <- c(start_with, tag_content, end_with)
+    }
+    out
+  } else {
+    line
+  }
+} 
+
 reference_content_default <- function(file_in, 
                                       pkg, 
                                       output = "qmd", 
@@ -7,9 +72,12 @@ reference_content_default <- function(file_in,
                                       ) {
   parsed <- reference_to_list_page(file_in, pkg)
   con <- reference_convert(parsed)
+  alias <- paste("#", con$alias)
+  
+  
   
   out <- c(
-    paste("#", con$name), 
+    alias, 
     reference_entry(con$title),
     reference_entry(con$description, "Description"),
     reference_entry(con$format, "Format"),
@@ -24,7 +92,22 @@ reference_content_default <- function(file_in,
     reference_entry(con$author, "Author(s)")
   )
   
-  if(output == "qmd") out <- c("---", output_options, "---", out)
+  if(output == "qmd") {
+    source <- paste0("  script: ", con$source)
+    repo <-  paste0("  repo: ", con$repo)
+    source_link <- path(con$repo, "blob/main", con$source)
+    out <- c("---", 
+             output_options, 
+             "source:",
+             source,
+             repo,
+             "---", 
+             "",
+             paste0("[View source on GitHub](", source_link,")"),
+             "",
+             out
+             )
+  } 
   
   as.character(out)
 }
@@ -76,7 +159,7 @@ reference_convert <- function(x, output = "qmd") {
     if(is.null(out)) {
       out <- curr
       if(is.list(out)) out <- flatten(out)
-      out <- reduce(out, function(x, y) c(x, "", y), .init = NULL)
+      if(length(out) > 1) out <- reduce(out, function(x, y) c(x, "", y), .init = NULL)
     }
 
     out <- list(out)  
