@@ -34,6 +34,8 @@
 #' way we avoid documenting work-in-progress.  The 'latest_commit' value will
 #' simply use whatever is cloned. Pass an SHA value if you wish to fix the
 #' commit to use.
+#' @param reference_template The path to a `.qmd` file to use as the template to
+#' create the reference pages.
 #' @param branch Repo branch. Defaults to 'main'
 #' @inheritParams ecodown_build
 #' @export
@@ -53,10 +55,11 @@ ecodown_convert <- function(package_source_folder = "",
                             vignettes_folder = "articles",
                             reference_examples = FALSE,
                             reference_examples_not_run = FALSE,
-                            commit = c("latest_tag", "latest_commit"),
-                            branch = "main",
                             reference_output = "qmd",
-                            reference_qmd_options = NULL
+                            reference_qmd_options = NULL,     
+                            reference_template = NULL,
+                            commit = c("latest_tag", "latest_commit"),
+                            branch = "main"
                             ) {
   
   set_verbosity(verbosity)
@@ -111,7 +114,8 @@ ecodown_convert <- function(package_source_folder = "",
     vignettes_folder = vignettes_folder,
     examples = reference_examples,
     output = reference_output,
-    output_options = reference_qmd_options        
+    output_options = reference_qmd_options,
+    template = reference_template
   )
   
   get_files <- function(pkg_folder) {
@@ -183,6 +187,7 @@ package_file <- function(input,
                          reference_folder,
                          vignettes_folder,
                          examples = FALSE,
+                         template = NULL,
                          output,
                          output_options) {
   pkg_topics <- pkg$topics
@@ -212,12 +217,7 @@ package_file <- function(input,
   if (!dir_exists(output_folder)) dir_create(output_folder)
   if (tolower(path_ext(input)) == "rd") {
     
-    out <- reference_content_default(
-      input_name[[1]], pkg, 
-      output, 
-      output_options, 
-      examples
-      )
+    out <- reference_to_qmd(input_name[[1]], pkg, template)
     
     output_file <- output_file %>% 
       path_ext_remove() %>%  

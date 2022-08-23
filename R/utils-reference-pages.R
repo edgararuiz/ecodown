@@ -1,32 +1,28 @@
-reference_content_template <- function() {
+reference_to_qmd<- function(file_in, pkg, template = NULL) {
   
-  file_in <- "activation_relu.Rd"
-  pkg <- "../keras"
   parsed <- reference_to_list_page(file_in, pkg)
   con <- reference_convert(parsed)
   
-  template_path <- system.file("templates/reference.qmd", package = "ecodown")
+  if(is.null(template)) {
+    template_path <- system.file("templates/reference.qmd", package = "ecodown")  
+  } else {
+    template_path <- template
+  }
+  
   
   template <- readLines(template_path)
   
   template %>% 
-    map(parse_line_tag) %>% 
-    flatten() 
-  
+    map(parse_line_tag, con) %>% 
+    flatten() %>% 
+    as.character()
 }
 
-parse_line_tag <- function(line) {
+parse_line_tag <- function(line, con) {
   start_tag <- "\\{\\{\\{\\{"
   end_tag <- "\\}\\}\\}\\}"
   
   tr <- c(
-    "description" = "Description",
-    "format" = "Format", 
-    "usage" = "Usage", 
-    "arguments" = "Arguments", 
-    "value" = "Value", 
-    "note" = "Note",
-    "examples" = "Examples", 
     "seealso" = "See Also", 
     "author" = "Author(s)"
   )
@@ -38,6 +34,16 @@ parse_line_tag <- function(line) {
     tag_title <- tag_full[[1]]
     tag_name <- tag_full[[2]]
     
+    tag_name_label <- paste0(
+      toupper(substr(tag_name, 1, 1)), 
+      substr(tag_name, 2, nchar(tag_name))
+      )
+    
+    tag_match <- names(tr) == tag_name
+    
+    if(any(tag_match)) {
+      tag_name_label <- tr[tag_match]
+    }
     
     start_with <- NULL 
     if(length(start_half) > 1) start_with <- start_half[[1]]
@@ -46,16 +52,18 @@ parse_line_tag <- function(line) {
     
     start_with <- start_with[start_with != ""]
     end_with <- end_with[end_with != ""]
-    
-    tag_content <- con[[tag_name]]
-  
-    if(tag_title == "title") tag_content <- c(paste0("## ", tag_name), tag_content)
-    
     out <- NULL
-    if(length(tag_content) == 1) {
-      out <- paste0(start_with, tag_content, end_with)
-    } else {
-      out <- c(start_with, tag_content, end_with)
+    tag_content <- con[[tag_name]]
+    if(!is.null(tag_content)) {
+      if(tag_title == "title") {
+        tag_content <- c(paste0("## ", tag_name_label), tag_content)
+      } 
+      if(length(tag_content) == 1) {
+        out <- paste0(start_with, tag_content, end_with)
+      } else {
+        out <- c(start_with, tag_content, end_with)  
+      }
+        
     }
     out
   } else {

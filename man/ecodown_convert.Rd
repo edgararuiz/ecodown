@@ -21,10 +21,11 @@ ecodown_convert(
   vignettes_folder = "articles",
   reference_examples = FALSE,
   reference_examples_not_run = FALSE,
-  commit = c("latest_tag", "latest_commit"),
-  branch = "main",
   reference_output = "qmd",
-  reference_qmd_options = NULL
+  reference_qmd_options = NULL,
+  reference_template = NULL,
+  commit = c("latest_tag", "latest_commit"),
+  branch = "main"
 )
 }
 \arguments{
@@ -71,6 +72,16 @@ reference page is to be evaluated.}
 \item{reference_examples_not_run}{Boolean flag to indicate if the Examples
 marked as DO NOT RUN is to be ignored and the code should be evaluated.}
 
+\item{reference_output}{File type for all the reference files. Possible options
+are \code{qmd} and \code{md}. Defaults to \code{qmd}.}
+
+\item{reference_qmd_options}{A character variable that contains the text version
+of additions to the reference front matter. It applies only to when reference
+output is \code{qmd}}
+
+\item{reference_template}{The path to a \code{.qmd} file to use as the template to
+create the reference pages.}
+
 \item{commit}{Commit to use as the base for the documentation.  It defaults
 to 'latest_tag'. That default will search for the latest Git tag.  The
 assumption is that the latest tag is the same as the latest release.  This
@@ -79,13 +90,6 @@ simply use whatever is cloned. Pass an SHA value if you wish to fix the
 commit to use.}
 
 \item{branch}{Repo branch. Defaults to 'main'}
-
-\item{reference_output}{File type for all the reference files. Possible options
-are \code{qmd} and \code{md}. Defaults to \code{qmd}.}
-
-\item{reference_qmd_options}{A character variable that contains the text version
-of additions to the reference front matter. It applies only to when reference
-output is \code{qmd}}
 }
 \description{
 Copies and/or converts files from package source into Quarto
