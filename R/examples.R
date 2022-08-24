@@ -4,13 +4,13 @@
 #' examples, and examples don't run are executed when rendering Quarto.
 #' @export
 examples_run <- function() {
-  examples_run_not_run("reference_examples_not_run")
+  examples_run_not_run("reference_examples")
 }
 
 #' @rdname examples_run
 #' @export
 examples_not_run <- function() {
-  examples_run_not_run("reference_examples")
+  examples_run_not_run("reference_examples_not_run")
 }
 
 examples_run_not_run <- function(x = "") {
