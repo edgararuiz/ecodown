@@ -24,6 +24,7 @@ ecodown_clone_convert(
   verbosity = c("verbose", "summary", "silent"),
   reference_output = "qmd",
   reference_qmd_options = NULL,
+  reference_template = NULL,
   versions = list()
 )
 }
@@ -83,6 +84,9 @@ are \code{qmd} and \code{md}. Defaults to \code{qmd}.}
 \item{reference_qmd_options}{A character variable that contains the text version
 of additions to the reference front matter. It applies only to when reference
 output is \code{qmd}}
+
+\item{reference_template}{The path to a \code{.qmd} file to use as the template to
+create the reference pages.}
 
 \item{versions}{A list of additional reference versions to convert.
 Pass the commit to use, the name of the version, and the sub-folder to use. It

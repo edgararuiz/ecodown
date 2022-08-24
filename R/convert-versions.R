@@ -21,7 +21,8 @@ ecodown_convert_versions <- function(package_source_folder = "",
                                      vignettes_folder = "articles",                                     
                                      reference_examples = TRUE,
                                      reference_output = "qmd",
-                                     reference_qmd_options = NULL,                                     
+                                     reference_qmd_options = NULL,   
+                                     reference_template = NULL,
                                      branch = "main",
                                      versions = list()) {
   walk(
@@ -44,7 +45,8 @@ ecodown_convert_versions <- function(package_source_folder = "",
         reference_output = .x$reference_output %||% reference_output,
         reference_qmd_options = .x$reference_qmd_options %||% reference_qmd_options,
         commit = .x$commit %||% "latest_tag",
-        branch = .x$branch %||% branch
+        branch = .x$branch %||% branch,
+        reference_template = .x$reference_template %||% reference_template
       )
     }
   )

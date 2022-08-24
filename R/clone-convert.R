@@ -21,7 +21,8 @@ ecodown_clone_convert <- function(repo_url = "",
                                   reference_examples = TRUE,
                                   verbosity = c("verbose", "summary", "silent"),
                                   reference_output = "qmd",
-                                  reference_qmd_options = NULL,                                  
+                                  reference_qmd_options = NULL, 
+                                  reference_template = NULL,
                                   versions = list()) {
   set_verbosity(verbosity)
 
@@ -50,7 +51,8 @@ ecodown_clone_convert <- function(repo_url = "",
     verbosity = get_verbosity(),
     reference_examples = reference_examples,
     reference_output = reference_output,
-    reference_qmd_options = reference_qmd_options
+    reference_qmd_options = reference_qmd_options,
+    reference_template = reference_template
   )
 
   if (length(versions) > 0) {
