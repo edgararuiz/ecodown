@@ -29,43 +29,70 @@ parse_line_tag <- function(line, con) {
   
   if(grepl(start_tag, line)) {
     start_half <- strsplit(line, start_tag)[[1]]
-    end_half <- strsplit(start_half[[2]], end_tag)[[1]]
-    tag_full <-strsplit(end_half[[1]], "\\.")[[1]]
-    tag_title <- tag_full[[1]]
-    tag_name <- tag_full[[2]]
     
-    tag_name_label <- paste0(
-      toupper(substr(tag_name, 1, 1)), 
-      substr(tag_name, 2, nchar(tag_name))
-      )
+    parsed <- start_half %>% 
+      strsplit(end_tag) %>% 
+      flatten()
     
-    tag_match <- names(tr) == tag_name
-    
-    if(any(tag_match)) {
-      tag_name_label <- tr[tag_match]
-    }
-    
-    start_with <- NULL 
-    if(length(start_half) > 1) start_with <- start_half[[1]]
-    end_with <- NULL
-    if(length(end_half) > 1) end_with <- end_half[[2]]
-    
-    start_with <- start_with[start_with != ""]
-    end_with <- end_with[end_with != ""]
-    out <- NULL
-    tag_content <- con[[tag_name]]
-    if(!is.null(tag_content)) {
-      if(tag_title == "title") {
-        tag_content <- c(paste0("## ", tag_name_label), tag_content)
-      } 
-      if(length(tag_content) == 1) {
-        out <- paste0(start_with, tag_content, end_with)
+    pm <-map(parsed, ~ {
+      yes_title <- substr(.x, 1, 6) == "title."
+      yes_notitle <- substr(.x, 1, 8) == "notitle."
+      if(yes_title | yes_notitle) {
+        start_sub <- ifelse(yes_title, 7, 9)
+        tag <- substr(.x, start_sub, nchar(.x))
+        tag <- trimws(tag)
+        x <- con[[tag]]
       } else {
-        out <- c(start_with, tag_content, end_with)  
+        x <- .x
+        tag <- NULL
       }
-        
+      list(
+        content = x,
+        title = yes_title,
+        no_title = yes_notitle,
+        no_lines = length(x),
+        tag = tag
+      )
+    }) %>% 
+      transpose()
+    
+    if(all(map_lgl(pm$content, is.null))) {
+      tag_content <- NULL
+    } else {
+      if(any(pm$no_lines > 1)) {
+        tag_content <- reduce(pm$content, c)
+      } else {
+        tag_content <- paste0(pm$content, collapse = "")
+      }
+      
+      yes_notitle <- any(as.logical(pm$no_title))
+      yes_title <- any(as.logical(pm$title))
+      
+      if(yes_title && !yes_notitle) {
+        tag_names <- as.character(pm$tag)
+        tag_names <- tag_names[!is.null(tag_names)]
+        if(length(tag_names > 0)) {
+          tag_name <- tag_names[[1]]
+          tag_name_label <- paste0(
+            toupper(substr(tag_name, 1, 1)), 
+            substr(tag_name, 2, nchar(tag_name))
+          )
+          
+          tag_match <- names(tr) == tag_name
+          
+          if(any(tag_match)) {
+            tag_name_label <- tr[tag_match]
+          }
+          
+          if(!is.null(tag_content)) {
+            tag_content <- c(paste0("## ", tag_name_label), tag_content)    
+          }
+        }
+      }
     }
-    out
+   
+    
+    tag_content
   } else {
     line
   }
