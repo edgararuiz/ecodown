@@ -21,7 +21,8 @@ ecodown_convert_versions <- function(package_source_folder = "",
                                      vignettes_folder = "articles",                                     
                                      reference_examples = TRUE,
                                      reference_output = "qmd",
-                                     reference_qmd_options = NULL,                                     
+                                     reference_qmd_options = NULL,   
+                                     reference_template = NULL,
                                      branch = "main",
                                      versions = list()) {
   walk(
