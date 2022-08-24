@@ -17,7 +17,7 @@ examples_run_not_run <- function(x = "") {
   out <- FALSE
   env_var <- Sys.getenv(paste0("ecodown_", x), unset = NA)
   if(is.na(env_var)) {
-    yml_path <- path("_ecodown.yml")
+    yml_path <- here("_ecodown.yml")
     if(file_exists(yml_path)) {
       yml_file <- read_yaml(yml_path)  
       re <- yml_file$site$clone_convert
