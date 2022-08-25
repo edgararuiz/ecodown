@@ -25,7 +25,8 @@ ecodown_convert(
   reference_qmd_options = NULL,
   reference_template = NULL,
   commit = c("latest_tag", "latest_commit"),
-  branch = "main"
+  branch = "main",
+  package_description = NULL
 )
 }
 \arguments{
@@ -90,6 +91,9 @@ simply use whatever is cloned. Pass an SHA value if you wish to fix the
 commit to use.}
 
 \item{branch}{Repo branch. Defaults to 'main'}
+
+\item{package_description}{Custom description for the package. If NULL then
+the package's Title, inside DESCRIPTION, will be used.}
 }
 \description{
 Copies and/or converts files from package source into Quarto

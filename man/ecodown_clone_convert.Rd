@@ -21,10 +21,12 @@ ecodown_clone_convert(
   target_folder = tempdir(),
   branch = "main",
   reference_examples = TRUE,
+  reference_examples_not_run = FALSE,
   verbosity = c("verbose", "summary", "silent"),
   reference_output = "qmd",
   reference_qmd_options = NULL,
   reference_template = NULL,
+  package_description = NULL,
   versions = list()
 )
 }
@@ -75,6 +77,9 @@ directory}
 \item{reference_examples}{Boolean flag to indicate if the Examples inside the
 reference page is to be evaluated.}
 
+\item{reference_examples_not_run}{Boolean flag to indicate if the Examples
+marked as DO NOT RUN is to be ignored and the code should be evaluated.}
+
 \item{verbosity}{Level of messaging available during run time. Possible values
 are 'verbose', 'summary', and 'silent'.}
 
@@ -87,6 +92,9 @@ output is \code{qmd}}
 
 \item{reference_template}{The path to a \code{.qmd} file to use as the template to
 create the reference pages.}
+
+\item{package_description}{Custom description for the package. If NULL then
+the package's Title, inside DESCRIPTION, will be used.}
 
 \item{versions}{A list of additional reference versions to convert.
 Pass the commit to use, the name of the version, and the sub-folder to use. It

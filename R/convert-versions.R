@@ -20,10 +20,12 @@ ecodown_convert_versions <- function(package_source_folder = "",
                                      reference_folder = "reference",
                                      vignettes_folder = "articles",                                     
                                      reference_examples = TRUE,
+                                     reference_examples_not_run = FALSE,
                                      reference_output = "qmd",
                                      reference_qmd_options = NULL,   
                                      reference_template = NULL,
                                      branch = "main",
+                                     package_description = NULL,
                                      versions = list()) {
   walk(
     versions, ~ {
@@ -44,9 +46,11 @@ ecodown_convert_versions <- function(package_source_folder = "",
         reference_examples = .x$reference_examples %||% reference_examples,
         reference_output = .x$reference_output %||% reference_output,
         reference_qmd_options = .x$reference_qmd_options %||% reference_qmd_options,
+        reference_examples_not_run = .x$reference_examples_not_run %||% reference_examples_not_run,
         commit = .x$commit %||% "latest_tag",
         branch = .x$branch %||% branch,
-        reference_template = .x$reference_template %||% reference_template
+        reference_template = .x$reference_template %||% reference_template,
+        package_description = .x$package_description %||% package_description
       )
     }
   )

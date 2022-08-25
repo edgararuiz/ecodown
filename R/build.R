@@ -49,11 +49,12 @@ ecodown_build <- function(quarto_folder = here::here(),
           autolink = run_autolink
         )
       )
+      if (run_autolink) {
+        ecodown_autolink(quarto_folder = quarto_folder, verbosity = get_verbosity())
+      }
     }
 
-    if (run_autolink) {
-      ecodown_autolink(quarto_folder = quarto_folder, verbosity = get_verbosity())
-    }
+
   }
   lc <- last_commit()
   lc_sha <- lc$sha

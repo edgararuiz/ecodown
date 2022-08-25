@@ -20,10 +20,12 @@ ecodown_convert_versions(
   reference_folder = "reference",
   vignettes_folder = "articles",
   reference_examples = TRUE,
+  reference_examples_not_run = FALSE,
   reference_output = "qmd",
   reference_qmd_options = NULL,
   reference_template = NULL,
   branch = "main",
+  package_description = NULL,
   versions = list()
 )
 }
@@ -68,6 +70,9 @@ Defaults to "articles".}
 \item{reference_examples}{Boolean flag to indicate if the Examples inside the
 reference page is to be evaluated.}
 
+\item{reference_examples_not_run}{Boolean flag to indicate if the Examples
+marked as DO NOT RUN is to be ignored and the code should be evaluated.}
+
 \item{reference_output}{File type for all the reference files. Possible options
 are \code{qmd} and \code{md}. Defaults to \code{qmd}.}
 
@@ -79,6 +84,9 @@ output is \code{qmd}}
 create the reference pages.}
 
 \item{branch}{Repo branch. Defaults to 'main'}
+
+\item{package_description}{Custom description for the package. If NULL then
+the package's Title, inside DESCRIPTION, will be used.}
 
 \item{versions}{A list of additional reference versions to convert.
 Pass the commit to use, the name of the version, and the sub-folder to use. It

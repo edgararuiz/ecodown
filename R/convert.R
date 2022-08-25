@@ -37,6 +37,8 @@
 #' @param reference_template The path to a `.qmd` file to use as the template to
 #' create the reference pages.
 #' @param branch Repo branch. Defaults to 'main'
+#' @param package_description Custom description for the package. If NULL then
+#' the package's Title, inside DESCRIPTION, will be used.
 #' @inheritParams ecodown_build
 #' @export
 ecodown_convert <- function(package_source_folder = "",
@@ -59,7 +61,8 @@ ecodown_convert <- function(package_source_folder = "",
                             reference_qmd_options = NULL,     
                             reference_template = NULL,
                             commit = c("latest_tag", "latest_commit"),
-                            branch = "main"
+                            branch = "main",
+                            package_description = NULL
                             ) {
   
   set_verbosity(verbosity)
@@ -162,7 +165,8 @@ ecodown_convert <- function(package_source_folder = "",
       vignettes_folder = vignettes_folder,        
       quarto_sub_folder = quarto_sub_folder,
       version_folder = version_folder, 
-      output = reference_output
+      output = reference_output,
+      package_description = package_description
     )
     writeLines(ri, path(qfs, reference_folder, "index", ext = reference_output))
     msg_summary_number(1)
