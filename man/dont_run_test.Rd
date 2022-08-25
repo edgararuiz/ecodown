@@ -3,23 +3,17 @@
 \name{dont_run_test}
 \alias{dont_run_test}
 \title{Copies "don't run" examples from package into individual test scripts and
-executes the tests via \code{testthat}}
+executes them via the RStudio Job pane.}
 \usage{
-dont_run_test(
-  pkg,
-  test_dir = NULL,
-  testthat_reporter = testthat::RStudioReporter
-)
+dont_run_test(pkg, test_dir = NULL)
 }
 \arguments{
 \item{pkg}{A \code{pkgdown} package object, or a character path to the location of
 the package to parse.}
 
 \item{test_dir}{Path to where to save the temp test files}
-
-\item{testthat_reporter}{\code{testthat} reporter to use when running tests}
 }
 \description{
 Copies "don't run" examples from package into individual test scripts and
-executes the tests via \code{testthat}
+executes them via the RStudio Job pane.
 }
