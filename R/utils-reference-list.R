@@ -126,9 +126,28 @@ tag_examples <- function(x) {
 
 tag_convert.tag_examples <- tag_examples
 
+s3_label <- "## S3 method for class '"
+
 tag_convert.tag_usage <- function(x) {
-  out <- tag_examples(x)
-  out$code_run
+  x <- x[[1]]
+  out <- NULL
+  not_s3 <- TRUE
+  for(i in seq_along(x)) {
+    if(not_s3) {
+      cs <- x[[i]]
+      ts <- tag_single(cs) 
+      curr_s3 <- substr(ts[[1]], 1, nchar(s3_label)) == s3_label
+      if(curr_s3) {
+        ts1 <- tag_single(x[[i+1]])
+        ts1[[1]] <- paste0(ts[[2]], ts1[[1]], collapse = "")
+        ts[[2]] <- ts1
+        not_s3 <- FALSE
+        }
+      out <- c(out, ts)
+    } else {
+      not_s3 <- TRUE
+    }}
+  out
 }
 
 tag_convert.tag_arguments <- function(x) {
@@ -312,7 +331,7 @@ tag_href <- function(x) {
 
 tag_method <- function(x) {
   c(
-    paste0("## S3 method for class '", x[[2]],"'"),
+    paste0(s3_label, x[[2]],"'"),
     as.character(x[[1]])
   )
   
