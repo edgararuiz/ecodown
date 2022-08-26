@@ -53,3 +53,13 @@ package_header <- function() {
 set_package_header <- function(x = 1) {
   ecodown_context_set("package_header", x)
 }
+
+set_package_name <- function(x) {
+  ecodown_context_set("package_name", x)
+}
+
+get_package_name <- function() {
+  ecodown_context_get("package_name")
+}
+
+

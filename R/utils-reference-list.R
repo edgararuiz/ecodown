@@ -1,11 +1,44 @@
 reference_to_list_page <- function(file_in, pkg) {
   if(is.character(pkg)) pkg <- as_pkgdown(pkg)
-  
+  set_package_name(pkg$package)
   out <- file_in %>%
     tags_get(pkg) %>%
     tags_process()
   
   out$repo <- pkg$repo$url$home
+  set_package_name(NULL)
+  ln <- find_in_script(out, pkg)
+  out$alias_line <- ln
+  out
+}
+
+find_in_script <- function(x, pkg) {
+  out <- ""
+  
+  script <- path(pkg$src_path, x$source)
+  
+  if(file_exists(script)) {
+    script_lines <- script %>% 
+      readLines() %>% 
+      map_chr(trimws) 
+    
+    res <- c(
+      paste0(x$alias, " <-"), 
+      paste0("#' @name ", x$alias)
+    ) %>% 
+      map(~{
+        out <- NULL
+        cr <- .x
+        scrip_sub <- map_chr(script_lines, ~ substr(.x, 1, nchar(cr)))
+        find_func <- which(scrip_sub == cr)
+        if(length(find_func)) out <- find_func[[1]]
+        out
+      }) %>% 
+      flatten() %>% 
+      as.numeric()
+    
+    if(length(res) > 0) out <- res[[1]]
+  }
   
   out
 }
@@ -15,13 +48,10 @@ tags_get <- function(file_in, pkg) {
   
   pkg_topics <- pkg$topics
   topic_row <- pkg_topics[pkg_topics$file_in == file_in, ]
-
   topic <- transpose(topic_row)
   topic_rd <- topic[[1]]$rd
   tag_names <- map_chr(topic_rd, ~ class(.)[[1]])
   tag_split <- split(topic_rd, tag_names)
-  
-  #tag_split <- tag_split[names(tag_split) != "COMMENT"]
   tag_split <- tag_split[names(tag_split) != "TEXT"]
   
   imap(tag_split, 
@@ -30,6 +60,7 @@ tags_get <- function(file_in, pkg) {
          class(.x) <- c(nm, class(.x))
          .x
         })
+  
 }
 
 tags_process <- function(x) {
@@ -45,7 +76,6 @@ tags_process <- function(x) {
   
   new_names <- substr(names(out), 5, nchar(names(out)))
   names(out) <- new_names
-  
   
   out
 }
@@ -93,7 +123,7 @@ tag_convert.tag_section <- function(x) {
   })
 }
 
-tag_examples <- function(x) {
+tag_convert.tag_examples <- function(x) {
   x <- x[[1]]
   rf <- tag_flatten(x)
   on_examples <- TRUE
@@ -119,12 +149,23 @@ tag_examples <- function(x) {
     }
   }
   list(
-    code_run = examples_run,
-    code_dont_run = examples_dont_run
+    code_run = add_library(examples_run),
+    code_dont_run = add_library(examples_dont_run)
   )
 }
 
-tag_convert.tag_examples <- tag_examples
+add_library <- function(x) {
+  if(is.null(x)) return(x)
+  pkg_library <- NULL
+  pkg_name <- get_package_name()
+  if(!is.null(pkg_name)) {
+    pkg_library <- paste0("library(", pkg_name, ")")
+    if(!any(map_lgl(x, ~ trimws(.x) == pkg_library))) {
+      x <- c(pkg_library, x)
+    }
+  }
+  x
+}
 
 s3_label <- "## S3 method for class '"
 
@@ -147,6 +188,8 @@ tag_convert.tag_usage <- function(x) {
     } else {
       not_s3 <- TRUE
     }}
+  out[out == new_paragraph_symbol] <- ""
+  if(out[[1]] == "" && length(out) > 1) out <- out[2:length(out)]
   out
 }
 
@@ -279,7 +322,6 @@ tag_dontrun <- function(x) {
     flatten() %>% 
     c(do_not_run_symbol, .)
 }
-
 
 tag_sub_section <- function(x) {
   x_class <- map_chr(x, class)

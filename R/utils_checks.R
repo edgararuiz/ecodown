@@ -6,8 +6,7 @@ check_all_reference <- function(pkg, silent = FALSE) {
   for(i in seq_len(length(files_in))) {
     if(!silent) print(paste(i, " - ", files_in[[i]]))
     tags <- files_in[[i]] %>% 
-      tags_get(pkg) %>% 
-      tags_process() 
+      reference_to_list_page(pkg)
     
     ref <- list(tags)
     names(ref) <- files_in[[i]]
