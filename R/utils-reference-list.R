@@ -239,6 +239,7 @@ tag_translate.tag_emph <- function(x) paste0("**", x, "**")
 tag_translate.tag_strong <- function(x) paste0("**", x, "**")
 tag_translate.tag_cite <- function(x) paste0("*", x, "*")
 tag_translate.tag_eqn <- function(x) paste0("$", x, "$")
+tag_translate.tag_deqn <- function(x) tag_deqn(x)
 tag_translate.tag_item <- function(x) list(new_paragraph_symbol, "-")
 
 tag_translate.tag_preformatted <- function(x) tag_preformatted(x)
@@ -377,4 +378,9 @@ tag_method <- function(x) {
     as.character(x[[1]])
   )
   
+}
+
+tag_deqn <- function(x) {
+  x_list <- map_chr(x, as.character)
+  c("$", x_list, "$")
 }
