@@ -148,6 +148,8 @@ tag_convert.tag_examples <- function(x) {
       on_examples <- FALSE
     }
   }
+  if(all(examples_run == " ")) examples_run <- NULL
+  if(all(examples_dont_run == " ")) examples_dont_run <- NULL
   list(
     code_run = add_library(examples_run),
     code_dont_run = add_library(examples_dont_run)
@@ -280,7 +282,9 @@ new_paragraph_symbol <- "<<<<<<<<<<<<<<<<<<<<<<<<<"
 do_not_run_symbol <- ";;;;;;;;;;;;;;;;;;;;;;;;;"
 
 remove_return <- function(x) {
-  if(trimws(x) == "\n") x <- new_paragraph_symbol
+  if(trimws(x) == "\n") {
+    x <- new_paragraph_symbol
+    }
   remove_generic(x)
 }
 
