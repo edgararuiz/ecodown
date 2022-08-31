@@ -14,7 +14,7 @@ reference_to_list_page <- function(file_in, pkg) {
 
 find_in_script <- function(x, pkg) {
   out <- ""
-  
+  if(is.null(x$source)) return(out)
   script <- path(pkg$src_path, x$source)
   
   if(file_exists(script)) {
@@ -280,7 +280,7 @@ new_paragraph_symbol <- "<<<<<<<<<<<<<<<<<<<<<<<<<"
 do_not_run_symbol <- ";;;;;;;;;;;;;;;;;;;;;;;;;"
 
 remove_return <- function(x) {
-  if(x == "\n") x <- new_paragraph_symbol
+  if(trimws(x) == "\n") x <- new_paragraph_symbol
   remove_generic(x)
 }
 
