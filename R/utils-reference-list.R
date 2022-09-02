@@ -23,6 +23,7 @@ find_in_script <- function(x, pkg) {
       map_chr(trimws) 
     
     res <- c(
+      paste0("`", x$alias, "`", " <-"), 
       paste0(x$alias, " <-"), 
       paste0("#' @name ", x$alias)
     ) %>% 
