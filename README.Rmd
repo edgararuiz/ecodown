@@ -23,15 +23,8 @@ cat_tree <- function(x, ...) {
 
 ```
 
-# ecodown <img src="man/figures/logo.png" align="right" alt="" width="130" />
+A fork of `ecodown`, a package is intended for internal RStudio use to generate `pkgdown` docs for `Quarto`. This package (still very much a WIP!) extends this work by combining R and Python function references for a `Quarto` website. 
 
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/edgararuiz/ecodown/workflows/R-CMD-check/badge.svg)](https://github.com/edgararuiz/ecodown/actions)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/ecodown)](https://CRAN.R-project.org/package=ecodown)
-<!-- badges: end -->
-
-This package is intended for internal RStudio use. 
 
 
 
