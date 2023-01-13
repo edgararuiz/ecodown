@@ -23,7 +23,7 @@ cat_tree <- function(x, ...) {
 
 ```
 
-A fork of `ecodown`, a package is intended for internal RStudio use to generate `pkgdown` docs for `Quarto`. This package (still very much a WIP!) extends this work by combining R and Python function references for a `Quarto` website. 
+A fork of `ecodown`, a package intended for internal RStudio use to generate `pkgdown` docs for `Quarto`. This package (still very much a WIP!) extends this work by combining R and Python function references for a `Quarto` website. 
 
 
 

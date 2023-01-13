@@ -1,16 +1,14 @@
-Package: ecodown
-Title: Publish package documents in Quarto
+Package: pyrdocs
+Title: Publish R & Python package documents in Quarto
 Version: 0.0.0.9008
 Authors@R: 
     person(
-    given = "Edgar", 
-    family = "Ruiz", 
-    email = "edgararuiz@gmail.com", 
+    given = "Zoe", 
+    family = "Meers", 
+    email = "zoe.meers@gmail.com", 
     role = c("aut", "cre")
     )
-Description: Automates refreshing package documentation in a website. 
-    It can clone, copy, convert and render the pages. It is meant to 
-    be used in Quarto websites.
+Description: Create R and Python package documentation in a Quarto website.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
