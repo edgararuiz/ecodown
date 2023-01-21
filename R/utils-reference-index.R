@@ -16,7 +16,7 @@ reference_index <- function(pkg = NULL, quarto_sub_folder = "", version_folder =
     } else {
       c(" ", paste("##", .y), " ", .x)  
     }
-    })
+  })
   
   res <- reduce(res, c)
   
@@ -27,7 +27,7 @@ reference_index <- function(pkg = NULL, quarto_sub_folder = "", version_folder =
              paste0("description: ", package_description),
              "---", 
              res
-             )
+    )
   }
   
   res
@@ -79,7 +79,7 @@ reference_to_list_index <- function(pkg) {
           try(
             item_numbers <- eval(parse(text = paste0("`", .x,"`")), topics_env), 
             silent = TRUE
-            )
+          )
           if(is.null(item_numbers)) {
             item_numbers <- eval(parse(text = .x), topics_env)
           }
