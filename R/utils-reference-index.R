@@ -55,6 +55,7 @@ reference_index_convert <- function(index_list, dir_out = "") {
   map(out, ~ c(header, map_chr(.x, ~ paste0("|", .x[[1]], "|", .x[[2]], "|")) ))
 }
 
+
 reference_to_list_index <- function(pkg) {
   if(is.character(pkg)) pkg <- as_pkgdown(pkg)
   pkg_ref <- pkg$meta$reference
